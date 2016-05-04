@@ -68,6 +68,16 @@ public class ImgurUtils {
     }
 
     /**
+     * Checks whether the passed in urlString is a valid Imgur URL
+     *
+     * @param urlString The String to check for validity
+     * @return True when urlString is a valid Imgur URL, false otherwise
+     */
+    public static boolean isImgurUrl(String urlString) {
+        return getUrlObject(urlString) != null;
+    }
+
+    /**
      * Attempts to return a direct link to an image based on a hash alone, without doing an HTTP call to the Imgur API.
      * This means that this method might fail since it attempts to guess at a URL based on the passed in hash.
      *
