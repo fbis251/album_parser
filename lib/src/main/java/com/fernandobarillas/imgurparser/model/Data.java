@@ -23,9 +23,10 @@ package com.fernandobarillas.imgurparser.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Generated;
 
 /**
  * Created by fb on 5/3/16.

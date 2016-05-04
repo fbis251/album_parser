@@ -91,7 +91,7 @@ public class ImgurUtils {
 
     private static URL getUrlObject(String urlString) {
         try {
-            URL url = new URL(urlString);
+            URL    url    = new URL(urlString);
             String domain = url.getHost();
             if (domain.equals(ImgurApi.BASE_DOMAIN) || domain.endsWith("." + ImgurApi.BASE_DOMAIN)) {
                 return url;
