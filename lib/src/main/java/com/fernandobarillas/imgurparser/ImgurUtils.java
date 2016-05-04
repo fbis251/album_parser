@@ -77,7 +77,7 @@ public class ImgurUtils {
     public static String getImageUrl(String hash) {
         if (hash.length() <= IMGUR_ALBUM_HASH_LENGTH) return null;
         if (isAlbum(hash)) return null;
-        return String.format("%s/%s.jpg", ImgurApi.IMAGE_URL, hash);
+        return String.format("%s%s.jpg", ImgurApi.IMAGE_URL, hash);
     }
 
     private static String hashRegex(String haystack, String needleRegex) {
