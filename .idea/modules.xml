@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/example.iml" filepath="$PROJECT_DIR$/.idea/modules/example/example.iml" group="example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/example_main.iml" group="example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/example_test.iml" group="example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/imgur_parser_lib.iml" filepath="$PROJECT_DIR$/.idea/modules/imgur_parser_lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/lib.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/lib.iml" group="lib" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/lib_main.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/lib_main.iml" group="lib" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/lib_test.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/lib_test.iml" group="lib" />
+    </modules>
+  </component>
+</project>

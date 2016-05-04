@@ -1,0 +1,12 @@
+group 'com.fernandobarillas.imgurparser'
+version '0.1'
+
+apply plugin: 'java'
+
+// Output jar filename
+archivesBaseName = 'imgurparser'
+
+dependencies {
+    compile 'com.squareup.retrofit2:retrofit:+'
+    compile 'com.google.code.gson:gson:+'
+}

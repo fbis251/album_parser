@@ -1,0 +1,15 @@
+apply plugin: 'java'
+
+dependencies {
+    compile 'com.squareup.okhttp:okhttp:+'
+    compile 'com.google.code.gson:gson:+'
+    compile 'com.squareup.retrofit2:converter-gson:+'
+    compile project(':lib')
+}
+
+task(runSimple, dependsOn: 'classes', type: JavaExec) {
+    main = 'com.example.Main'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+defaultTasks 'runSimple'
