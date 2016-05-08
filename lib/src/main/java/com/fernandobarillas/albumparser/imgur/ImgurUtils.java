@@ -21,11 +21,9 @@
 package com.fernandobarillas.albumparser.imgur;
 
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by fb on 5/3/16.
@@ -40,20 +38,20 @@ public class ImgurUtils {
      * @return An Imgur album or URL hash if the passed in URL was a valid Imgur URL, null otherwise
      */
     public static String getHash(String imgurUrl) {
-        URL url = getUrlObject(imgurUrl);
+        URL url = ParseUtils.getUrlObject(imgurUrl, ImgurApi.BASE_DOMAIN);
         if (url == null) return null; // Passed in String wasn't a valid URL
         String path = url.getPath();
 
         if (path.startsWith("/gallery/")) {
-            return hashRegex(path, "/gallery/(\\w+)");
+            return ParseUtils.hashRegex(path, "/gallery/(\\w+)");
         }
 
         if (path.startsWith("/a/")) {
-            return hashRegex(path, "/a/(\\w+)");
+            return ParseUtils.hashRegex(path, "/a/(\\w+)");
         }
 
         // Probably a gallery URL with no prefix
-        return hashRegex(path, "/(\\w+)");
+        return ParseUtils.hashRegex(path, "/(\\w+)");
     }
 
     /**
@@ -76,7 +74,7 @@ public class ImgurUtils {
      * @return True when urlString is a valid Imgur URL, false otherwise
      */
     public static boolean isImgurUrl(String urlString) {
-        return getUrlObject(urlString) != null;
+        return ParseUtils.getUrlObject(urlString, ImgurApi.BASE_DOMAIN) != null;
     }
 
     /**
@@ -90,27 +88,5 @@ public class ImgurUtils {
         if (hash.length() <= IMGUR_ALBUM_HASH_LENGTH) return null;
         if (isAlbum(hash)) return null;
         return String.format("%s%s.jpg", ImgurApi.IMAGE_URL, hash);
-    }
-
-    private static String hashRegex(String haystack, String needleRegex) {
-        Pattern pattern = Pattern.compile(needleRegex);
-        Matcher matcher = pattern.matcher(haystack);
-        if (matcher.find() && matcher.groupCount() == 1) {
-            return matcher.group(1);
-        }
-        return null;
-    }
-
-    private static URL getUrlObject(String urlString) {
-        try {
-            URL    url    = new URL(urlString);
-            String domain = url.getHost();
-            if (domain.equals(ImgurApi.BASE_DOMAIN) || domain.endsWith("." + ImgurApi.BASE_DOMAIN)) {
-                return url;
-            }
-        } catch (MalformedURLException ignored) {
-        }
-
-        return null;
     }
 }
