@@ -18,24 +18,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.imgurparser.api;
+package com.fernandobarillas.albumparser.imgur.model;
 
-import com.fernandobarillas.imgurparser.model.ImgurResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
+import javax.annotation.Generated;
 
 /**
  * Created by fb on 5/3/16.
  */
-public interface ImgurApi {
-    // No trailing slash!
-    String BASE_DOMAIN = "imgur.com";
-    // Must have trailing slashes
-    String API_URL     = "https://" + BASE_DOMAIN + "/";
-    String IMAGE_URL   = "https://i." + BASE_DOMAIN + "/";
 
-    @GET("/ajaxalbums/getimages/{hash}/hit.json?all=true")
-    Call<ImgurResponse> getAlbumData(@Path("hash") String hash);
+@Generated("org.jsonschema2pojo")
+public class ImgurResponse {
+
+    @SerializedName("data")
+    @Expose
+    private Data    data;
+    @SerializedName("success")
+    @Expose
+    private boolean success;
+    @SerializedName("status")
+    @Expose
+    private int     status;
+
+    /**
+     * @return The data
+     */
+    public Data getData() {
+        return data;
+    }
+
+    /**
+     * @return The success
+     */
+    public boolean isSuccess() {
+        return success;
+    }
+
+    /**
+     * @return The status
+     */
+    public int getStatus() {
+        return status;
+    }
 }

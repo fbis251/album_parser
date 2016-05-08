@@ -18,9 +18,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.imgurparser.model;
+package com.fernandobarillas.albumparser.imgur.model;
 
-import com.fernandobarillas.imgurparser.api.ImgurApi;
+import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

@@ -18,56 +18,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.imgurparser.model;
+package com.fernandobarillas.albumparser.imgur.api;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.fernandobarillas.albumparser.imgur.model.ImgurResponse;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Generated;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 /**
  * Created by fb on 5/3/16.
  */
+public interface ImgurApi {
+    // No trailing slash!
+    String BASE_DOMAIN = "imgur.com";
+    // Must have trailing slashes
+    String API_URL     = "https://" + BASE_DOMAIN + "/";
+    String IMAGE_URL   = "https://i." + BASE_DOMAIN + "/";
 
-@Generated("org.jsonschema2pojo")
-public class Data {
-
-    @SerializedName("count")
-    @Expose
-    private int count;
-    @SerializedName("images")
-    @Expose
-    private List<Image> images = new ArrayList<Image>();
-
-    /**
-     * @return The count
-     */
-    public int getCount() {
-        return count;
-    }
-
-    /**
-     * @param count The count
-     */
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    /**
-     * @return The images
-     */
-    public List<Image> getImages() {
-        return images;
-    }
-
-    /**
-     * @param images The images
-     */
-    public void setImages(List<Image> images) {
-        this.images = images;
-    }
-
+    @GET("/ajaxalbums/getimages/{hash}/hit.json?all=true")
+    Call<ImgurResponse> getAlbumData(@Path("hash") String hash);
 }

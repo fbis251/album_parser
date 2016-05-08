@@ -18,9 +18,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.imgurparser;
+package com.fernandobarillas.albumparser.imgur;
 
-import com.fernandobarillas.imgurparser.api.ImgurApi;
+import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -66,6 +66,8 @@ public class ImgurUtils {
     public static boolean isAlbum(String hash) {
         return hash != null && hash.length() == IMGUR_ALBUM_HASH_LENGTH;
     }
+
+    // TODO: Add imgur link rewrite for different qualities
 
     /**
      * Checks whether the passed in urlString is a valid Imgur URL

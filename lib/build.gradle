@@ -1,10 +1,10 @@
 apply plugin: 'java'
 
-group 'com.fernandobarillas.imgurparser'
+group 'com.fernandobarillas.albumparser'
 version '0.1.1'
 
 // Output jar filename
-archivesBaseName = 'imgurparser'
+archivesBaseName = 'albumparser'
 
 dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.2'

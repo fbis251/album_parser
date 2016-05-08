@@ -1,10 +1,10 @@
 package com.example;
 
-import com.fernandobarillas.imgurparser.ImgurUtils;
-import com.fernandobarillas.imgurparser.api.ImgurApi;
-import com.fernandobarillas.imgurparser.model.Data;
-import com.fernandobarillas.imgurparser.model.Image;
-import com.fernandobarillas.imgurparser.model.ImgurResponse;
+import com.fernandobarillas.albumparser.imgur.ImgurUtils;
+import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
+import com.fernandobarillas.albumparser.imgur.model.Data;
+import com.fernandobarillas.albumparser.imgur.model.Image;
+import com.fernandobarillas.albumparser.imgur.model.ImgurResponse;
 import com.google.gson.JsonSyntaxException;
 import retrofit2.Call;
 import retrofit2.Callback;

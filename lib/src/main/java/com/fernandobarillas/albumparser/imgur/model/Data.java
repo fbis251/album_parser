@@ -18,10 +18,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.imgurparser.model;
+package com.fernandobarillas.albumparser.imgur.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Generated;
 
@@ -30,36 +33,41 @@ import javax.annotation.Generated;
  */
 
 @Generated("org.jsonschema2pojo")
-public class ImgurResponse {
+public class Data {
 
-    @SerializedName("data")
+    @SerializedName("count")
     @Expose
-    private Data    data;
-    @SerializedName("success")
+    private int count;
+    @SerializedName("images")
     @Expose
-    private boolean success;
-    @SerializedName("status")
-    @Expose
-    private int     status;
+    private List<Image> images = new ArrayList<Image>();
 
     /**
-     * @return The data
+     * @return The count
      */
-    public Data getData() {
-        return data;
+    public int getCount() {
+        return count;
     }
 
     /**
-     * @return The success
+     * @param count The count
      */
-    public boolean isSuccess() {
-        return success;
+    public void setCount(int count) {
+        this.count = count;
     }
 
     /**
-     * @return The status
+     * @return The images
      */
-    public int getStatus() {
-        return status;
+    public List<Image> getImages() {
+        return images;
     }
+
+    /**
+     * @param images The images
+     */
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
 }
