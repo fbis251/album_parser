@@ -65,8 +65,6 @@ public class ImgurUtils {
         return hash != null && hash.length() == IMGUR_ALBUM_HASH_LENGTH;
     }
 
-    // TODO: Add imgur link rewrite for different qualities
-
     /**
      * Checks whether the passed in urlString is a valid Imgur URL
      *
@@ -85,6 +83,7 @@ public class ImgurUtils {
      * @return A URL to an image if the passed in hash was a valid non-album hash, null otherwise;
      */
     public static String getImageUrl(String hash) {
+        if(hash == null) return null;
         if (hash.length() <= IMGUR_ALBUM_HASH_LENGTH) return null;
         if (isAlbum(hash)) return null;
         return String.format("%s%s.jpg", ImgurApi.IMAGE_URL, hash);
