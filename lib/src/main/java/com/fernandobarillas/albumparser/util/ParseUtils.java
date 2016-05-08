@@ -55,15 +55,44 @@ public class ParseUtils {
      * @return
      */
     public static URL getUrlObject(String urlString, String baseDomain) {
-        try {
-            URL url = new URL(urlString);
-            String domain = url.getHost();
-            if (domain.equals(baseDomain) || domain.endsWith("." + baseDomain)) {
-                return url;
-            }
-        } catch (MalformedURLException ignored) {
+        URL url = getUrlObject(urlString);
+        if (url == null) return null;
+
+        String domain = url.getHost();
+        if (domain.equals(baseDomain) || domain.endsWith("." + baseDomain)) {
+            return url;
         }
 
         return null;
+    }
+
+
+    /**
+     * Get a URL Object from a passed in String
+     *
+     * @param urlString The String to attempt to parse as a URL
+     * @return A URL representation if the passed in String is a valid URL, null otherwise
+     */
+    public static URL getUrlObject(String urlString) {
+        try {
+            return new URL(urlString);
+        } catch (MalformedURLException ignored) {
+        }
+        return null;
+    }
+
+    /**
+     * Tries to get the extension of the passed-in URL
+     *
+     * @param url The URL to get an extension from
+     * @return A String containing only the extension with no . prefix if an extension could be found, null otherwise
+     */
+    public static String getExtension(URL url) {
+        if (url == null) return null;
+        String path = url.getPath();
+        if (!path.contains(".")) return null;
+        int extensionIndex = path.lastIndexOf(".") + 1;
+        if (extensionIndex > path.length()) return null;
+        return path.substring(extensionIndex);
     }
 }

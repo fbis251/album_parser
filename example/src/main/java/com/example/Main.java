@@ -5,6 +5,11 @@ import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.imgur.model.Data;
 import com.fernandobarillas.albumparser.imgur.model.Image;
 import com.fernandobarillas.albumparser.imgur.model.ImgurResponse;
+import com.fernandobarillas.albumparser.vidble.VidbleUtils;
+import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
+import com.fernandobarillas.albumparser.vidble.exception.InvalidVidbleUrlException;
+import com.fernandobarillas.albumparser.vidble.model.VidbleResponse;
+import com.fernandobarillas.albumparser.vidble.model.VidbleUrl;
 import com.google.gson.JsonSyntaxException;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,7 +26,6 @@ import java.util.List;
 public class Main {
     private static boolean ASYNC_REQUESTS = false;
     private static String[] IMGUR_URLS = {
-            "http://google.com/test",
             "http://imgur.com/gallery/mhcWa37/new",
             "https://imgur.com/gallery/PBTrqAA",
             "http://i.imgur.com/sCjRLQG.jpg?1",
@@ -31,13 +35,20 @@ public class Main {
             "http://imgur.com/awsGf9p",
     };
 
+    private static String[] VIDBLE_URLS = {
+            "https://vidble.com/album/TESTTEST",
+            "https://vidble.com/1234567890.jpg",
+            "https://vidble.com/show/1234567890.gif",
+    };
+
     public static void main(String[] args) {
         System.out.println("Starting");
-        testLibrary();
+        imgurTest();
+        vidbleTest();
         System.out.println("Done");
     }
 
-    private static void testLibrary() {
+    private static void imgurTest() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ImgurApi.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -54,7 +65,7 @@ public class Main {
             if (ImgurUtils.isAlbum(hash)) {
                 System.out.println("Album Hash " + hash);
                 if (ASYNC_REQUESTS) {
-                    service.getAlbumData(hash).enqueue(callbackHandler(hash));
+                    service.getAlbumData(hash).enqueue(imgurHandler(hash));
                 } else {
                     try {
                         Response<ImgurResponse> response = service.getAlbumData(hash).execute();
@@ -72,7 +83,50 @@ public class Main {
         }
     }
 
-    private static Callback<ImgurResponse> callbackHandler(final String hash) {
+    private static void vidbleTest() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(VidbleApi.API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        VidbleApi service = retrofit.create(VidbleApi.class);
+        boolean getOriginalQuality = true; // Set to false to get medium quality images
+
+        for (String url : VIDBLE_URLS) {
+            String hash = VidbleUtils.getHash(url);
+            if (hash == null) {
+                // TODO: Handle invalid Vidble URL error
+                System.out.println("No hash for URL: " + url);
+                break;
+            }
+
+            if (VidbleUtils.isAlbum(hash)) {
+                System.out.println("Album Hash " + hash);
+                try {
+                    Response<VidbleResponse> response = service.getAlbumData(hash).execute();
+                    List<String> pics = response.body().getPics(getOriginalQuality);
+                    System.out.println("Image count: " + pics.size());
+                    for (String picUrl : pics) {
+                        System.out.println(hash + " " + picUrl);
+                    }
+                } catch (IOException e) {
+                    System.err.println("Album error: " + hash + " " + e.getMessage());
+                    // TODO: Handle error
+                    break;
+                }
+            } else {
+                try {
+                    VidbleUrl vidbleUrl = new VidbleUrl(url);
+                    System.out.println(hash + " " + vidbleUrl.getUrl(getOriginalQuality));
+                } catch (InvalidVidbleUrlException e) {
+                    System.out.println("Not a Vidble URL: " + url);
+                    // TODO: Handle invalid Vidble URL error
+                    break;
+                }
+            }
+        }
+    }
+
+    private static Callback<ImgurResponse> imgurHandler(final String hash) {
         return new Callback<ImgurResponse>() {
             @Override
             public void onResponse(Call<ImgurResponse> call, Response<ImgurResponse> response) {
