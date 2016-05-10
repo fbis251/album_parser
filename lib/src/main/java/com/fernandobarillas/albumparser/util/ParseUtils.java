@@ -95,4 +95,15 @@ public class ParseUtils {
         if (extensionIndex > path.length()) return null;
         return path.substring(extensionIndex);
     }
+
+    /**
+     * Converts the input byte size to megabytes
+     *
+     * @param byteSize The number of bytes to convert to megabytes
+     * @return A String with the size in megabytes
+     */
+    public static String getSizeInMb(int byteSize) {
+        double mbSize = byteSize / 1024.0 / 1024.0;
+        return String.format("%.1f", mbSize);
+    }
 }
