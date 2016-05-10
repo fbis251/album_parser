@@ -38,4 +38,8 @@ public class CajaxResponse {
     public GfyItem getGfyItem() {
         return gfyItem;
     }
+
+    public String getPreviewUrl() {
+        return (gfyItem == null) ? gfyItem.getPosterUrl() : null;
+    }
 }

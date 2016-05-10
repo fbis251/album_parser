@@ -24,6 +24,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
+import java.util.List;
 
 /**
  * Created by fb on 5/3/16.
@@ -34,13 +35,13 @@ public class ImgurResponse {
 
     @SerializedName("data")
     @Expose
-    private Data    data;
+    private Data data;
     @SerializedName("success")
     @Expose
     private boolean success;
     @SerializedName("status")
     @Expose
-    private int     status;
+    private int status;
 
     /**
      * @return The data
@@ -61,5 +62,11 @@ public class ImgurResponse {
      */
     public int getStatus() {
         return status;
+    }
+
+    public String getPreviewUrl() {
+        if (data == null) return null;
+        List<Image> images = data.getImages();
+        return (images.size() > 0) ? images.get(0).getImageUrl() : null;
     }
 }

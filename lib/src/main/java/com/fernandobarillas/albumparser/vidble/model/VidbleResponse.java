@@ -56,4 +56,9 @@ public class VidbleResponse {
 
         return result;
     }
+
+    public String getPreviewUrl() {
+        List<String> pics = getPics(true);
+        return (pics.size() > 0) ? pics.get(0) : null;
+    }
 }
