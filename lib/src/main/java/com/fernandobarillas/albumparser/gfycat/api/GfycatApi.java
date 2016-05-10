@@ -22,6 +22,7 @@ package com.fernandobarillas.albumparser.gfycat.api;
 
 import com.fernandobarillas.albumparser.gfycat.model.cajax.CajaxResponse;
 import com.fernandobarillas.albumparser.gfycat.model.transcode.TranscodeResponse;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -34,8 +35,8 @@ public interface GfycatApi {
     // No trailing slash!
     String BASE_DOMAIN = "gfycat.com";
     // Must have trailing slashes
-    String API_URL = "https://" + BASE_DOMAIN + "/";
-    String UPLOAD_URL = "https://upload." + BASE_DOMAIN + "/";
+    String API_URL     = "https://" + BASE_DOMAIN + "/";
+    String UPLOAD_URL  = "https://upload." + BASE_DOMAIN + "/";
 
     @GET("/cajax/get/{hash}")
     Call<CajaxResponse> getCajax(@Path("hash") String hash);

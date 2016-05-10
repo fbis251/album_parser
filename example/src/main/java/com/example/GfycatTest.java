@@ -25,11 +25,12 @@ import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
 import com.fernandobarillas.albumparser.gfycat.model.cajax.CajaxResponse;
 import com.fernandobarillas.albumparser.gfycat.model.cajax.GfyItem;
 import com.fernandobarillas.albumparser.gfycat.model.transcode.TranscodeResponse;
+
+import java.io.IOException;
+
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.io.IOException;
 
 /**
  * Created by fb on 5/9/16.
@@ -50,28 +51,12 @@ public class GfycatTest {
     };
 
     public static void gfycatTest() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(GfycatApi.API_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(GfycatApi.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         GfycatApi service = retrofit.create(GfycatApi.class);
         testHashes(service);
         testTranscode(service);
-    }
-
-    private static void testTranscode(GfycatApi service) {
-        if (service == null) return;
-        for (String gifUrl : GIF_URLS) {
-            try {
-                Response<TranscodeResponse> response = service.getTranscode(gifUrl).execute();
-                TranscodeResponse transcodeRespose = response.body();
-                if (transcodeRespose == null) break; // TODO: Handle bad data
-                System.out.println(transcodeRespose);
-            } catch (IOException e) {
-                e.printStackTrace();
-                break;
-            }
-        }
     }
 
     private static void testHashes(GfycatApi service) {
@@ -84,11 +69,28 @@ public class GfycatTest {
             }
 
             try {
-                Response<CajaxResponse> response = service.getCajax(hash).execute();
-                CajaxResponse cajax = response.body();
-                GfyItem gfyItem = cajax.getGfyItem();
+                Response<CajaxResponse> response = service.getCajax(hash)
+                        .execute();
+                CajaxResponse           cajax    = response.body();
+                GfyItem                 gfyItem  = cajax.getGfyItem();
                 if (gfyItem == null) break; // TODO: Handle bad data
                 System.out.println(gfyItem);
+            } catch (IOException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
+    }
+
+    private static void testTranscode(GfycatApi service) {
+        if (service == null) return;
+        for (String gifUrl : GIF_URLS) {
+            try {
+                Response<TranscodeResponse> response         = service.getTranscode(gifUrl)
+                        .execute();
+                TranscodeResponse           transcodeRespose = response.body();
+                if (transcodeRespose == null) break; // TODO: Handle bad data
+                System.out.println(transcodeRespose);
             } catch (IOException e) {
                 e.printStackTrace();
                 break;

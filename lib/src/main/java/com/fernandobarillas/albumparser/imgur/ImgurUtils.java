@@ -55,6 +55,20 @@ public class ImgurUtils {
     }
 
     /**
+     * Attempts to return a direct link to an image based on a hash alone, without doing an HTTP call to the Imgur API.
+     * This means that this method might fail since it attempts to guess at a URL based on the passed in hash.
+     *
+     * @param hash The hash to get an image URL for
+     * @return A URL to an image if the passed in hash was a valid non-album hash, null otherwise;
+     */
+    public static String getImageUrl(String hash) {
+        if (hash == null) return null;
+        if (hash.length() <= IMGUR_ALBUM_HASH_LENGTH) return null;
+        if (isAlbum(hash)) return null;
+        return String.format("%s%s.jpg", ImgurApi.IMAGE_URL, hash);
+    }
+
+    /**
      * Attempts to tell whether the passed in hash is from an album or a gallery. This is most useful when the hash was
      * gotten from {@link #getHash(String)}
      *
@@ -73,19 +87,5 @@ public class ImgurUtils {
      */
     public static boolean isImgurUrl(String urlString) {
         return ParseUtils.getUrlObject(urlString, ImgurApi.BASE_DOMAIN) != null;
-    }
-
-    /**
-     * Attempts to return a direct link to an image based on a hash alone, without doing an HTTP call to the Imgur API.
-     * This means that this method might fail since it attempts to guess at a URL based on the passed in hash.
-     *
-     * @param hash The hash to get an image URL for
-     * @return A URL to an image if the passed in hash was a valid non-album hash, null otherwise;
-     */
-    public static String getImageUrl(String hash) {
-        if(hash == null) return null;
-        if (hash.length() <= IMGUR_ALBUM_HASH_LENGTH) return null;
-        if (isAlbum(hash)) return null;
-        return String.format("%s%s.jpg", ImgurApi.IMAGE_URL, hash);
     }
 }

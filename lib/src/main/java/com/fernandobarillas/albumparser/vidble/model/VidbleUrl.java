@@ -31,14 +31,12 @@ import java.net.URL;
  * This class is a wrapper by url Strings returned via the Vidble API. These URLs tend to look like:
  * //www.vidble.com/[HASH].[EXTENSION]
  * <p>
- * Note that the URLs have no protocol specification according to RFC 1808
- * https://www.ietf.org/rfc/rfc1808.txt
+ * Note that the URLs have no protocol specification according to RFC 1808 https://www.ietf.org/rfc/rfc1808.txt
  * <p>
- * The constructor will also accept URLs with an http/https prefix
- * [http/https]://www.vidble.com/[HASH].[EXTENSION]
+ * The constructor will also accept URLs with an http/https prefix [http/https]://www.vidble.com/[HASH].[EXTENSION]
  */
 public class VidbleUrl {
-    private final static String MEDIUM_QUALITY = "_med";
+    private final static String MEDIUM_QUALITY   = "_med";
     private final static String ORIGINAL_QUALITY = "";
     private String mExtension;
     private String mHash;

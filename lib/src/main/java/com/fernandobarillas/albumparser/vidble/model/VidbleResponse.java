@@ -24,9 +24,10 @@ import com.fernandobarillas.albumparser.vidble.exception.InvalidVidbleUrlExcepti
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Generated;
 
 /**
  * Java representation of the Vidble album JSON response

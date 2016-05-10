@@ -31,57 +31,6 @@ import java.util.regex.Pattern;
 public class ParseUtils {
 
     /**
-     * Tries to find the regex in the haystack
-     *
-     * @param haystack    A String target for the regex
-     * @param needleRegex A regex String with exactly 1 capturing group
-     * @return The text captured by the needledRegex capturing group if the regex matched, null otherwise
-     */
-    public static String hashRegex(String haystack, String needleRegex) {
-        Pattern pattern = Pattern.compile(needleRegex);
-        Matcher matcher = pattern.matcher(haystack);
-        if (matcher.find() && matcher.groupCount() == 1) {
-            return matcher.group(1);
-        }
-        return null;
-    }
-
-    /**
-     * Verifies that a URL contains a certain TLD or a subdomain of the passed in TLD. Additionally the passed-in
-     * urlString will be converted to a valid URL object
-     *
-     * @param urlString  A url to attempt to convert to a URL object
-     * @param baseDomain The TLD to match with no subdomain prefix or trailing slash, example: imgur.com
-     * @return
-     */
-    public static URL getUrlObject(String urlString, String baseDomain) {
-        URL url = getUrlObject(urlString);
-        if (url == null) return null;
-
-        String domain = url.getHost();
-        if (domain.equals(baseDomain) || domain.endsWith("." + baseDomain)) {
-            return url;
-        }
-
-        return null;
-    }
-
-
-    /**
-     * Get a URL Object from a passed in String
-     *
-     * @param urlString The String to attempt to parse as a URL
-     * @return A URL representation if the passed in String is a valid URL, null otherwise
-     */
-    public static URL getUrlObject(String urlString) {
-        try {
-            return new URL(urlString);
-        } catch (MalformedURLException ignored) {
-        }
-        return null;
-    }
-
-    /**
      * Tries to get the extension of the passed-in URL
      *
      * @param url The URL to get an extension from
@@ -105,5 +54,55 @@ public class ParseUtils {
     public static String getSizeInMb(int byteSize) {
         double mbSize = byteSize / 1024.0 / 1024.0;
         return String.format("%.1f", mbSize);
+    }
+
+    /**
+     * Verifies that a URL contains a certain TLD or a subdomain of the passed in TLD. Additionally the passed-in
+     * urlString will be converted to a valid URL object
+     *
+     * @param urlString  A url to attempt to convert to a URL object
+     * @param baseDomain The TLD to match with no subdomain prefix or trailing slash, example: imgur.com
+     * @return
+     */
+    public static URL getUrlObject(String urlString, String baseDomain) {
+        URL url = getUrlObject(urlString);
+        if (url == null) return null;
+
+        String domain = url.getHost();
+        if (domain.equals(baseDomain) || domain.endsWith("." + baseDomain)) {
+            return url;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get a URL Object from a passed in String
+     *
+     * @param urlString The String to attempt to parse as a URL
+     * @return A URL representation if the passed in String is a valid URL, null otherwise
+     */
+    public static URL getUrlObject(String urlString) {
+        try {
+            return new URL(urlString);
+        } catch (MalformedURLException ignored) {
+        }
+        return null;
+    }
+
+    /**
+     * Tries to find the regex in the haystack
+     *
+     * @param haystack    A String target for the regex
+     * @param needleRegex A regex String with exactly 1 capturing group
+     * @return The text captured by the needledRegex capturing group if the regex matched, null otherwise
+     */
+    public static String hashRegex(String haystack, String needleRegex) {
+        Pattern pattern = Pattern.compile(needleRegex);
+        Matcher matcher = pattern.matcher(haystack);
+        if (matcher.find() && matcher.groupCount() == 1) {
+            return matcher.group(1);
+        }
+        return null;
     }
 }

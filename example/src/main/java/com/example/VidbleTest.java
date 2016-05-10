@@ -25,12 +25,13 @@ import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.fernandobarillas.albumparser.vidble.exception.InvalidVidbleUrlException;
 import com.fernandobarillas.albumparser.vidble.model.VidbleResponse;
 import com.fernandobarillas.albumparser.vidble.model.VidbleUrl;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 import java.util.List;
+
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by fb on 5/9/16.
@@ -43,12 +44,11 @@ public class VidbleTest {
     };
 
     public static void vidbleTest() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(VidbleApi.API_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(VidbleApi.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        VidbleApi service = retrofit.create(VidbleApi.class);
-        boolean getOriginalQuality = true; // Set to false to get medium quality images
+        VidbleApi service            = retrofit.create(VidbleApi.class);
+        boolean   getOriginalQuality = true; // Set to false to get medium quality images
 
         for (String url : VIDBLE_URLS) {
             String hash = VidbleUtils.getHash(url);
@@ -61,8 +61,10 @@ public class VidbleTest {
             if (VidbleUtils.isAlbum(hash)) {
                 System.out.println("Album Hash " + hash);
                 try {
-                    Response<VidbleResponse> response = service.getAlbumData(hash).execute();
-                    List<String> pics = response.body().getPics(getOriginalQuality);
+                    Response<VidbleResponse> response = service.getAlbumData(hash)
+                            .execute();
+                    List<String>             pics     = response.body()
+                            .getPics(getOriginalQuality);
                     System.out.println("Image count: " + pics.size());
                     for (String picUrl : pics) {
                         System.out.println(hash + " " + picUrl);

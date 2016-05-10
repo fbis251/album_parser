@@ -26,21 +26,22 @@ import com.fernandobarillas.albumparser.imgur.model.Data;
 import com.fernandobarillas.albumparser.imgur.model.Image;
 import com.fernandobarillas.albumparser.imgur.model.ImgurResponse;
 import com.google.gson.JsonSyntaxException;
+
+import java.io.IOException;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.io.IOException;
-import java.util.List;
-
 /**
  * Created by fb on 5/9/16.
  */
 public class ImgurTest {
-    private static boolean ASYNC_REQUESTS = false;
-    private static String[] IMGUR_URLS = {
+    private static boolean  ASYNC_REQUESTS = false;
+    private static String[] IMGUR_URLS     = {
             "http://imgur.com/gallery/mhcWa37/new",
             "https://imgur.com/gallery/PBTrqAA",
             "http://i.imgur.com/sCjRLQG.jpg?1",
@@ -51,8 +52,7 @@ public class ImgurTest {
     };
 
     public static void imgurTest() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ImgurApi.API_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(ImgurApi.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ImgurApi service = retrofit.create(ImgurApi.class);
@@ -67,10 +67,12 @@ public class ImgurTest {
             if (ImgurUtils.isAlbum(hash)) {
                 System.out.println("Album Hash " + hash);
                 if (ASYNC_REQUESTS) {
-                    service.getAlbumData(hash).enqueue(imgurHandler(hash));
+                    service.getAlbumData(hash)
+                            .enqueue(imgurHandler(hash));
                 } else {
                     try {
-                        Response<ImgurResponse> response = service.getAlbumData(hash).execute();
+                        Response<ImgurResponse> response = service.getAlbumData(hash)
+                                .execute();
                         parseImgurResponse(response.body());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -89,7 +91,8 @@ public class ImgurTest {
         return new Callback<ImgurResponse>() {
             @Override
             public void onResponse(Call<ImgurResponse> call, Response<ImgurResponse> response) {
-                System.out.println("Call URL: " + call.request().url());
+                System.out.println("Call URL: " + call.request()
+                        .url());
                 System.out.println("Response " + response.raw());
                 parseImgurResponse(response.body());
             }
@@ -115,11 +118,13 @@ public class ImgurTest {
         System.out.println("Status: " + imgurResponse.getStatus());
         Data imgurData = imgurResponse.getData();
         if (imgurData == null) return; // TODO: Handle null data
-        System.out.println("Image Count: " + imgurResponse.getData().getCount());
-        List<Image> imageList = imgurResponse.getData().getImages();
+        System.out.println("Image Count: " + imgurResponse.getData()
+                .getCount());
+        List<Image> imageList = imgurResponse.getData()
+                .getImages();
         if (imageList == null) return; // TODO: Handle null imageList
         for (Image image : imageList) {
-            System.out.println("Image URL: " + image.getImageUrl());
+            System.out.println("Image URL: " + image.getImageUrl(true));
         }
     }
 }

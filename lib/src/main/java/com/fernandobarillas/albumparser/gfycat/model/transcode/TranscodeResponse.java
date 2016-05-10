@@ -24,9 +24,10 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Generated;
 
 /**
  * Created by fb on 5/9/16.
@@ -42,22 +43,22 @@ public class TranscodeResponse {
     public String gfyName;
     @SerializedName("gfyNumber")
     @Expose
-    public int gfyNumber;
+    public int    gfyNumber;
     @SerializedName("userName")
     @Expose
     public String userName;
     @SerializedName("width")
     @Expose
-    public int width;
+    public int    width;
     @SerializedName("height")
     @Expose
-    public int height;
+    public int    height;
     @SerializedName("frameRate")
     @Expose
-    public int frameRate;
+    public int    frameRate;
     @SerializedName("numFrames")
     @Expose
-    public int numFrames;
+    public int    numFrames;
     @SerializedName("mp4Url")
     @Expose
     public String mp4Url;
@@ -69,19 +70,19 @@ public class TranscodeResponse {
     public String gifUrl;
     @SerializedName("gifSize")
     @Expose
-    public int gifSize;
+    public int    gifSize;
     @SerializedName("mp4Size")
     @Expose
-    public int mp4Size;
+    public int    mp4Size;
     @SerializedName("webmSize")
     @Expose
-    public int webmSize;
+    public int    webmSize;
     @SerializedName("createDate")
     @Expose
-    public int createDate;
+    public int    createDate;
     @SerializedName("views")
     @Expose
-    public int views;
+    public int    views;
     @SerializedName("title")
     @Expose
     public String title;
@@ -93,13 +94,13 @@ public class TranscodeResponse {
     public String md5;
     @SerializedName("sar")
     @Expose
-    public int sar;
+    public int    sar;
     @SerializedName("url")
     @Expose
     public String url;
     @SerializedName("source")
     @Expose
-    public int source;
+    public int    source;
     @SerializedName("subreddit")
     @Expose
     public String subreddit;
@@ -117,10 +118,10 @@ public class TranscodeResponse {
     public String avgColor;
     @SerializedName("likes")
     @Expose
-    public int likes;
+    public int    likes;
     @SerializedName("dislikes")
     @Expose
-    public int dislikes;
+    public int    dislikes;
     @SerializedName("description")
     @Expose
     public String description;
@@ -138,7 +139,12 @@ public class TranscodeResponse {
     public String gfyname;
     @SerializedName("gfysize")
     @Expose
-    public int gfysize;
+    public int    gfysize;
+
+    @Override
+    public String toString() {
+        return gfyName + " " + ParseUtils.getSizeInMb(gifSize) + "MB -> " + ParseUtils.getSizeInMb(gfysize) + "MB " + mp4Url;
+    }
 
     public String getMp4Url() {
         return mp4Url;
@@ -146,10 +152,5 @@ public class TranscodeResponse {
 
     public String getUrl() {
         return url;
-    }
-
-    @Override
-    public String toString() {
-        return gfyName + " " + ParseUtils.getSizeInMb(gifSize) + "MB -> " + ParseUtils.getSizeInMb(gfysize) + "MB " + mp4Url;
     }
 }
