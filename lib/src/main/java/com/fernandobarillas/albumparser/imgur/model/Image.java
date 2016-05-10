@@ -32,6 +32,14 @@ import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
 public class Image {
+    // https://api.imgur.com/models/image
+    public static final String ORIGINAL         = "";
+    public static final String SMALL_SQUARE     = "s";
+    public static final String BIG_SQUARE       = "b";
+    public static final String SMALL_THUMBNAIL  = "t";
+    public static final String MEDIUM_THUMBNAIL = "m";
+    public static final String LARGE_THUMBNAIL  = "l";
+    public static final String HUGE_THUMBNAIL   = "h";
 
     @SerializedName("hash")
     @Expose
@@ -68,17 +76,10 @@ public class Image {
     private String  datetime;
 
     /**
-     * @return The hash
+     * @return The datetime
      */
-    public String getHash() {
-        return hash;
-    }
-
-    /**
-     * @return The title
-     */
-    public String getTitle() {
-        return title;
+    public String getDatetime() {
+        return datetime;
     }
 
     /**
@@ -89,10 +90,17 @@ public class Image {
     }
 
     /**
-     * @return The width
+     * @return The ext
      */
-    public int getWidth() {
-        return width;
+    public String getExt() {
+        return ext;
+    }
+
+    /**
+     * @return The hash
+     */
+    public String getHash() {
+        return hash;
     }
 
     /**
@@ -103,6 +111,28 @@ public class Image {
     }
 
     /**
+     * Gets the url to the image with either the original quality or a lower quality huge thumbnail
+     *
+     * @param originalQuality True to get the original quality link, false for huge thumbnail quality
+     * @return The URL to the image
+     */
+    public String getImageUrl(boolean originalQuality) {
+        String quality = (originalQuality) ? ORIGINAL : HUGE_THUMBNAIL;
+        return ImgurApi.IMAGE_URL + hash + quality + ext;
+    }
+
+    /**
+     * Gets the url to the image with the passed in quality.
+     *
+     * @param quality The quality to use in the returned URL, for example to return the URL for the small thumbnail
+     *                image you can pass in {@link #SMALL_THUMBNAIL}
+     * @return The URL to the image with the selected quality
+     */
+    public String getImageUrl(String quality) {
+        return ImgurApi.IMAGE_URL + hash + quality + ext;
+    }
+
+    /**
      * @return The size
      */
     public int getSize() {
@@ -110,10 +140,17 @@ public class Image {
     }
 
     /**
-     * @return The ext
+     * @return The title
      */
-    public String getExt() {
-        return ext;
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @return The width
+     */
+    public int getWidth() {
+        return width;
     }
 
     /**
@@ -124,13 +161,6 @@ public class Image {
     }
 
     /**
-     * @return The preferVideo
-     */
-    public boolean isPreferVideo() {
-        return preferVideo;
-    }
-
-    /**
      * @return The looping
      */
     public boolean isLooping() {
@@ -138,13 +168,9 @@ public class Image {
     }
 
     /**
-     * @return The datetime
+     * @return The preferVideo
      */
-    public String getDatetime() {
-        return datetime;
-    }
-
-    public String getImageUrl() {
-        return ImgurApi.IMAGE_URL + hash + ext;
+    public boolean isPreferVideo() {
+        return preferVideo;
     }
 }

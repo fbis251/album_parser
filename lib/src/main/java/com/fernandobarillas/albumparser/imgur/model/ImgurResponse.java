@@ -67,6 +67,6 @@ public class ImgurResponse {
     public String getPreviewUrl() {
         if (data == null) return null;
         List<Image> images = data.getImages();
-        return (images.size() > 0) ? images.get(0).getImageUrl() : null;
+        return (images.size() > 0) ? images.get(0).getImageUrl(false) : null;
     }
 }
