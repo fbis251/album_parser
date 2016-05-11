@@ -37,10 +37,10 @@ public class Data {
 
     @SerializedName("count")
     @Expose
-    private int count;
+    public int count;
     @SerializedName("images")
     @Expose
-    private List<Image> images = new ArrayList<Image>();
+    public List<Image> images = new ArrayList<Image>();
 
     /**
      * @return The count
@@ -50,24 +50,10 @@ public class Data {
     }
 
     /**
-     * @param count The count
-     */
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    /**
      * @return The images
      */
     public List<Image> getImages() {
         return images;
-    }
-
-    /**
-     * @param images The images
-     */
-    public void setImages(List<Image> images) {
-        this.images = images;
     }
 
 }

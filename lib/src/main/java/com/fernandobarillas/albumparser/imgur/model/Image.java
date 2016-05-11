@@ -43,37 +43,37 @@ public class Image {
 
     @SerializedName("hash")
     @Expose
-    private String  hash;
+    public String  hash;
     @SerializedName("title")
     @Expose
-    private String  title;
+    public String  title;
     @SerializedName("description")
     @Expose
-    private String  description;
+    public String  description;
     @SerializedName("width")
     @Expose
-    private int     width;
+    public int     width;
     @SerializedName("height")
     @Expose
-    private int     height;
+    public int     height;
     @SerializedName("size")
     @Expose
-    private int     size;
+    public int     size;
     @SerializedName("ext")
     @Expose
-    private String  ext;
+    public String  ext;
     @SerializedName("animated")
     @Expose
-    private boolean animated;
+    public boolean animated;
     @SerializedName("prefer_video")
     @Expose
-    private boolean preferVideo;
+    public boolean preferVideo;
     @SerializedName("looping")
     @Expose
-    private boolean looping;
+    public boolean looping;
     @SerializedName("datetime")
     @Expose
-    private String  datetime;
+    public String  datetime;
 
     /**
      * @return The datetime

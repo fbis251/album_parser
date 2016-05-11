@@ -36,13 +36,13 @@ public class ImgurResponse {
 
     @SerializedName("data")
     @Expose
-    private Data    data;
+    public Data    data;
     @SerializedName("success")
     @Expose
-    private boolean success;
+    public boolean success;
     @SerializedName("status")
     @Expose
-    private int     status;
+    public int     status;
 
     /**
      * @return The data
