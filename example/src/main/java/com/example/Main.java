@@ -9,6 +9,7 @@ public class Main {
         GfycatTest.gfycatTest();
         ImgurTest.imgurTest();
         VidbleTest.vidbleTest();
+        VidmeTest.vidmeTest();
         System.out.println("Done");
     }
 }
