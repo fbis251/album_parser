@@ -41,6 +41,7 @@ public class VidbleTest {
             "https://vidble.com/album/TESTTEST",
             "https://vidble.com/1234567890.jpg",
             "https://vidble.com/show/1234567890.gif",
+            "https://vidble.com/show/1234567890",
     };
 
     public static void vidbleTest() {

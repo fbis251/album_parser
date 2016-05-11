@@ -35,8 +35,8 @@ public interface VidbleApi {
     // Must have trailing slashes
     String API_URL           = "https://" + BASE_DOMAIN + "/";
     String IMAGE_URL         = API_URL;
-    int    IMAGE_HASH_LENGTH = 10; // HiYtkSQEHv
-    int    ALBUM_HASH_LENGTH = 8; // HiYtkSQEHv
+    int    IMAGE_HASH_LENGTH = 10;
+    int    ALBUM_HASH_LENGTH = 8;
 
     @GET("/album/{hash}?json=1")
     Call<VidbleResponse> getAlbumData(@Path("hash") String hash);

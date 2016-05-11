@@ -6,9 +6,9 @@ package com.example;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Starting");
+        GfycatTest.gfycatTest();
         ImgurTest.imgurTest();
         VidbleTest.vidbleTest();
-        GfycatTest.gfycatTest();
         System.out.println("Done");
     }
 }
