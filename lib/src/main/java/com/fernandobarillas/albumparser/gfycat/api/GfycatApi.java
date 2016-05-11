@@ -34,9 +34,8 @@ import retrofit2.http.Query;
 public interface GfycatApi {
     // No trailing slash!
     String BASE_DOMAIN = "gfycat.com";
-    // Must have trailing slashes
-    String API_URL     = "https://" + BASE_DOMAIN + "/";
-    String UPLOAD_URL  = "https://upload." + BASE_DOMAIN + "/";
+    String API_URL     = "https://" + BASE_DOMAIN;
+    String UPLOAD_URL  = "https://upload." + BASE_DOMAIN;
 
     @GET("/cajax/get/{hash}")
     Call<CajaxResponse> getCajax(@Path("hash") String hash);

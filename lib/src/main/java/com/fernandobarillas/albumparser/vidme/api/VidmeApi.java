@@ -32,8 +32,7 @@ import retrofit2.http.Query;
 public interface VidmeApi {
     // No trailing slash!
     String BASE_DOMAIN = "vid.me";
-    // Must have trailing slashes
-    String API_URL     = "https://api." + BASE_DOMAIN + "/";
+    String API_URL     = "https://api." + BASE_DOMAIN;
 
     /**
      * Calls the vid.me API to get data about a vid.me url

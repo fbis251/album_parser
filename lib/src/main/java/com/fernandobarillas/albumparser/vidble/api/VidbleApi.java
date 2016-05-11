@@ -32,8 +32,7 @@ import retrofit2.http.Path;
 public interface VidbleApi {
     // No trailing slash!
     String BASE_DOMAIN       = "vidble.com";
-    // Must have trailing slashes
-    String API_URL           = "https://" + BASE_DOMAIN + "/";
+    String API_URL           = "https://" + BASE_DOMAIN;
     String IMAGE_URL         = API_URL;
     int    IMAGE_HASH_LENGTH = 10;
     int    ALBUM_HASH_LENGTH = 8;

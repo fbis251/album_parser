@@ -32,9 +32,8 @@ import retrofit2.http.Path;
 public interface ImgurApi {
     // No trailing slash!
     String BASE_DOMAIN = "imgur.com";
-    // Must have trailing slashes
-    String API_URL     = "https://" + BASE_DOMAIN + "/";
-    String IMAGE_URL   = "https://i." + BASE_DOMAIN + "/";
+    String API_URL     = "https://" + BASE_DOMAIN;
+    String IMAGE_URL   = "https://i." + BASE_DOMAIN;
 
     @GET("/ajaxalbums/getimages/{hash}/hit.json?all=true")
     Call<ImgurResponse> getAlbumData(@Path("hash") String hash);

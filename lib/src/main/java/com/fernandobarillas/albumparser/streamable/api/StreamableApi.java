@@ -32,9 +32,8 @@ import retrofit2.http.Path;
 public interface StreamableApi {
     // No trailing slash!
     String BASE_DOMAIN = "streamable.com";
-    // Must have trailing slashes // TODO: Remove all the trailing slashes, it's adding two of them to the API request
-    String API_URL     = "https://api." + BASE_DOMAIN + "/";
+    String API_URL     = "https://api." + BASE_DOMAIN;
 
-    @GET("videos/{hash}")
+    @GET("/videos/{hash}")
     Call<StreamableResponse> getVideo(@Path("hash") String hash);
 }
