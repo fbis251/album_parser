@@ -33,11 +33,11 @@ public class GfycatUtils {
     /**
      * Attempts to get a Gfycat hash for a passed in URL String
      *
-     * @param imgurUrl The String to attempt to get a hash from
+     * @param gfycatUrl The String to attempt to get a hash from
      * @return An Imgur album or URL hash if the passed in URL was a valid Imgur URL, null otherwise
      */
-    public static String getHash(String imgurUrl) {
-        URL url = ParseUtils.getUrlObject(imgurUrl, GfycatApi.BASE_DOMAIN);
+    public static String getHash(String gfycatUrl) {
+        URL url = ParseUtils.getUrlObject(gfycatUrl, GfycatApi.BASE_DOMAIN);
         if (url == null) return null; // Passed in String wasn't a valid URL
         String path = url.getPath();
 

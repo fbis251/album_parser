@@ -35,6 +35,14 @@ public class CajaxResponse {
     @Expose
     public GfyItem gfyItem;
 
+    @SerializedName("error")
+    @Expose
+    public String error;
+
+    public String getError() {
+        return error;
+    }
+
     public GfyItem getGfyItem() {
         return gfyItem;
     }
