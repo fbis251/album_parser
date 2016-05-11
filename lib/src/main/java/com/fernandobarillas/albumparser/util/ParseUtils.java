@@ -62,7 +62,7 @@ public class ParseUtils {
      *
      * @param urlString  A url to attempt to convert to a URL object
      * @param baseDomain The TLD to match with no subdomain prefix or trailing slash, example: imgur.com
-     * @return
+     * @return A URL Object representation of the passed in urlString
      */
     public static URL getUrlObject(String urlString, String baseDomain) {
         URL url = getUrlObject(urlString);
