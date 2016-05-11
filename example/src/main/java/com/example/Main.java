@@ -8,6 +8,7 @@ public class Main {
         System.out.println("Starting");
         GfycatTest.gfycatTest();
         ImgurTest.imgurTest();
+        StreamableTest.streamableTest();
         VidbleTest.vidbleTest();
         VidmeTest.vidmeTest();
         System.out.println("Done");
