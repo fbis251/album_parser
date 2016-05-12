@@ -38,7 +38,6 @@ public class StreamableTest {
     private static final String[] TEST_URLS = {
         "https://streamable.com/7k1v",
         "https://cdn.streamable.com/video/mp4-mobile/ghju.mp4",
-        "https://streamable.com/l7el",
         "https://cdn.streamable.com/video/mp4/w78y.mp4",
         "https://streamable.com/hm0i?t=0.2",
 
@@ -54,6 +53,7 @@ public class StreamableTest {
         for (String streamableUrl : TEST_URLS) {
             if (StreamableUtils.isDirectUrl(streamableUrl)) {
                 System.out.println("Direct url: " + streamableUrl);
+                System.out.println(MediaTest.SEPARATOR);
                 continue;
             }
 
@@ -67,7 +67,9 @@ public class StreamableTest {
                 Response<StreamableResponse> response = service.getVideo(hash)
                         .execute();
                 StreamableResponse streamableResponse = response.body();
-                System.out.println(streamableResponse);
+                streamableResponse.setHash(hash);
+                streamableResponse.setOriginalUrl(streamableUrl);
+                MediaTest.testResponse(streamableResponse);
             } catch (IOException e) {
                 e.printStackTrace();
                 break;

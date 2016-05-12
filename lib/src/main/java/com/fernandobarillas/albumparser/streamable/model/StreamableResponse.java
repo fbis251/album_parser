@@ -20,21 +20,33 @@
 
 package com.fernandobarillas.albumparser.streamable.model;
 
+import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.IMediaAlbum;
+import com.fernandobarillas.albumparser.media.IMediaResponse;
+import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Generated;
 
+import static com.fernandobarillas.albumparser.media.IMedia.PROTOCOL_HTTPS;
+
 /**
  * Created by fb on 5/10/16.
  */
 @Generated("org.jsonschema2pojo")
-public class StreamableResponse {
-    protected static final String PROTOCOL_HTTPS = "https:";
-
+public class StreamableResponse implements IMediaResponse {
+    // Video schema status responses according to: https://streamable.com/documentation
+    public static final int STATUS_UPLOADING  = 0;
+    public static final int STATUS_PROCESSING = 1;
+    public static final int STATUS_READY      = 2;
+    public static final int STATUS_ERROR      = 3;
     @SerializedName("status")
     @Expose
     public int    status;
@@ -62,45 +74,73 @@ public class StreamableResponse {
     @SerializedName("percent")
     @Expose
     public int    percent;
+    private String          mOriginalUrl;
+    private StreamableMedia mStreamableMedia;
 
     @Override
-    public String toString() {
-        return "StreamableResponse{" +
-                "files=" + files +
-                ", highQuality=" + getVideoUrl(true) +
-                ", lowQuality=" + getVideoUrl(false) +
-                ", thumbnailUrl='" + getThumbnailUrl() + '\'' +
-                '}';
+    public IMediaAlbum getAlbum() {
+        // Not supported by Streamable
+        return null;
     }
 
-    public Files getFiles() {
-        return files;
+    @Override
+    public String getApiDomain() {
+        return StreamableApi.BASE_DOMAIN;
     }
 
-    public int getStatus() {
-        return status;
+    @Override
+    public String getErrorMessage() {
+        // Not supported by Streamable
+        return null;
     }
 
-    public String getThumbnailUrl() {
-        return PROTOCOL_HTTPS + thumbnailUrl;
+    @Override
+    public String getHash() {
+        return ParseUtils.hashRegex(url, StreamableApi.BASE_DOMAIN + "/(\\w+)");
     }
 
-    String getVideoUrl(boolean highQuality) {
+    @Override
+    public void setHash(String hash) {
+        // getHash() keeps track of the API hash
+    }
+
+    @Override
+    public IMedia getMedia() {
         if (files == null) return null;
-        String    resultUrl = null;
-        Mp4Mobile mp4Mobile = files.mp4Mobile;
-        if (mp4Mobile != null) {
-            resultUrl = mp4Mobile.getUrl();
-        }
 
-        if (highQuality) {
-            Mp4 mp4 = files.mp4;
-            if (mp4 != null) {
-                resultUrl = mp4.getUrl();
-            }
+        if (mStreamableMedia == null) {
+            mStreamableMedia = new StreamableMedia(files.mp4, files.mp4Mobile);
         }
-
-        return resultUrl;
+        return mStreamableMedia;
     }
 
+    @Override
+    public String getOriginalUrlString() {
+        return mOriginalUrl;
+    }
+
+    @Override
+    public URL getPreviewUrl() {
+        try {
+            return new URL(PROTOCOL_HTTPS + ":" + thumbnailUrl);
+        } catch (MalformedURLException ignored) {
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isAlbum() {
+        // Not supported by Streamable
+        return false;
+    }
+
+    @Override
+    public boolean isSuccessful() {
+        return status == STATUS_READY;
+    }
+
+    @Override
+    public void setOriginalUrl(String originalUrl) {
+        mOriginalUrl = originalUrl;
+    }
 }

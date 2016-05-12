@@ -25,14 +25,11 @@ import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
 
-import static com.fernandobarillas.albumparser.streamable.model.StreamableResponse.PROTOCOL_HTTPS;
-
 /**
  * Created by fb on 5/10/16.
  */
 @Generated("org.jsonschema2pojo")
 public class Mp4 {
-
     @SerializedName("status")
     @Expose
     public int    status;
@@ -54,41 +51,4 @@ public class Mp4 {
     @SerializedName("size")
     @Expose
     public int    size;
-
-    @Override
-    public String toString() {
-        return "Mp4{" +
-                "status=" + status +
-                ", url='" + url + '\'' +
-                ", framerate=" + framerate +
-                ", height=" + height +
-                ", width=" + width +
-                ", bitrate=" + bitrate +
-                ", size=" + size +
-                '}';
-    }
-
-    public int getBitrate() {
-        return bitrate;
-    }
-
-    public int getFramerate() {
-        return framerate;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public String getUrl() {
-        return PROTOCOL_HTTPS + url;
-    }
-
-    public int getWidth() {
-        return width;
-    }
 }
