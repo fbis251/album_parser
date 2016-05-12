@@ -20,10 +20,12 @@
 
 package com.fernandobarillas.albumparser.gfycat.model.cajax;
 
-import com.fernandobarillas.albumparser.util.ParseUtils;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ import javax.annotation.Generated;
  * Created by fb on 5/9/16.
  */
 @Generated("org.jsonschema2pojo")
-public class GfyItem {
+public class GfyItem implements IMedia {
 
     @SerializedName("gfyId")
     @Expose
@@ -169,35 +171,64 @@ public class GfyItem {
     public String languageText;
 
     @Override
-    public String toString() {
-        return gfyName + " " + ParseUtils.getSizeInMbString(gifSize) + "MB -> " + ParseUtils.getSizeInMbString(mp4Size) + "MB " + mp4Url;
+    public int getByteSize(boolean highQuality) {
+        // Gfycat mp4Size only available for high quality
+        return (highQuality) ? mp4Size : SIZE_UNAVAILABLE;
     }
 
-    public int getHeight() {
-        return height;
+    @Override
+    public String getDescription() {
+        return description;
     }
 
-    public String getMobileUrl() {
-        return mobileUrl;
+    @Override
+    public double getDuration() {
+        double result = DURATION_UNAVAILABLE;
+        if (frameRate > 0) {
+            result = (double) numFrames / (double) frameRate;
+        }
+        return result;
     }
 
-    public int getMp4Size() {
-        return mp4Size;
+    @Override
+    public int getHeight(boolean highQuality) {
+        // Gfycat height only available for high quality
+        return (highQuality) ? height : SIZE_UNAVAILABLE;
     }
 
-    public String getMp4Url() {
-        return mp4Url;
+    @Override
+    public URL getPreviewUrl() {
+        try {
+            return new URL(posterUrl);
+        } catch (MalformedURLException ignored) {
+        }
+
+        return null;
     }
 
-    public String getPosterUrl() {
-        return posterUrl;
+    @Override
+    public String getTitle() {
+        return title;
     }
 
-    public String getUrl() {
-        return url;
+    @Override
+    public URL getUrl(boolean highQuality) {
+        String resultUrl = (highQuality) ? mp4Url : mobileUrl;
+        try {
+            return new URL(resultUrl);
+        } catch (MalformedURLException ignored) {
+        }
+        return null;
     }
 
-    public int getWidth() {
-        return width;
+    @Override
+    public int getWidth(boolean highQuality) {
+        // Gfycat width only available for high quality
+        return (highQuality) ? width : SIZE_UNAVAILABLE;
+    }
+
+    @Override
+    public boolean isVideo() {
+        return true;
     }
 }

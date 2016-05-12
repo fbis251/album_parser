@@ -23,7 +23,6 @@ package com.example;
 import com.fernandobarillas.albumparser.gfycat.GfycatUtils;
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
 import com.fernandobarillas.albumparser.gfycat.model.cajax.CajaxResponse;
-import com.fernandobarillas.albumparser.gfycat.model.cajax.GfyItem;
 import com.fernandobarillas.albumparser.gfycat.model.transcode.TranscodeResponse;
 
 import java.io.IOException;
@@ -36,19 +35,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by fb on 5/9/16.
  */
 public class GfycatTest {
+    // @formatter:off
     private static String[] GFYCAT_URLS = {
-            "https://thumbs.gfycat.com/PotableLeftAbalone-mobile.mp4",
-            "https://gfycat.com/IndelibleMerryBuck",
-            "https://gfycat.com//GregariousPepperyBellfrog",
-            "https://giant.gfycat.com/GregariousPepperyBellfrog.webm",
+        "https://thumbs.gfycat.com/PotableLeftAbalone-mobile.mp4",
+        "https://gfycat.com/IndelibleMerryBuck",
+        "https://gfycat.com/cajax/get/GenerousSoftImago",
+        "https://gfycat.com//GregariousPepperyBellfrog",
+        "https://giant.gfycat.com/GregariousPepperyBellfrog.webm",
     };
 
     private static String[] GIF_URLS = {
-            "https://i.imgur.com/XKRUHJH.gif",
-            "http://i.imgur.com/XKRUHJH.gif",
-            "i.imgur.com/XKRUHJH.gif",
-            "i.imgur.com/XKRUHJH.jpg",
+        "http://i.imgur.com/sEkAXxL.gif",
+        "https://i.imgur.com/sEkAXxL.gif",
+        "i.imgur.com/sEkAXxL.gif",
+        "i.imgur.com/sEkAXxL.jpg",
     };
+    // @formatter:on
 
     public static void gfycatTest() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(GfycatApi.API_URL)
@@ -71,10 +73,9 @@ public class GfycatTest {
             try {
                 Response<CajaxResponse> response = service.getCajax(hash)
                         .execute();
-                CajaxResponse           cajax    = response.body();
-                GfyItem                 gfyItem  = cajax.getGfyItem();
-                if (gfyItem == null) break; // TODO: Handle bad data
-                System.out.println(gfyItem);
+                CajaxResponse cajax = response.body();
+                cajax.setOriginalUrl(gfycatUrl);
+                MediaTest.testResponse(cajax);
             } catch (IOException e) {
                 e.printStackTrace();
                 break;
@@ -86,9 +87,9 @@ public class GfycatTest {
         if (service == null) return;
         for (String gifUrl : GIF_URLS) {
             try {
-                Response<TranscodeResponse> response         = service.getTranscode(gifUrl)
+                Response<TranscodeResponse> response = service.getTranscode(gifUrl)
                         .execute();
-                TranscodeResponse           transcodeRespose = response.body();
+                TranscodeResponse transcodeRespose = response.body();
                 if (transcodeRespose == null) break; // TODO: Handle bad data
                 System.out.println(transcodeRespose);
             } catch (IOException e) {

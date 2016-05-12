@@ -20,8 +20,14 @@
 
 package com.fernandobarillas.albumparser.gfycat.model.cajax;
 
+import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
+import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.IMediaAlbum;
+import com.fernandobarillas.albumparser.media.IMediaResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.net.URL;
 
 import javax.annotation.Generated;
 
@@ -29,25 +35,68 @@ import javax.annotation.Generated;
  * Created by fb on 5/9/16.
  */
 @Generated("org.jsonschema2pojo")
-public class CajaxResponse {
+public class CajaxResponse implements IMediaResponse {
 
     @SerializedName("gfyItem")
     @Expose
     public GfyItem gfyItem;
-
     @SerializedName("error")
     @Expose
     public String error;
+    private String mOriginalUrl;
 
-    public String getError() {
+    @Override
+    public IMediaAlbum getAlbum() {
+        return null;
+    }
+
+    @Override
+    public String getApiDomain() {
+        return GfycatApi.BASE_DOMAIN;
+    }
+
+    @Override
+    public String getErrorMessage() {
         return error;
     }
 
-    public GfyItem getGfyItem() {
+    @Override
+    public String getHash() {
+        return (gfyItem != null) ? gfyItem.gfyName : null;
+    }
+
+    @Override
+    public void setHash(String hash) {
+        // Hash is handled by getHash()
+    }
+
+    @Override
+    public IMedia getMedia() {
         return gfyItem;
     }
 
-    public String getPreviewUrl() {
-        return (gfyItem == null) ? gfyItem.getPosterUrl() : null;
+    @Override
+    public String getOriginalUrlString() {
+        return mOriginalUrl;
+    }
+
+    @Override
+    public URL getPreviewUrl() {
+        return (gfyItem != null) ? gfyItem.getPreviewUrl() : null;
+    }
+
+    @Override
+    public boolean isAlbum() {
+        return false;
+    }
+
+    @Override
+    public boolean isSuccessful() {
+        return gfyItem != null;
+    }
+
+    @Override
+    public void setOriginalUrl(String originalUrl) {
+        mOriginalUrl = originalUrl;
     }
 }
