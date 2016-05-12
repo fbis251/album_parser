@@ -23,12 +23,13 @@ package com.example;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.media.IMediaResponse;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 
 /**
  * Created by fb on 5/11/16.
  */
 public class MediaTest {
-    protected final static String SEPARATOR = "--------------------";
+    protected final static String SEPARATOR = "\n--------------------\n";
 
     public static void testResponse(IMediaResponse mediaResponse) {
         System.out.println("Response from " + mediaResponse.getApiDomain() + " API");
@@ -62,7 +63,21 @@ public class MediaTest {
                 "Title='" + media.getTitle() + '\'' +
                 ", Description='" + media.getDescription() + '\'' +
                 ", isVideo='" + media.isVideo() + '\'' +
-                ", URL='" + media.getUrl(true) + '\'' +
+                ", highQuality='" + media.getUrl(true) + '\'' +
+                ", highStats='" + getVideoInfo(media, true) + '\'' +
+                ", lowQuality='" + media.getUrl(false) + '\'' +
+                ", lowStats='" + getVideoInfo(media, false) + '\'' +
                 '}';
+    }
+
+    private static String getVideoInfo(IMedia media, boolean highQuality) {
+        if (media == null) return null;
+        String result = "";
+        if (media.getWidth(highQuality) > 0) result += String.format("%dw", media.getWidth(highQuality));
+        if (media.getHeight(highQuality) > 0) result += String.format(" %dh", media.getHeight(highQuality));
+        if (media.getDuration() > 0) result += String.format(" %.1fs", media.getDuration());
+        if (media.getByteSize(highQuality) > 0)
+            result += " " + ParseUtils.getSizeInMbString(media.getByteSize(highQuality)) + "MB";
+        return result;
     }
 }
