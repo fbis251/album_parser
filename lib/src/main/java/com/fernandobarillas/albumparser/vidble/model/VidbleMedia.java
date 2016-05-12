@@ -66,7 +66,7 @@ public class VidbleMedia implements IMedia {
     }
 
     @Override
-    public int getByteSize() {
+    public int getByteSize(boolean highQuality) {
         return SIZE_UNAVAILABLE;
     }
 
@@ -82,7 +82,7 @@ public class VidbleMedia implements IMedia {
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight(boolean highQuality) {
         return SIZE_UNAVAILABLE;
     }
 
@@ -119,7 +119,7 @@ public class VidbleMedia implements IMedia {
     }
 
     @Override
-    public int getWidth() {
+    public int getWidth(boolean highQuality) {
         return SIZE_UNAVAILABLE;
     }
 

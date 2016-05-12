@@ -29,6 +29,10 @@ public interface IMedia {
     int SIZE_UNAVAILABLE     = -1;
     int DURATION_UNAVAILABLE = -1;
 
+    // Only protocol, no : or /
+    String PROTOCOL_HTTP  = "http";
+    String PROTOCOL_HTTPS = "https";
+
     String EXT_JPG  = "jpg";
     String EXT_PNG  = "png";
     String EXT_JPEG = "jpeg";
@@ -38,9 +42,11 @@ public interface IMedia {
     String EXT_WEBM = "webm";
 
     /**
+     * @param highQuality True to get the size of the high quality media, false to get the size of the low quality
+     *                    media
      * @return The size in bytes of this media, {@link #SIZE_UNAVAILABLE} if no size returned by the API
      */
-    int getByteSize();
+    int getByteSize(boolean highQuality);
 
     /**
      * @return The description of this media, null if no description available
@@ -53,9 +59,11 @@ public interface IMedia {
     double getDuration();
 
     /**
+     * @param highQuality True to get the height of the high quality media, false to get the height of the low quality
+     *                    media
      * @return The height of the media, {@link #SIZE_UNAVAILABLE} if no size returned by the API
      */
-    int getHeight();
+    int getHeight(boolean highQuality);
 
     /**
      * @return A URL to the preview image for this media, null if unavailable
@@ -74,9 +82,11 @@ public interface IMedia {
     URL getUrl(boolean highQuality);
 
     /**
-     * @return The width of the media, {@link #SIZE_UNAVAILABLE} if no size returned by the API
+     * @param highQuality True to get the width of the high quality media, false to get the width of the low quality
+     *                    media
+     * @return The height of the media, {@link #SIZE_UNAVAILABLE} if no size returned by the API
      */
-    int getWidth();
+    int getWidth(boolean highQuality);
 
     /**
      * @return True if this media is a video (mp4, webm, etc.) or a GIF, false otherwise

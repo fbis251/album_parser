@@ -149,8 +149,8 @@ public class Video implements IMedia {
     public String  redditLink;
 
     @Override
-    public int getByteSize() {
-        return IMedia.SIZE_UNAVAILABLE;
+    public int getByteSize(boolean highQuality) {
+        return SIZE_UNAVAILABLE;
     }
 
     @Override
@@ -164,7 +164,7 @@ public class Video implements IMedia {
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight(boolean highQuality) {
         return height;
     }
 
@@ -192,7 +192,7 @@ public class Video implements IMedia {
     }
 
     @Override
-    public int getWidth() {
+    public int getWidth(boolean highQuality) {
         return width;
     }
 
