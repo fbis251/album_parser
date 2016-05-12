@@ -21,8 +21,12 @@
 package com.fernandobarillas.albumparser.imgur.model;
 
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.annotation.Generated;
 
@@ -31,7 +35,7 @@ import javax.annotation.Generated;
  */
 
 @Generated("org.jsonschema2pojo")
-public class Image {
+public class Image implements IMedia {
     // https://api.imgur.com/models/image
     public static final String ORIGINAL         = "";
     public static final String SMALL_SQUARE     = "s";
@@ -75,102 +79,101 @@ public class Image {
     @Expose
     public String  datetime;
 
-    /**
-     * @return The datetime
-     */
-    public String getDatetime() {
-        return datetime;
+    @Override
+    public int getByteSize(boolean highQuality) {
+        // Imgur only returns size for original quality images
+        return (highQuality) ? size : SIZE_UNAVAILABLE;
     }
 
-    /**
-     * @return The description
-     */
+    @Override
     public String getDescription() {
         return description;
     }
 
-    /**
-     * @return The ext
-     */
-    public String getExt() {
-        return ext;
+    @Override
+    public double getDuration() {
+        return DURATION_UNAVAILABLE;
+    }
+
+    @Override
+    public int getHeight(boolean highQuality) {
+        // Imgur only returns height for original quality
+        return (highQuality) ? height : SIZE_UNAVAILABLE;
+    }
+
+    @Override
+    public URL getPreviewUrl() {
+        return getImageUrl(HUGE_THUMBNAIL);
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public URL getUrl(boolean highQuality) {
+        return (highQuality) ? getImageUrl(ORIGINAL) : getImageUrl(HUGE_THUMBNAIL);
+    }
+
+    @Override
+    public int getWidth(boolean highQuality) {
+        // Imgur only returns width for original quality
+        return (highQuality) ? width : SIZE_UNAVAILABLE;
+    }
+
+    @Override
+    public boolean isVideo() {
+        return animated;
     }
 
     /**
-     * @return The hash
-     */
-    public String getHash() {
-        return hash;
-    }
-
-    /**
-     * @return The height
-     */
-    public int getHeight() {
-        return height;
-    }
-
-    /**
-     * Gets the url to the image with either the original quality or a lower quality huge thumbnail
-     *
-     * @param originalQuality True to get the original quality link, false for huge thumbnail quality
-     * @return The URL to the image
-     */
-    public String getImageUrl(boolean originalQuality) {
-        String quality = (originalQuality) ? ORIGINAL : HUGE_THUMBNAIL;
-        return ImgurApi.IMAGE_URL + hash + quality + ext;
-    }
-
-    /**
-     * Gets the url to the image with the passed in quality.
+     * Wrapper for {@link #getImageUrl(String, boolean)} that always gets a GIF/GIFV URL for animations in {@link
+     * #ORIGINAL} quality
      *
      * @param quality The quality to use in the returned URL, for example to return the URL for the small thumbnail
      *                image you can pass in {@link #SMALL_THUMBNAIL}
      * @return The URL to the image with the selected quality
      */
-    public String getImageUrl(String quality) {
-        return ImgurApi.IMAGE_URL + hash + quality + ext;
+    public URL getImageUrl(String quality) {
+        return getImageUrl(quality, false);
     }
 
     /**
-     * @return The size
+     * Gets the url to the image with the passed in quality.
+     *
+     * @param quality   The quality to use in the returned URL, for example to return the URL for the small thumbnail
+     *                  image you can pass in {@link #SMALL_THUMBNAIL}
+     * @param preferMp4 True to get an MP4 extension instead of a GIF/GIFV extension, false for original extension. This
+     *                  only works when {@link #ORIGINAL} quality is requested
+     * @return The URL to the image with the selected quality
      */
-    public int getSize() {
-        return size;
+    public URL getImageUrl(String quality, boolean preferMp4) {
+        String newExt = ext;
+        if (animated && !quality.equals(ORIGINAL)) {
+            // Imgur returns a JPG image for non-ORIGINAL URLs for animations regardless of the extension in the request
+            // The client shouldn't have to use the response MIME type to figure this out
+            newExt = "." + EXT_JPG;
+        }
+
+        if (preferMp4 && (newExt.endsWith(EXT_GIF) || newExt.endsWith(EXT_GIFV))) {
+            newExt = "." + EXT_MP4;
+        }
+
+        String resultUrl = ImgurApi.IMAGE_URL + "/" + hash + quality + newExt;
+        try {
+            return new URL(resultUrl);
+        } catch (MalformedURLException ignored) {
+        }
+        return null;
     }
 
     /**
-     * @return The title
+     * @return A URL to an mp4 file if this this is a GIF/GIFV, null for all other file types. Useful when combined with
+     * {@link #isVideo()} before calling this method
      */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * @return The width
-     */
-    public int getWidth() {
-        return width;
-    }
-
-    /**
-     * @return The animated
-     */
-    public boolean isAnimated() {
-        return animated;
-    }
-
-    /**
-     * @return The looping
-     */
-    public boolean isLooping() {
-        return looping;
-    }
-
-    /**
-     * @return The preferVideo
-     */
-    public boolean isPreferVideo() {
-        return preferVideo;
+    public URL getMp4Url() {
+        System.out.println("Animated: ? " + animated);
+        return (animated) ? getImageUrl(ORIGINAL, true) : null;
     }
 }

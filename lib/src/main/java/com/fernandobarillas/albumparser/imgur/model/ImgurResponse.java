@@ -20,10 +20,14 @@
 
 package com.fernandobarillas.albumparser.imgur.model;
 
+import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
+import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.IMediaAlbum;
+import com.fernandobarillas.albumparser.media.IMediaResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.net.URL;
 
 import javax.annotation.Generated;
 
@@ -32,8 +36,7 @@ import javax.annotation.Generated;
  */
 
 @Generated("org.jsonschema2pojo")
-public class ImgurResponse {
-
+public class ImgurResponse implements IMediaResponse {
     @SerializedName("data")
     @Expose
     public Data    data;
@@ -44,31 +47,64 @@ public class ImgurResponse {
     @Expose
     public int     status;
 
-    /**
-     * @return The data
-     */
-    public Data getData() {
+    private String mAlbumHash;
+    private String mOriginalUrl;
+
+    @Override
+    public IMediaAlbum getAlbum() {
         return data;
     }
 
-    public String getPreviewUrl() {
-        if (data == null) return null;
-        List<Image> images = data.getImages();
-        return (images.size() > 0) ? images.get(0)
-                .getImageUrl(false) : null;
+    @Override
+    public String getApiDomain() {
+        return ImgurApi.BASE_DOMAIN;
     }
 
-    /**
-     * @return The status
-     */
-    public int getStatus() {
-        return status;
+    @Override
+    public String getErrorMessage() {
+        return null;
     }
 
-    /**
-     * @return The success
-     */
-    public boolean isSuccess() {
-        return success;
+    @Override
+    public String getHash() {
+        return mAlbumHash;
+    }
+
+    @Override
+    public void setHash(String hash) {
+        mAlbumHash = hash;
+    }
+
+    @Override
+    public IMedia getMedia() {
+        // Not supported by this API call
+        return null;
+    }
+
+    @Override
+    public String getOriginalUrlString() {
+        return mOriginalUrl;
+    }
+
+    @Override
+    public URL getPreviewUrl() {
+        return (data != null) ? data.getPreviewUrl() : null;
+    }
+
+    @Override
+    public boolean isAlbum() {
+        // This API call is for albums only
+        return true;
+    }
+
+    @Override
+    public boolean isSuccessful() {
+        // This API always returns true in the response, determine succes from non-empty album instead
+        return (data != null && !data.isEmpty());
+    }
+
+    @Override
+    public void setOriginalUrl(String originalUrl) {
+        mOriginalUrl = originalUrl;
     }
 }

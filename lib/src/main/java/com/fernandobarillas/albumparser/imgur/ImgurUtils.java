@@ -65,7 +65,7 @@ public class ImgurUtils {
         if (hash == null) return null;
         if (hash.length() <= IMGUR_ALBUM_HASH_LENGTH) return null;
         if (isAlbum(hash)) return null;
-        return String.format("%s%s.jpg", ImgurApi.IMAGE_URL, hash);
+        return String.format("%s/%s.jpg", ImgurApi.IMAGE_URL, hash);
     }
 
     /**

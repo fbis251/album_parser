@@ -20,9 +20,12 @@
 
 package com.fernandobarillas.albumparser.imgur.model;
 
+import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +36,7 @@ import javax.annotation.Generated;
  */
 
 @Generated("org.jsonschema2pojo")
-public class Data {
+public class Data implements IMediaAlbum {
 
     @SerializedName("count")
     @Expose
@@ -42,18 +45,35 @@ public class Data {
     @Expose
     public List<Image> images = new ArrayList<Image>();
 
-    /**
-     * @return The count
-     */
+    private List<IMedia> mMediaList;
+
+    @Override
+    public List<IMedia> getAlbumMedia() {
+        if (mMediaList == null) {
+            mMediaList = new ArrayList<>();
+            mMediaList.addAll(images);
+        }
+        return mMediaList;
+    }
+
+    @Override
     public int getCount() {
         return count;
     }
 
-    /**
-     * @return The images
-     */
-    public List<Image> getImages() {
-        return images;
+    @Override
+    public URL getPreviewUrl() {
+        if (!isEmpty()) {
+            // Return the first image as the preview
+            return getAlbumMedia().get(0)
+                    .getPreviewUrl();
+        }
+
+        return null;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return count == 0;
+    }
 }
