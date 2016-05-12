@@ -18,12 +18,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.vidble.exception;
+package com.fernandobarillas.albumparser.vidble.model;
+
+import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.IMediaAlbum;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by fb on 5/8/16.
+ * Created by fb on 5/11/16.
  */
-public class InvalidVidbleUrlException extends Exception {
-    public InvalidVidbleUrlException() {
+public class VidbleAlbum implements IMediaAlbum {
+    List<IMedia> mMediaList;
+
+    public VidbleAlbum(List<String> responsePics) {
+        mMediaList = new ArrayList<>();
+        if (responsePics == null) return;
+        for (String responsePic : responsePics) {
+            mMediaList.add(new VidbleMedia(responsePic));
+        }
+    }
+
+    @Override
+    public List<IMedia> getAlbumMedia() {
+        return mMediaList;
+    }
+
+    @Override
+    public int getCount() {
+        return mMediaList.size();
+    }
+
+    @Override
+    public URL getPreviewUrl() {
+        if (!isEmpty()) {
+            // Return the first image as the preview
+            return mMediaList.get(0)
+                    .getPreviewUrl();
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return getCount() == 0;
     }
 }

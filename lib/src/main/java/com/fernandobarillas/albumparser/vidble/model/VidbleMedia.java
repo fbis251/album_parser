@@ -20,11 +20,12 @@
 
 package com.fernandobarillas.albumparser.vidble.model;
 
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.vidble.VidbleUtils;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
-import com.fernandobarillas.albumparser.vidble.exception.InvalidVidbleUrlException;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -35,7 +36,7 @@ import java.net.URL;
  * <p>
  * The constructor will also accept URLs with an http/https prefix [http/https]://www.vidble.com/[HASH].[EXTENSION]
  */
-public class VidbleUrl {
+public class VidbleMedia implements IMedia {
     private final static String MEDIUM_QUALITY   = "_med";
     private final static String ORIGINAL_QUALITY = "";
     private String mExtension;
@@ -45,10 +46,9 @@ public class VidbleUrl {
      * Attempts to parse a URL String and validates it as a Vidble URL
      *
      * @param urlString The String to validate and parse as a Vidble URL
-     * @throws InvalidVidbleUrlException If a passed-in String could not be recognized as a valid vidble URL
      */
-    public VidbleUrl(String urlString) throws InvalidVidbleUrlException {
-        if (urlString == null) throw new InvalidVidbleUrlException();
+    public VidbleMedia(String urlString) {
+        if (urlString == null) return;
 
         if (!urlString.startsWith("http")) {
             urlString = "http:" + urlString;
@@ -59,24 +59,81 @@ public class VidbleUrl {
         mHash = VidbleUtils.getHash(url);
         mExtension = ParseUtils.getExtension(url);
         if (mExtension == null) {
-            mExtension = "jpg"; // Try to guess at it, even with a jpg extension the Vidble returns the image/gif
+            mExtension = EXT_JPG; // Try to guess at it, even with a jpg extension the Vidble returns the image/gif
         }
 
-        if (url == null || mHash == null) throw new InvalidVidbleUrlException();
+        mExtension = mExtension.toLowerCase();
     }
 
-    /**
-     * Gets the String representation of the VidbleUrl.
-     *
-     * @param originalQuality True to return the original quality url, false to return medium quality
-     * @return A String url of a Vidble image
-     */
-    public String getUrl(boolean originalQuality) {
+    @Override
+    public int getByteSize() {
+        return SIZE_UNAVAILABLE;
+    }
+
+    @Override
+    public String getDescription() {
+        // Vidble doesn't support descriptions
+        return null;
+    }
+
+    @Override
+    public double getDuration() {
+        return DURATION_UNAVAILABLE;
+    }
+
+    @Override
+    public int getHeight() {
+        return SIZE_UNAVAILABLE;
+    }
+
+    @Override
+    public URL getPreviewUrl() {
+        // Get JPG preview if this is a GIF
+        String extension = (mExtension.equals(EXT_GIF)) ? EXT_JPG : mExtension;
+        try {
+            return new URL(VidbleApi.IMAGE_URL + "/" + mHash + MEDIUM_QUALITY + "." + extension);
+        } catch (MalformedURLException ignored) {
+        }
+        return null;
+    }
+
+    @Override
+    public String getTitle() {
+        // Vidble doesn't support titles
+        return null;
+    }
+
+    @Override
+    public URL getUrl(boolean highQuality) {
         String quality = ORIGINAL_QUALITY;
-        if (!originalQuality && !mExtension.equals("gif")) {
+        if (!highQuality && !mExtension.equals(EXT_GIF)) {
+            // Vidble doesn't provide lower quality GIFs, don't use medium quality at all for GIFs
             quality = MEDIUM_QUALITY;
         }
 
-        return VidbleApi.IMAGE_URL + mHash + quality + "." + mExtension;
+        try {
+            return new URL(VidbleApi.IMAGE_URL + "/" + mHash + quality + "." + mExtension);
+        } catch (MalformedURLException ignored) {
+        }
+        return null;
+    }
+
+    @Override
+    public int getWidth() {
+        return SIZE_UNAVAILABLE;
+    }
+
+    @Override
+    public boolean isVideo() {
+        return mExtension.equals(EXT_GIF);
+    }
+
+    @Override
+    public String toString() {
+        return "VidbleMedia{" +
+                "mExtension='" + mExtension + '\'' +
+                ", mHash='" + mHash + '\'' +
+                ", URL='" + getUrl(true) + '\'' +
+                '}';
     }
 }

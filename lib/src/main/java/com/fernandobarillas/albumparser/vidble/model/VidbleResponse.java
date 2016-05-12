@@ -20,10 +20,14 @@
 
 package com.fernandobarillas.albumparser.vidble.model;
 
-import com.fernandobarillas.albumparser.vidble.exception.InvalidVidbleUrlException;
+import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.IMediaAlbum;
+import com.fernandobarillas.albumparser.media.IMediaResponse;
+import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,33 +37,72 @@ import javax.annotation.Generated;
  * Java representation of the Vidble album JSON response
  */
 @Generated("org.jsonschema2pojo")
-public class VidbleResponse {
+public class VidbleResponse implements IMediaResponse {
+
+    String mOriginalUrl;
 
     @SerializedName("pics")
     @Expose
-    private List<String> pics = new ArrayList<String>();
+    public List<String> pics = new ArrayList<String>();
+    VidbleAlbum mAlbum;
+    private String mHash;
 
-    /**
-     * Parses the pics returned by the Vidble API into valid List of url Strings
-     *
-     * @param originalQuality True to return the url to the original quality image, false for medium quality
-     * @return A List of validated and parsed url Strings to the images in the album
-     */
-    public List<String> getPics(boolean originalQuality) {
-        List<String> result = new ArrayList<>();
-        for (String picUrl : pics) {
-            try {
-                result.add(new VidbleUrl(picUrl).getUrl(originalQuality));
-            } catch (InvalidVidbleUrlException e) {
-                continue;
-            }
+    @Override
+    public IMediaAlbum getAlbum() {
+        if (mAlbum == null) {
+            mAlbum = new VidbleAlbum(pics);
         }
-
-        return result;
+        return mAlbum;
     }
 
-    public String getPreviewUrl() {
-        List<String> pics = getPics(true);
-        return (pics.size() > 0) ? pics.get(0) : null;
+    @Override
+    public String getApiDomain() {
+        return VidbleApi.BASE_DOMAIN;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return null;
+    }
+
+    @Override
+    public String getHash() {
+        return mHash;
+    }
+
+    @Override
+    public void setHash(String hash) {
+        mHash = hash;
+    }
+
+    @Override
+    public IMedia getMedia() {
+        // No direct media, this is an album
+        return null;
+    }
+
+    @Override
+    public String getOriginalUrlString() {
+        return mOriginalUrl;
+    }
+
+    @Override
+    public URL getPreviewUrl() {
+        return (getAlbum() != null) ? getAlbum().getPreviewUrl() : null;
+    }
+
+    @Override
+    public boolean isAlbum() {
+        return true;
+    }
+
+    @Override
+    public boolean isSuccessful() {
+        return getAlbum().isEmpty();
+    }
+
+    @Override
+    public void setOriginalUrl(String originalUrl) {
+        mOriginalUrl = originalUrl;
     }
 }
