@@ -57,7 +57,7 @@ public class MediaTest {
         System.out.println(SEPARATOR);
     }
 
-    public static String getMediaInfo(String hash, IMedia media) {
+    protected static String getMediaInfo(String hash, IMedia media) {
         if (media == null) return hash + " Error: media is null";
         return hash + " Media{" +
                 "Title='" + media.getTitle() + '\'' +
