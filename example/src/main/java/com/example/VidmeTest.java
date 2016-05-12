@@ -20,9 +20,9 @@
 
 package com.example;
 
+import com.fernandobarillas.albumparser.media.IMediaResponse;
 import com.fernandobarillas.albumparser.vidme.VidmeUtils;
 import com.fernandobarillas.albumparser.vidme.api.VidmeApi;
-import com.fernandobarillas.albumparser.vidme.model.Video;
 import com.fernandobarillas.albumparser.vidme.model.VidmeResponse;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class VidmeTest {
     // @formatter:off
     private static final String[] TEST_URLS = {
             "https://vid.me/e/yYU",
-            "https://vid.me/e/Y8JS",
+            "https://vid.me/Y8JS",
     };
     // @formatter:on
 
@@ -58,11 +58,11 @@ public class VidmeTest {
             try {
                 Response<VidmeResponse> response = service.getVideoData(hash)
                         .execute();
-                VidmeResponse vidmeResponse = response.body();
-                Video         video         = vidmeResponse.getVideo();
-                if (video == null) break; // TODO: Handle bad data
-                System.out.println(video);
+                IMediaResponse mediaResponse = response.body();
+                mediaResponse.setOriginalUrl(vidmeUrl);
+                MediaTest.testResponse(mediaResponse);
             } catch (IOException e) {
+                System.err.println("Error with request: " + vidmeUrl);
                 e.printStackTrace();
                 break;
             }

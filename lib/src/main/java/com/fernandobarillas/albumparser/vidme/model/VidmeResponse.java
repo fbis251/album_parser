@@ -20,8 +20,14 @@
 
 package com.fernandobarillas.albumparser.vidme.model;
 
+import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.IMediaAlbum;
+import com.fernandobarillas.albumparser.media.IMediaResponse;
+import com.fernandobarillas.albumparser.vidme.api.VidmeApi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.net.URL;
 
 import javax.annotation.Generated;
 
@@ -29,7 +35,9 @@ import javax.annotation.Generated;
  * Created by fb on 5/10/16.
  */
 @Generated("org.jsonschema2pojo")
-public class VidmeResponse {
+public class VidmeResponse implements IMediaResponse {
+
+    private String mOriginalUrl;
 
     @SerializedName("status")
     @Expose
@@ -45,6 +53,61 @@ public class VidmeResponse {
     public Video   video;
 
     @Override
+    public IMediaAlbum getAlbum() {
+        return null;
+    }
+
+    @Override
+    public String getApiDomain() {
+        return VidmeApi.BASE_DOMAIN;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return error;
+    }
+
+    @Override
+    public String getHash() {
+        return (video != null) ? video.url : null;
+    }
+
+    @Override
+    public IMedia getMedia() {
+        return video;
+    }
+
+    @Override
+    public String getOriginalUrlString() {
+        return mOriginalUrl;
+    }
+
+    @Override
+    public URL getPreviewUrl() {
+        return (video != null) ? video.getPreviewUrl() : null;
+    }
+
+    @Override
+    public boolean isAlbum() {
+        return false;
+    }
+
+    @Override
+    public boolean isSuccessful() {
+        return status;
+    }
+
+    @Override
+    public void setOriginalUrl(String originalUrl) {
+        mOriginalUrl = originalUrl;
+    }
+
+    @Override
+    public void setHash(String hash) {
+        // The hash is kept track of by Video
+    }
+
+    @Override
     public String toString() {
         return "VidmeResponse{" +
                 "status=" + status +
@@ -52,29 +115,5 @@ public class VidmeResponse {
                 ", code='" + code + '\'' +
                 ", video=" + video +
                 '}';
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public String getPreviewUrl() {
-        return (video == null) ? video.getThumbnailUrl() : null;
-    }
-
-    public Video getVideo() {
-        return video;
-    }
-
-    public String getVideoUrl() {
-        return (video == null) ? video.getCompleteUrl() : null;
-    }
-
-    public boolean isSuccessful() {
-        return status;
     }
 }

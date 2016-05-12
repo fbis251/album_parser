@@ -20,8 +20,12 @@
 
 package com.fernandobarillas.albumparser.vidme.model;
 
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.annotation.Generated;
 
@@ -30,7 +34,7 @@ import javax.annotation.Generated;
  */
 
 @Generated("org.jsonschema2pojo")
-public class Video {
+public class Video implements IMedia {
 
     @SerializedName("video_id")
     @Expose
@@ -46,7 +50,7 @@ public class Video {
     public String  embedUrl;
     @SerializedName("user_id")
     @Expose
-    public Object  userId;
+    public String  userId;
     @SerializedName("complete")
     @Expose
     public String  complete;
@@ -61,10 +65,10 @@ public class Video {
     public String  title;
     @SerializedName("description")
     @Expose
-    public Object  description;
+    public String  description;
     @SerializedName("duration")
     @Expose
-    public float   duration;
+    public double  duration;
     @SerializedName("height")
     @Expose
     public int     height;
@@ -145,6 +149,59 @@ public class Video {
     public String  redditLink;
 
     @Override
+    public int getByteSize() {
+        return IMedia.SIZE_UNAVAILABLE;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public double getDuration() {
+        return duration;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
+
+    @Override
+    public URL getPreviewUrl() {
+        try {
+            return new URL(thumbnailUrl);
+        } catch (MalformedURLException ignored) {
+        }
+        return null;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public URL getUrl(boolean highQuality) {
+        try {
+            return new URL(completeUrl);
+        } catch (MalformedURLException ignored) {
+        }
+        return null;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    public boolean isVideo() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "Video{" +
                 "url='" + url + '\'' +
@@ -154,25 +211,5 @@ public class Video {
                 ", duration=" + duration +
                 ", thumbnailUrl='" + thumbnailUrl + '\'' +
                 '}';
-    }
-
-    public String getCompleteUrl() {
-        return completeUrl;
-    }
-
-    public float getDuration() {
-        return duration;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public int getWidth() {
-        return width;
     }
 }
