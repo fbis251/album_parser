@@ -38,3 +38,9 @@ subprojects {
         archives javadocJar
     }
 }
+
+task runExample() {
+    dependsOn ':example:runSimple'
+}
+
+defaultTasks 'runExample'
