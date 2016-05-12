@@ -42,7 +42,9 @@ public class ParseUtils {
         if (!path.contains(".")) return null;
         int extensionIndex = path.lastIndexOf(".") + 1;
         if (extensionIndex > path.length()) return null;
-        return path.substring(extensionIndex);
+        String extension = path.substring(extensionIndex)
+                .toLowerCase();
+        return (!extension.isEmpty()) ? extension : null;
     }
 
     /**
