@@ -143,7 +143,7 @@ public class TranscodeResponse {
 
     @Override
     public String toString() {
-        return gfyName + " " + ParseUtils.getSizeInMb(gifSize) + "MB -> " + ParseUtils.getSizeInMb(gfysize) + "MB " + mp4Url;
+        return gfyName + " " + ParseUtils.getSizeInMbString(gifSize) + "MB -> " + ParseUtils.getSizeInMbString(gfysize) + "MB " + mp4Url;
     }
 
     public String getMp4Url() {

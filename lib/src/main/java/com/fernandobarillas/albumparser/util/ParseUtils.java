@@ -53,9 +53,18 @@ public class ParseUtils {
      * @param byteSize The number of bytes to convert to megabytes
      * @return A String with the size in megabytes
      */
-    public static String getSizeInMb(int byteSize) {
-        double mbSize = byteSize / 1024.0 / 1024.0;
-        return String.format("%.1f", mbSize);
+    public static String getSizeInMbString(int byteSize) {
+        return String.format("%.1f", getSizeInMb(byteSize));
+    }
+
+    /**
+     * Converts the input byte size to megabytes
+     *
+     * @param byteSize The number of bytes to convert to megabytes
+     * @return The byteSize in megabytes
+     */
+    public static double getSizeInMb(int byteSize) {
+        return byteSize / 1024.0 / 1024.0;
     }
 
     /**

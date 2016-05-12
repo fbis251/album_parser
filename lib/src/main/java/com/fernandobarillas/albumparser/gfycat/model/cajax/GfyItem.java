@@ -170,7 +170,7 @@ public class GfyItem {
 
     @Override
     public String toString() {
-        return gfyName + " " + ParseUtils.getSizeInMb(gifSize) + "MB -> " + ParseUtils.getSizeInMb(mp4Size) + "MB " + mp4Url;
+        return gfyName + " " + ParseUtils.getSizeInMbString(gifSize) + "MB -> " + ParseUtils.getSizeInMbString(mp4Size) + "MB " + mp4Url;
     }
 
     public int getHeight() {
