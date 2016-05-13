@@ -33,13 +33,18 @@ public interface IMedia {
     String PROTOCOL_HTTP  = "http";
     String PROTOCOL_HTTPS = "https";
 
-    String EXT_JPG  = "jpg";
-    String EXT_PNG  = "png";
-    String EXT_JPEG = "jpeg";
+    // https://developer.android.com/guide/appendix/media-formats.html
+    String EXT_3GP  = "3gp";
+    String EXT_BMP  = "bmp";
     String EXT_GIF  = "gif";
     String EXT_GIFV = "gifv";
+    String EXT_JPG  = "jpg";
+    String EXT_JPEG = "jpeg";
+    String EXT_MKV  = "mkv";
+    String EXT_PNG  = "png";
     String EXT_MP4  = "mp4";
     String EXT_WEBM = "webm";
+    String EXT_WEBP = "webp";
 
     /**
      * @param highQuality True to get the size of the high quality media, false to get the size of the low quality
