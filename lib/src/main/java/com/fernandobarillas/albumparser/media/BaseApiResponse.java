@@ -23,9 +23,9 @@ package com.fernandobarillas.albumparser.media;
 import java.net.URL;
 
 /**
- * Class that sets default values for the IMediaResponse interface
+ * Class that sets default values for the IApiResponse interface
  */
-public class BaseMediaResponse implements IMediaResponse {
+public class BaseApiResponse implements IApiResponse {
     String mOriginalUrl;
 
     @Override

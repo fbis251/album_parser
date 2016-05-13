@@ -39,8 +39,7 @@ public class GfycatTest {
     private static String[] GFYCAT_URLS = {
         "https://thumbs.gfycat.com/PotableLeftAbalone-mobile.mp4",
         "https://gfycat.com/IndelibleMerryBuck",
-        "https://gfycat.com/cajax/get/GenerousSoftImago",
-        "https://gfycat.com//GregariousPepperyBellfrog",
+        "https://gfycat.com/GregariousPepperyBellfrog",
         "https://giant.gfycat.com/GregariousPepperyBellfrog.webm",
     };
 
@@ -75,7 +74,7 @@ public class GfycatTest {
                         .execute();
                 CajaxResponse cajax = response.body();
                 cajax.setOriginalUrl(gfycatUrl);
-                MediaTest.testResponse(cajax);
+                MediaTest.testApiResponse(cajax);
             } catch (IOException e) {
                 e.printStackTrace();
                 break;

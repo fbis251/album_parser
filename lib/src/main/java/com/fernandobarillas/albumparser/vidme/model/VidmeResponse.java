@@ -22,7 +22,7 @@ package com.fernandobarillas.albumparser.vidme.model;
 
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMediaResponse;
+import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.vidme.api.VidmeApi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -35,7 +35,7 @@ import javax.annotation.Generated;
  * Created by fb on 5/10/16.
  */
 @Generated("org.jsonschema2pojo")
-public class VidmeResponse implements IMediaResponse {
+public class VidmeResponse implements IApiResponse {
 
     private String mOriginalUrl;
 

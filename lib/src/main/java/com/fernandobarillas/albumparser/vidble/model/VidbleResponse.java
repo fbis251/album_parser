@@ -20,7 +20,7 @@
 
 package com.fernandobarillas.albumparser.vidble.model;
 
-import com.fernandobarillas.albumparser.media.BaseMediaResponse;
+import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.google.gson.annotations.Expose;
@@ -36,7 +36,7 @@ import javax.annotation.Generated;
  * Java representation of the Vidble album JSON response
  */
 @Generated("org.jsonschema2pojo")
-public class VidbleResponse extends BaseMediaResponse {
+public class VidbleResponse extends BaseApiResponse {
 
     @SerializedName("pics")
     @Expose

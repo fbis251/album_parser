@@ -20,7 +20,7 @@
 
 package com.fernandobarillas.albumparser.streamable.model;
 
-import com.fernandobarillas.albumparser.media.BaseMediaResponse;
+import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
 import com.fernandobarillas.albumparser.util.ParseUtils;
@@ -40,7 +40,7 @@ import static com.fernandobarillas.albumparser.media.IMedia.PROTOCOL_HTTPS;
  * Created by fb on 5/10/16.
  */
 @Generated("org.jsonschema2pojo")
-public class StreamableResponse extends BaseMediaResponse {
+public class StreamableResponse extends BaseApiResponse {
     // Video schema status responses according to: https://streamable.com/documentation
     public static final int STATUS_UPLOADING  = 0;
     public static final int STATUS_PROCESSING = 1;

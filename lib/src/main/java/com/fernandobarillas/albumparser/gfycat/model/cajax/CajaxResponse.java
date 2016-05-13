@@ -21,7 +21,7 @@
 package com.fernandobarillas.albumparser.gfycat.model.cajax;
 
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
-import com.fernandobarillas.albumparser.media.BaseMediaResponse;
+import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -34,7 +34,7 @@ import javax.annotation.Generated;
  * Created by fb on 5/9/16.
  */
 @Generated("org.jsonschema2pojo")
-public class CajaxResponse extends BaseMediaResponse {
+public class CajaxResponse extends BaseApiResponse {
 
     @SerializedName("gfyItem")
     @Expose

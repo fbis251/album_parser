@@ -22,7 +22,7 @@ package com.example;
 
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMediaResponse;
+import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 
 /**
@@ -31,25 +31,25 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 public class MediaTest {
     protected final static String SEPARATOR = "\n--------------------\n";
 
-    public static void testResponse(IMediaResponse mediaResponse) {
-        System.out.println("Response from " + mediaResponse.getApiDomain() + " API");
-        if (!mediaResponse.isSuccessful()) {
-            System.err.println("API Error: " + mediaResponse.getOriginalUrlString());
-            if (mediaResponse.getErrorMessage() == null) return;
-            System.err.println(mediaResponse.getErrorMessage());
+    public static void testApiResponse(IApiResponse apiResponse) {
+        System.out.println("Response from " + apiResponse.getApiDomain() + " API");
+        if (!apiResponse.isSuccessful()) {
+            System.err.println("API Error: " + apiResponse.getOriginalUrlString());
+            if (apiResponse.getErrorMessage() == null) return;
+            System.err.println(apiResponse.getErrorMessage());
             return;
         }
 
-        System.out.println("Original URL: " + mediaResponse.getOriginalUrlString());
-        System.out.println("Preview URL: " + mediaResponse.getPreviewUrl());
+        System.out.println("Original URL: " + apiResponse.getOriginalUrlString());
+        System.out.println("Preview URL: " + apiResponse.getPreviewUrl());
 
-        String hash = mediaResponse.getHash();
+        String hash = apiResponse.getHash();
 
-        if (mediaResponse.isAlbum()) {
+        if (apiResponse.isAlbum()) {
             System.out.println("API returned an album");
-            IMediaAlbum album = mediaResponse.getAlbum();
+            IMediaAlbum album = apiResponse.getAlbum();
             if (album == null) {
-                System.err.println("Response had a null album: " + mediaResponse.getHash());
+                System.err.println("Response had a null album: " + apiResponse.getHash());
                 return;
             }
             System.out.println("Album media count: " + album.getCount());
@@ -58,7 +58,7 @@ public class MediaTest {
             }
         } else {
             System.out.println("Response not album");
-            IMedia media = mediaResponse.getMedia();
+            IMedia media = apiResponse.getMedia();
             System.out.println(getMediaInfo(hash, media));
         }
 

@@ -61,9 +61,9 @@ public class GfycatParser implements IApiParser {
         GfycatApi service = retrofit.create(GfycatApi.class);
         Response<CajaxResponse> response = service.getCajax(hash)
                 .execute();
-        CajaxResponse mediaResponse = response.body();
-        mediaResponse.setOriginalUrl(mediaUrl.toString());
+        CajaxResponse apiResponse = response.body();
+        apiResponse.setOriginalUrl(mediaUrl.toString());
 
-        return new ParserResponse(mediaResponse);
+        return new ParserResponse(apiResponse);
     }
 }

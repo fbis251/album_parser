@@ -40,7 +40,6 @@ public class ImgurTest {
             "https://imgur.com/gallery/PBTrqAA",
             "http://i.imgur.com/sCjRLQG.jpg?1",
             "http://imgur.com/a/cvehZ",
-            "http://i.imgur.com/9U0eIZR.jpg?fb",
             "http://imgur.com/gallery/0Kqrz",
             "http://imgur.com/awsGf9p",
             "https://imgur.com/gallery/WKauF", // GIF album
@@ -68,7 +67,7 @@ public class ImgurTest {
                     ImgurResponse imgurResponse = response.body();
                     imgurResponse.setHash(hash);
                     imgurResponse.setOriginalUrl(url);
-                    MediaTest.testResponse(imgurResponse);
+                    MediaTest.testApiResponse(imgurResponse);
                 } catch (IOException e) {
                     System.err.println("Bad response for URL: " + url);
                     break;

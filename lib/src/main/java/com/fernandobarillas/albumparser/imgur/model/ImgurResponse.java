@@ -21,7 +21,7 @@
 package com.fernandobarillas.albumparser.imgur.model;
 
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
-import com.fernandobarillas.albumparser.media.BaseMediaResponse;
+import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -35,7 +35,7 @@ import javax.annotation.Generated;
  */
 
 @Generated("org.jsonschema2pojo")
-public class ImgurResponse extends BaseMediaResponse {
+public class ImgurResponse extends BaseApiResponse {
     @SerializedName("data")
     @Expose
     public Data    data;

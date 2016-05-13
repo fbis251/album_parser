@@ -69,7 +69,7 @@ public class VidbleTest {
                     VidbleResponse vidbleResponse = response.body();
                     vidbleResponse.setHash(hash);
                     vidbleResponse.setOriginalUrl(url);
-                    MediaTest.testResponse(vidbleResponse);
+                    MediaTest.testApiResponse(vidbleResponse);
                 } catch (IOException e) {
                     System.err.println("Album error: " + hash + " " + e.getMessage());
                     // TODO: Handle error

@@ -21,7 +21,7 @@
 package com.fernandobarillas.albumparser;
 
 import com.fernandobarillas.albumparser.media.IMedia;
-import com.fernandobarillas.albumparser.media.IMediaResponse;
+import com.fernandobarillas.albumparser.media.IApiResponse;
 
 /**
  * Class that facilitates getting API responses, regardless of which API returned them. This class will always try to
@@ -29,8 +29,8 @@ import com.fernandobarillas.albumparser.media.IMediaResponse;
  * links directly to video or an image
  */
 public class ParserResponse {
-    private IMediaResponse mMediaResponse;
-    private IMedia         mMedia;
+    private IApiResponse mApiResponse;
+    private IMedia       mMedia;
 
     /**
      * Constructor for direct IMedia objects
@@ -42,13 +42,13 @@ public class ParserResponse {
     }
 
     /**
-     * Constructor for full API IMediaResponses. These can contain one or several IMedia objects or a full album in
+     * Constructor for full API IApiResponse. These can contain one or several IMedia objects or a full album in
      * them.
      *
-     * @param mediaResponse The API response to return in this response
+     * @param apiResponse The API response to return in this response
      */
-    public ParserResponse(IMediaResponse mediaResponse) {
-        mMediaResponse = mediaResponse;
+    public ParserResponse(IApiResponse apiResponse) {
+        mApiResponse = apiResponse;
     }
 
     /**
@@ -59,10 +59,10 @@ public class ParserResponse {
     }
 
     /**
-     * @return The IMediaResponse returned by the parser
+     * @return The IApiResponse returned by the parser
      */
-    public IMediaResponse getMediaResponse() {
-        return mMediaResponse;
+    public IApiResponse getApiResponse() {
+        return mApiResponse;
     }
 
     /**

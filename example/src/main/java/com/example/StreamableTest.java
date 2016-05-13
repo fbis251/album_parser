@@ -69,7 +69,7 @@ public class StreamableTest {
                 StreamableResponse streamableResponse = response.body();
                 streamableResponse.setHash(hash);
                 streamableResponse.setOriginalUrl(streamableUrl);
-                MediaTest.testResponse(streamableResponse);
+                MediaTest.testApiResponse(streamableResponse);
             } catch (IOException e) {
                 e.printStackTrace();
                 break;
