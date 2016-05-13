@@ -23,6 +23,7 @@ package com.example;
 import com.fernandobarillas.albumparser.streamable.StreamableUtils;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
 import com.fernandobarillas.albumparser.streamable.model.StreamableResponse;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 
@@ -51,7 +52,7 @@ public class StreamableTest {
         StreamableApi service = retrofit.create(StreamableApi.class);
 
         for (String streamableUrl : TEST_URLS) {
-            if (StreamableUtils.isDirectUrl(streamableUrl)) {
+            if (ParseUtils.isDirectUrl(ParseUtils.getUrlObject(streamableUrl))) {
                 System.out.println("Direct url: " + streamableUrl);
                 System.out.println(MediaTest.SEPARATOR);
                 continue;

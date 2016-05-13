@@ -20,6 +20,7 @@
 
 package com.fernandobarillas.albumparser.streamable;
 
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 
@@ -29,6 +30,10 @@ import java.net.URL;
  * Created by fb on 5/10/16.
  */
 public class StreamableUtils {
+    private static final int    VIDEO_HASH_LENGTH = 4;
+    private static final String MP4_URL           = "/mp4/";
+    private static final String MP4_MOBILE_URL    = "/mp4-mobile/";
+
     /**
      * Attempts to get a Streamable hash for a passed in URL String
      *
@@ -40,20 +45,41 @@ public class StreamableUtils {
         if (url == null) return null; // Passed in String wasn't a valid URL
         String path = url.getPath();
 
+        if (path.contains(MP4_URL)) {
+            return ParseUtils.hashRegex(path, MP4_URL + "(\\w{" + VIDEO_HASH_LENGTH + "})");
+        }
+
+        if (path.contains(MP4_MOBILE_URL)) {
+            return ParseUtils.hashRegex(path, MP4_MOBILE_URL + "(\\w{" + VIDEO_HASH_LENGTH + "})");
+        }
+
         return ParseUtils.hashRegex(path, "/(\\w+)");
     }
 
     /**
-     * Try to detect a direct link to a Streamable video
-     *
-     * @param streamableUrl The video to check
-     * @return True when the URL is for a Streamable mp4 or webm file, false otherwise
+     * @param hash The hash to get the URL for
+     * @return A URL to a high quality vid.me MP4
      */
-    public static boolean isDirectUrl(String streamableUrl) {
-        URL url = ParseUtils.getUrlObject(streamableUrl, StreamableApi.BASE_DOMAIN);
-        if (url == null) return false;
-        String path = url.getPath();
-        if (path == null) return false;
-        return path.endsWith(".mp4") || path.endsWith(".webm");
+    public static String getMp4Url(String hash) {
+        return getMp4Url(hash, true);
+    }
+
+    /**
+     * @param hash The hash to get the URL for
+     * @return A URL to a mobile quality vid.me MP4
+     */
+    public static String getMp4MobileUrl(String hash) {
+        return getMp4Url(hash, false);
+    }
+
+    /**
+     * @param hash        The hash to get the URL for
+     * @param highQuality True to get a high quality MP4 URL, false to get a mobile quality MP4 URL
+     * @return A URL to a high or mobile quality MP4, null if the hash is null
+     */
+    public static String getMp4Url(String hash, boolean highQuality) {
+        if (hash == null) return null;
+        String quality = (highQuality) ? MP4_URL : MP4_MOBILE_URL;
+        return String.format("%s%s%s.%s", StreamableApi.CDN_URL, quality, hash, IMedia.EXT_MP4);
     }
 }
