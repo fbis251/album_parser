@@ -20,6 +20,7 @@
 
 package com.fernandobarillas.albumparser.vidble;
 
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 
@@ -72,7 +73,7 @@ public class VidbleUtils {
     public static String getImageUrl(String hash) {
         if (hash == null) return null;
         if (hash.length() != VidbleApi.IMAGE_HASH_LENGTH) return null;
-        return String.format("%s%s.jpg", VidbleApi.IMAGE_URL, hash);
+        return String.format("%s/%s.%s", VidbleApi.IMAGE_URL, hash, IMedia.EXT_JPG);
     }
 
     /**
