@@ -21,6 +21,7 @@
 package com.fernandobarillas.albumparser.imgur;
 
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.net.URL;
@@ -29,7 +30,8 @@ import java.net.URL;
  * Created by fb on 5/3/16.
  */
 public class ImgurUtils {
-    private static final int IMGUR_ALBUM_HASH_LENGTH = 5; // Most recent album hashes are exactly 5 characters long
+    private static final int ALBUM_HASH_LENGTH = 5; // Most recent album hashes are exactly 5 characters long
+    private static final int IMAGE_HASH_LENGTH = 7; // Most recent image hashes are exactly 7 characters long
 
     /**
      * Attempts to get an Imgur hash for a passed in URL String
@@ -43,29 +45,35 @@ public class ImgurUtils {
         String path = url.getPath();
 
         if (path.startsWith("/gallery/")) {
-            return ParseUtils.hashRegex(path, "/gallery/(\\w+)");
+            return ParseUtils.hashRegex(path, "/gallery/(\\w{" + IMAGE_HASH_LENGTH + "})");
         }
 
         if (path.startsWith("/a/")) {
-            return ParseUtils.hashRegex(path, "/a/(\\w+)");
+            return ParseUtils.hashRegex(path, "/a/(\\w{" + ALBUM_HASH_LENGTH + "})");
         }
 
         // Probably a gallery URL with no prefix
-        return ParseUtils.hashRegex(path, "/(\\w+)");
+        return ParseUtils.hashRegex(path, "/(\\w{" + IMAGE_HASH_LENGTH + "})");
     }
 
     /**
      * Attempts to return a direct link to an image based on a hash alone, without doing an HTTP call to the Imgur API.
      * This means that this method might fail since it attempts to guess at a URL based on the passed in hash.
      *
-     * @param hash The hash to get an image URL for
+     * @param hash      The hash to get an image URL for
+     * @param extension The extension to use for the URL. This should not have a prefixed period, Example: jpg not .jpg
      * @return A URL to an image if the passed in hash was a valid non-album hash, null otherwise;
      */
-    public static String getImageUrl(String hash) {
+    public static String getImageUrl(String hash, String extension) {
+        String newExt = (extension == null) ? IMedia.EXT_JPG : extension;
         if (hash == null) return null;
-        if (hash.length() <= IMGUR_ALBUM_HASH_LENGTH) return null;
+        if (hash.length() <= ALBUM_HASH_LENGTH) return null;
         if (isAlbum(hash)) return null;
-        return String.format("%s/%s.jpg", ImgurApi.IMAGE_URL, hash);
+        return String.format("%s/%s.%s", ImgurApi.IMAGE_URL, hash, newExt);
+    }
+
+    public static String getImageUrl(String hash) {
+        return getImageUrl(hash, null);
     }
 
     /**
@@ -76,7 +84,7 @@ public class ImgurUtils {
      * @return True if the hash appears to be for an Imgur album, false otherwise
      */
     public static boolean isAlbum(String hash) {
-        return hash != null && hash.length() == IMGUR_ALBUM_HASH_LENGTH;
+        return hash != null && hash.length() == ALBUM_HASH_LENGTH;
     }
 
     /**
