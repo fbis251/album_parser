@@ -20,6 +20,8 @@
 
 package com.fernandobarillas.albumparser.util;
 
+import com.fernandobarillas.albumparser.media.IMedia;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
@@ -51,20 +53,20 @@ public class ParseUtils {
      * Converts the input byte size to megabytes
      *
      * @param byteSize The number of bytes to convert to megabytes
-     * @return A String with the size in megabytes
+     * @return The byteSize in megabytes
      */
-    public static String getSizeInMbString(int byteSize) {
-        return String.format("%.1f", getSizeInMb(byteSize));
+    public static double getSizeInMb(int byteSize) {
+        return byteSize / 1024.0 / 1024.0;
     }
 
     /**
      * Converts the input byte size to megabytes
      *
      * @param byteSize The number of bytes to convert to megabytes
-     * @return The byteSize in megabytes
+     * @return A String with the size in megabytes
      */
-    public static double getSizeInMb(int byteSize) {
-        return byteSize / 1024.0 / 1024.0;
+    public static String getSizeInMbString(int byteSize) {
+        return String.format("%.1f", getSizeInMb(byteSize));
     }
 
     /**
@@ -115,5 +117,52 @@ public class ParseUtils {
             return matcher.group(1);
         }
         return null;
+    }
+
+    /**
+     * @param mediaUrl The URL to check
+     * @return True when the URL likely links to an image or video, false otherwise
+     */
+    public static boolean isDirectUrl(URL mediaUrl) {
+        return ParseUtils.isVideoExtension(mediaUrl) || ParseUtils.isImageExtension(mediaUrl);
+    }
+
+    /**
+     * @param url The URL to check for an image extension
+     * @return True if the extension of the file in the URL appears to be for an image, false otherwise
+     */
+    public static boolean isImageExtension(URL url) {
+        String extension = getExtension(url);
+        if (extension == null) return false;
+        switch (extension) {
+            case IMedia.EXT_BMP:
+            case IMedia.EXT_JPG:
+            case IMedia.EXT_JPEG:
+            case IMedia.EXT_PNG:
+            case IMedia.EXT_WEBP:
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param url The URL to check for a video extension
+     * @return True if the extension of the file in the URL appears to be for a video or GIF, false otherwise
+     */
+    public static boolean isVideoExtension(URL url) {
+        String extension = getExtension(url);
+        if (extension == null) return false;
+        switch (extension) {
+            case IMedia.EXT_3GP:
+            case IMedia.EXT_GIF:
+            case IMedia.EXT_GIFV:
+            case IMedia.EXT_MKV:
+            case IMedia.EXT_MP4:
+            case IMedia.EXT_WEBM:
+                return true;
+        }
+
+        return false;
     }
 }
