@@ -40,17 +40,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class VidbleParser implements IApiParser {
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(VidbleApi.API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        VidbleApi service = retrofit.create(VidbleApi.class);
-
         String hash = VidbleUtils.getHash(mediaUrl);
         if (hash == null) {
             throw new InvalidMediaUrlException();
         }
 
         if (VidbleUtils.isAlbum(hash)) {
+            Retrofit retrofit = new Retrofit.Builder().baseUrl(VidbleApi.API_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            VidbleApi service = retrofit.create(VidbleApi.class);
             Response<VidbleResponse> response = service.getAlbumData(hash)
                     .execute();
             VidbleResponse vidbleResponse = response.body();

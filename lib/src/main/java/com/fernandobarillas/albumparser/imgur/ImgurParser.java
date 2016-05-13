@@ -41,16 +41,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ImgurParser implements IApiParser {
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(ImgurApi.API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        ImgurApi service = retrofit.create(ImgurApi.class);
-        String   hash    = ImgurUtils.getHash(mediaUrl.toString());
+        String hash = ImgurUtils.getHash(mediaUrl.toString());
         if (hash == null) {
             throw new InvalidMediaUrlException();
         }
 
         if (ImgurUtils.isAlbum(hash)) {
+            Retrofit retrofit = new Retrofit.Builder().baseUrl(ImgurApi.API_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            ImgurApi service = retrofit.create(ImgurApi.class);
+
             // Make an API call to get the album images
             Response<ImgurResponse> response = service.getAlbumData(hash)
                     .execute();
