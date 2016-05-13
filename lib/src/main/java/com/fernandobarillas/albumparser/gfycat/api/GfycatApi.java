@@ -36,6 +36,7 @@ public interface GfycatApi {
     String BASE_DOMAIN = "gfycat.com";
     String API_URL     = "https://" + BASE_DOMAIN;
     String UPLOAD_URL  = "https://upload." + BASE_DOMAIN;
+    String THUMB_URL   = "https://thumbs." + BASE_DOMAIN;
 
     @GET("/cajax/get/{hash}")
     Call<CajaxResponse> getCajax(@Path("hash") String hash);

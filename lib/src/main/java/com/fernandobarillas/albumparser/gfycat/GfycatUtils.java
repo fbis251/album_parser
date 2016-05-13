@@ -21,6 +21,7 @@
 package com.fernandobarillas.albumparser.gfycat;
 
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.net.URL;
@@ -29,6 +30,8 @@ import java.net.URL;
  * Created by fb on 5/9/16.
  */
 public class GfycatUtils {
+    private static final String TYPE_MOBILE = "-mobile";
+    private static final String TYPE_POSTER = "-poster";
 
     /**
      * Attempts to get a Gfycat hash for a passed in URL String
@@ -42,5 +45,33 @@ public class GfycatUtils {
         String path = url.getPath();
 
         return ParseUtils.hashRegex(path, "/(\\w+)");
+    }
+
+    /**
+     * @param hash The hash to get the URL for
+     * @return The mobile mp4 version URL
+     */
+    public static String getMobileUrl(String hash) {
+        return getPosterOrMobileUrl(hash, true);
+    }
+
+    /**
+     * @param hash The hash to get the URL for
+     * @return The JPG preview URL
+     */
+    public static String getPosterUrl(String hash) {
+        return getPosterOrMobileUrl(hash, false);
+    }
+
+    /**
+     * @param hash          The hash to get the URL for
+     * @param isMobileVideo True to get the mobile video URL, false to get the poster JPG url
+     * @return The URL to the mobile version of the video or to the preview poster URL
+     */
+    public static String getPosterOrMobileUrl(String hash, boolean isMobileVideo) {
+        if (hash == null) return null;
+        String ext  = (isMobileVideo) ? IMedia.EXT_MP4 : IMedia.EXT_JPG;
+        String type = (isMobileVideo) ? TYPE_MOBILE : TYPE_POSTER;
+        return String.format("%s/%s%s.%s", GfycatApi.THUMB_URL, hash, type, ext);
     }
 }
