@@ -33,8 +33,16 @@ public class MediaTest {
 
     public static void testResponse(IMediaResponse mediaResponse) {
         System.out.println("Response from " + mediaResponse.getApiDomain() + " API");
+        if (!mediaResponse.isSuccessful()) {
+            System.err.println("API Error: " + mediaResponse.getOriginalUrlString());
+            if (mediaResponse.getErrorMessage() == null) return;
+            System.err.println(mediaResponse.getErrorMessage());
+            return;
+        }
+
         System.out.println("Original URL: " + mediaResponse.getOriginalUrlString());
         System.out.println("Preview URL: " + mediaResponse.getPreviewUrl());
+
         String hash = mediaResponse.getHash();
 
         if (mediaResponse.isAlbum()) {
@@ -67,6 +75,7 @@ public class MediaTest {
                 ", highStats='" + getVideoInfo(media, true) + '\'' +
                 ", lowQuality='" + media.getUrl(false) + '\'' +
                 ", lowStats='" + getVideoInfo(media, false) + '\'' +
+                ", preview='" + media.getPreviewUrl() + '\'' +
                 '}';
     }
 
