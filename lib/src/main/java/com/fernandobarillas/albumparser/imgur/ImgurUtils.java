@@ -48,6 +48,10 @@ public class ImgurUtils {
             return ParseUtils.hashRegex(path, "/gallery/(\\w{" + IMAGE_HASH_LENGTH + "})");
         }
 
+        if (path.startsWith("/gallery/")) {
+            return ParseUtils.hashRegex(path, "/gallery/(\\w{" + ALBUM_HASH_LENGTH + "})");
+        }
+
         if (path.startsWith("/a/")) {
             return ParseUtils.hashRegex(path, "/a/(\\w{" + ALBUM_HASH_LENGTH + "})");
         }
