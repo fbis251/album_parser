@@ -20,8 +20,8 @@
 
 package com.fernandobarillas.albumparser.vidble.model;
 
+import com.fernandobarillas.albumparser.media.BaseMediaAlbum;
 import com.fernandobarillas.albumparser.media.IMedia;
-import com.fernandobarillas.albumparser.media.IMediaAlbum;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Created by fb on 5/11/16.
  */
-public class VidbleAlbum implements IMediaAlbum {
+public class VidbleAlbum extends BaseMediaAlbum {
     List<IMedia> mMediaList;
 
     public VidbleAlbum(List<String> responsePics) {
@@ -47,11 +47,6 @@ public class VidbleAlbum implements IMediaAlbum {
     }
 
     @Override
-    public int getCount() {
-        return mMediaList.size();
-    }
-
-    @Override
     public URL getPreviewUrl() {
         if (!isEmpty()) {
             // Return the first image as the preview
@@ -60,10 +55,5 @@ public class VidbleAlbum implements IMediaAlbum {
         }
 
         return null;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return getCount() == 0;
     }
 }

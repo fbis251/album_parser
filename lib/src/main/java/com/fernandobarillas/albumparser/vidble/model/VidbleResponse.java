@@ -20,9 +20,8 @@
 
 package com.fernandobarillas.albumparser.vidble.model;
 
-import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.BaseMediaResponse;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMediaResponse;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -37,9 +36,7 @@ import javax.annotation.Generated;
  * Java representation of the Vidble album JSON response
  */
 @Generated("org.jsonschema2pojo")
-public class VidbleResponse implements IMediaResponse {
-
-    String mOriginalUrl;
+public class VidbleResponse extends BaseMediaResponse {
 
     @SerializedName("pics")
     @Expose
@@ -61,11 +58,6 @@ public class VidbleResponse implements IMediaResponse {
     }
 
     @Override
-    public String getErrorMessage() {
-        return null;
-    }
-
-    @Override
     public String getHash() {
         return mHash;
     }
@@ -73,17 +65,6 @@ public class VidbleResponse implements IMediaResponse {
     @Override
     public void setHash(String hash) {
         mHash = hash;
-    }
-
-    @Override
-    public IMedia getMedia() {
-        // No direct media, this is an album
-        return null;
-    }
-
-    @Override
-    public String getOriginalUrlString() {
-        return mOriginalUrl;
     }
 
     @Override
@@ -98,11 +79,6 @@ public class VidbleResponse implements IMediaResponse {
 
     @Override
     public boolean isSuccessful() {
-        return getAlbum().isEmpty();
-    }
-
-    @Override
-    public void setOriginalUrl(String originalUrl) {
-        mOriginalUrl = originalUrl;
+        return !getAlbum().isEmpty();
     }
 }

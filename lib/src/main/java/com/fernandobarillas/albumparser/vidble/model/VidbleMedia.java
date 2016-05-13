@@ -20,7 +20,7 @@
 
 package com.fernandobarillas.albumparser.vidble.model;
 
-import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.vidble.VidbleUtils;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
@@ -36,7 +36,7 @@ import java.net.URL;
  * <p>
  * The constructor will also accept URLs with an http/https prefix [http/https]://www.vidble.com/[HASH].[EXTENSION]
  */
-public class VidbleMedia implements IMedia {
+public class VidbleMedia extends BaseMedia {
     private final static String MEDIUM_QUALITY   = "_med";
     private final static String ORIGINAL_QUALITY = "";
     private String mExtension;
@@ -66,27 +66,6 @@ public class VidbleMedia implements IMedia {
     }
 
     @Override
-    public int getByteSize(boolean highQuality) {
-        return SIZE_UNAVAILABLE;
-    }
-
-    @Override
-    public String getDescription() {
-        // Vidble doesn't support descriptions
-        return null;
-    }
-
-    @Override
-    public double getDuration() {
-        return DURATION_UNAVAILABLE;
-    }
-
-    @Override
-    public int getHeight(boolean highQuality) {
-        return SIZE_UNAVAILABLE;
-    }
-
-    @Override
     public URL getPreviewUrl() {
         // Get JPG preview if this is a GIF
         String extension = (mExtension.equals(EXT_GIF)) ? EXT_JPG : mExtension;
@@ -94,12 +73,6 @@ public class VidbleMedia implements IMedia {
             return new URL(VidbleApi.IMAGE_URL + "/" + mHash + MEDIUM_QUALITY + "." + extension);
         } catch (MalformedURLException ignored) {
         }
-        return null;
-    }
-
-    @Override
-    public String getTitle() {
-        // Vidble doesn't support titles
         return null;
     }
 
@@ -119,21 +92,7 @@ public class VidbleMedia implements IMedia {
     }
 
     @Override
-    public int getWidth(boolean highQuality) {
-        return SIZE_UNAVAILABLE;
-    }
-
-    @Override
     public boolean isVideo() {
         return mExtension.equals(EXT_GIF);
-    }
-
-    @Override
-    public String toString() {
-        return "VidbleMedia{" +
-                "mExtension='" + mExtension + '\'' +
-                ", mHash='" + mHash + '\'' +
-                ", URL='" + getUrl(true) + '\'' +
-                '}';
     }
 }

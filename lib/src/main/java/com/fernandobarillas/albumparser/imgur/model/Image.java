@@ -21,7 +21,7 @@
 package com.fernandobarillas.albumparser.imgur.model;
 
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
-import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -35,7 +35,7 @@ import javax.annotation.Generated;
  */
 
 @Generated("org.jsonschema2pojo")
-public class Image implements IMedia {
+public class Image extends BaseMedia {
     // https://api.imgur.com/models/image
     public static final String ORIGINAL         = "";
     public static final String SMALL_SQUARE     = "s";
@@ -88,11 +88,6 @@ public class Image implements IMedia {
     @Override
     public String getDescription() {
         return description;
-    }
-
-    @Override
-    public double getDuration() {
-        return DURATION_UNAVAILABLE;
     }
 
     @Override

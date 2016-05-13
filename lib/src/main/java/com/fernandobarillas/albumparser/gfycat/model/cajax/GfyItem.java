@@ -20,7 +20,7 @@
 
 package com.fernandobarillas.albumparser.gfycat.model.cajax;
 
-import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -35,7 +35,7 @@ import javax.annotation.Generated;
  * Created by fb on 5/9/16.
  */
 @Generated("org.jsonschema2pojo")
-public class GfyItem implements IMedia {
+public class GfyItem extends BaseMedia {
 
     @SerializedName("gfyId")
     @Expose

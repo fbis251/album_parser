@@ -20,9 +20,8 @@
 
 package com.fernandobarillas.albumparser.streamable.model;
 
+import com.fernandobarillas.albumparser.media.BaseMediaResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
-import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMediaResponse;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.google.gson.annotations.Expose;
@@ -41,7 +40,7 @@ import static com.fernandobarillas.albumparser.media.IMedia.PROTOCOL_HTTPS;
  * Created by fb on 5/10/16.
  */
 @Generated("org.jsonschema2pojo")
-public class StreamableResponse implements IMediaResponse {
+public class StreamableResponse extends BaseMediaResponse {
     // Video schema status responses according to: https://streamable.com/documentation
     public static final int STATUS_UPLOADING  = 0;
     public static final int STATUS_PROCESSING = 1;
@@ -74,14 +73,8 @@ public class StreamableResponse implements IMediaResponse {
     @SerializedName("percent")
     @Expose
     public int    percent;
-    private String          mOriginalUrl;
-    private StreamableMedia mStreamableMedia;
 
-    @Override
-    public IMediaAlbum getAlbum() {
-        // Not supported by Streamable
-        return null;
-    }
+    private StreamableMedia mStreamableMedia;
 
     @Override
     public String getApiDomain() {
@@ -89,19 +82,8 @@ public class StreamableResponse implements IMediaResponse {
     }
 
     @Override
-    public String getErrorMessage() {
-        // Not supported by Streamable
-        return null;
-    }
-
-    @Override
     public String getHash() {
         return ParseUtils.hashRegex(url, StreamableApi.BASE_DOMAIN + "/(\\w+)");
-    }
-
-    @Override
-    public void setHash(String hash) {
-        // getHash() keeps track of the API hash
     }
 
     @Override
@@ -115,11 +97,6 @@ public class StreamableResponse implements IMediaResponse {
     }
 
     @Override
-    public String getOriginalUrlString() {
-        return mOriginalUrl;
-    }
-
-    @Override
     public URL getPreviewUrl() {
         try {
             return new URL(PROTOCOL_HTTPS + ":" + thumbnailUrl);
@@ -129,18 +106,7 @@ public class StreamableResponse implements IMediaResponse {
     }
 
     @Override
-    public boolean isAlbum() {
-        // Not supported by Streamable
-        return false;
-    }
-
-    @Override
     public boolean isSuccessful() {
         return status == STATUS_READY;
-    }
-
-    @Override
-    public void setOriginalUrl(String originalUrl) {
-        mOriginalUrl = originalUrl;
     }
 }

@@ -21,9 +21,8 @@
 package com.fernandobarillas.albumparser.gfycat.model.cajax;
 
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
+import com.fernandobarillas.albumparser.media.BaseMediaResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
-import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMediaResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -35,20 +34,14 @@ import javax.annotation.Generated;
  * Created by fb on 5/9/16.
  */
 @Generated("org.jsonschema2pojo")
-public class CajaxResponse implements IMediaResponse {
+public class CajaxResponse extends BaseMediaResponse {
 
     @SerializedName("gfyItem")
     @Expose
-    public GfyItem gfyItem;
+    public  GfyItem gfyItem;
     @SerializedName("error")
     @Expose
-    public String error;
-    private String mOriginalUrl;
-
-    @Override
-    public IMediaAlbum getAlbum() {
-        return null;
-    }
+    public  String  error;
 
     @Override
     public String getApiDomain() {
@@ -66,18 +59,8 @@ public class CajaxResponse implements IMediaResponse {
     }
 
     @Override
-    public void setHash(String hash) {
-        // Hash is handled by getHash()
-    }
-
-    @Override
     public IMedia getMedia() {
         return gfyItem;
-    }
-
-    @Override
-    public String getOriginalUrlString() {
-        return mOriginalUrl;
     }
 
     @Override
@@ -86,17 +69,7 @@ public class CajaxResponse implements IMediaResponse {
     }
 
     @Override
-    public boolean isAlbum() {
-        return false;
-    }
-
-    @Override
     public boolean isSuccessful() {
         return gfyItem != null;
-    }
-
-    @Override
-    public void setOriginalUrl(String originalUrl) {
-        mOriginalUrl = originalUrl;
     }
 }

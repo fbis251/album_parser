@@ -20,7 +20,7 @@
 
 package com.fernandobarillas.albumparser.streamable.model;
 
-import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.BaseMedia;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,7 +28,7 @@ import java.net.URL;
 /**
  * Created by fb on 5/11/16.
  */
-public class StreamableMedia implements IMedia {
+public class StreamableMedia extends BaseMedia {
     Mp4       mMp4;
     Mp4Mobile mMp4Mobile;
 
@@ -48,17 +48,6 @@ public class StreamableMedia implements IMedia {
     }
 
     @Override
-    public String getDescription() {
-        // Not supported by Streamable API
-        return null;
-    }
-
-    @Override
-    public double getDuration() {
-        return DURATION_UNAVAILABLE;
-    }
-
-    @Override
     public int getHeight(boolean highQuality) {
         // By default always try to return the high quality height
         int resultHeight = (mMp4 != null) ? mMp4.height : SIZE_UNAVAILABLE;
@@ -69,25 +58,12 @@ public class StreamableMedia implements IMedia {
     }
 
     @Override
-    public URL getPreviewUrl() {
-        // Not supported by Streamable API
-        return null;
-    }
-
-    @Override
-    public String getTitle() {
-        // Not supported by streamable API
-        return null;
-    }
-
-    @Override
     public URL getUrl(boolean highQuality) {
         // By default always try to return the high quality URL
         String mediaUrl = (mMp4 != null) ? mMp4.url : null;
         if (!highQuality) {
             mediaUrl = (mMp4Mobile != null) ? mMp4Mobile.url : null;
         }
-        
         try {
             return new URL(PROTOCOL_HTTPS + ":" + mediaUrl);
         } catch (MalformedURLException ignored) {

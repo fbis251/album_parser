@@ -18,57 +18,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.imgur.model;
-
-import com.fernandobarillas.albumparser.media.BaseMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMedia;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+package com.fernandobarillas.albumparser.media;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Generated;
 
 /**
- * Created by fb on 5/3/16.
+ * Class that sets default values for the IMedia interface
  */
-
-@Generated("org.jsonschema2pojo")
-public class Data extends BaseMediaAlbum {
-
-    @SerializedName("count")
-    @Expose
-    public int count;
-    @SerializedName("images")
-    @Expose
-    public List<Image> images = new ArrayList<Image>();
-
-    private List<IMedia> mMediaList;
-
+public class BaseMedia implements IMedia {
     @Override
-    public List<IMedia> getAlbumMedia() {
-        if (mMediaList == null) {
-            mMediaList = new ArrayList<>();
-            mMediaList.addAll(images);
-        }
-        return mMediaList;
+    public int getByteSize(boolean highQuality) {
+        return SIZE_UNAVAILABLE;
     }
 
     @Override
-    public int getCount() {
-        return count;
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
+    public double getDuration() {
+        return DURATION_UNAVAILABLE;
+    }
+
+    @Override
+    public int getHeight(boolean highQuality) {
+        return SIZE_UNAVAILABLE;
     }
 
     @Override
     public URL getPreviewUrl() {
-        if (!isEmpty()) {
-            // Return the first image as the preview
-            return getAlbumMedia().get(0)
-                    .getPreviewUrl();
-        }
-
         return null;
+    }
+
+    @Override
+    public String getTitle() {
+        return null;
+    }
+
+    @Override
+    public URL getUrl(boolean highQuality) {
+        return null;
+    }
+
+    @Override
+    public int getWidth(boolean highQuality) {
+        return SIZE_UNAVAILABLE;
+    }
+
+    @Override
+    public boolean isVideo() {
+        return false;
     }
 }

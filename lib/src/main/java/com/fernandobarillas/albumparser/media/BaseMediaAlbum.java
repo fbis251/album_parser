@@ -18,57 +18,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.imgur.model;
-
-import com.fernandobarillas.albumparser.media.BaseMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMedia;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+package com.fernandobarillas.albumparser.media;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
-
 /**
- * Created by fb on 5/3/16.
+ * Class that sets default values for the IMediaAlbum interface
  */
-
-@Generated("org.jsonschema2pojo")
-public class Data extends BaseMediaAlbum {
-
-    @SerializedName("count")
-    @Expose
-    public int count;
-    @SerializedName("images")
-    @Expose
-    public List<Image> images = new ArrayList<Image>();
-
-    private List<IMedia> mMediaList;
-
+public class BaseMediaAlbum implements IMediaAlbum {
     @Override
     public List<IMedia> getAlbumMedia() {
-        if (mMediaList == null) {
-            mMediaList = new ArrayList<>();
-            mMediaList.addAll(images);
-        }
-        return mMediaList;
+        return null;
     }
 
     @Override
     public int getCount() {
-        return count;
+        return (getAlbumMedia() != null) ? getAlbumMedia().size() : 0;
     }
 
     @Override
     public URL getPreviewUrl() {
-        if (!isEmpty()) {
-            // Return the first image as the preview
-            return getAlbumMedia().get(0)
-                    .getPreviewUrl();
-        }
-
         return null;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return getCount() == 0;
     }
 }
