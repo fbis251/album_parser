@@ -20,9 +20,9 @@
 
 package com.example;
 
+import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 
 /**
@@ -42,6 +42,7 @@ public class MediaTest {
 
         System.out.println("Original URL: " + apiResponse.getOriginalUrlString());
         System.out.println("Preview URL: " + apiResponse.getPreviewUrl());
+        System.out.println("JSON: " + apiResponse.getJson());
 
         String hash = apiResponse.getHash();
 

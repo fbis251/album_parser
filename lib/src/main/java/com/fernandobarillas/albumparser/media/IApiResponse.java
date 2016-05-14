@@ -26,7 +26,6 @@ import java.net.URL;
  * Created by fb on 5/10/16.
  */
 public interface IApiResponse {
-    // TODO: rename me to IApiResponse
     /**
      * @return An album returned by the API, null if no album is available
      */
@@ -52,6 +51,11 @@ public interface IApiResponse {
      * of where the response data came from
      */
     void setHash(String hash);
+
+    /**
+     * @return This Object as a JSON String
+     */
+    String getJson();
 
     /**
      * @return A direct link to the media returned by the API, null if no direct media link was returned by the API

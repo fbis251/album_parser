@@ -20,21 +20,18 @@
 
 package com.fernandobarillas.albumparser.media;
 
+import com.google.gson.Gson;
+
 import java.net.URL;
 
 /**
  * Class that sets default values for the IApiResponse interface
  */
-public class BaseApiResponse implements IApiResponse {
+public abstract class BaseApiResponse implements IApiResponse {
     String mOriginalUrl;
 
     @Override
     public IMediaAlbum getAlbum() {
-        return null;
-    }
-
-    @Override
-    public String getApiDomain() {
         return null;
     }
 
@@ -44,12 +41,12 @@ public class BaseApiResponse implements IApiResponse {
     }
 
     @Override
-    public String getHash() {
-        return null;
+    public void setHash(String hash) {
     }
 
     @Override
-    public void setHash(String hash) {
+    public String getJson() {
+        return new Gson().toJson(this);
     }
 
     @Override
