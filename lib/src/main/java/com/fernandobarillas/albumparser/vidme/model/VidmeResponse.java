@@ -20,9 +20,8 @@
 
 package com.fernandobarillas.albumparser.vidme.model;
 
+import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
-import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.vidme.api.VidmeApi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -35,9 +34,7 @@ import javax.annotation.Generated;
  * Created by fb on 5/10/16.
  */
 @Generated("org.jsonschema2pojo")
-public class VidmeResponse implements IApiResponse {
-
-    private String mOriginalUrl;
+public class VidmeResponse extends BaseApiResponse {
 
     @SerializedName("status")
     @Expose
@@ -53,18 +50,8 @@ public class VidmeResponse implements IApiResponse {
     public Video   video;
 
     @Override
-    public IMediaAlbum getAlbum() {
-        return null;
-    }
-
-    @Override
     public String getApiDomain() {
         return VidmeApi.BASE_DOMAIN;
-    }
-
-    @Override
-    public String getErrorMessage() {
-        return error;
     }
 
     @Override
@@ -73,13 +60,13 @@ public class VidmeResponse implements IApiResponse {
     }
 
     @Override
-    public IMedia getMedia() {
-        return video;
+    public String getErrorMessage() {
+        return error;
     }
 
     @Override
-    public String getOriginalUrlString() {
-        return mOriginalUrl;
+    public IMedia getMedia() {
+        return video;
     }
 
     @Override
@@ -88,32 +75,7 @@ public class VidmeResponse implements IApiResponse {
     }
 
     @Override
-    public boolean isAlbum() {
-        return false;
-    }
-
-    @Override
     public boolean isSuccessful() {
         return status;
-    }
-
-    @Override
-    public void setOriginalUrl(String originalUrl) {
-        mOriginalUrl = originalUrl;
-    }
-
-    @Override
-    public void setHash(String hash) {
-        // The hash is kept track of by Video
-    }
-
-    @Override
-    public String toString() {
-        return "VidmeResponse{" +
-                "status=" + status +
-                ", error='" + error + '\'' +
-                ", code='" + code + '\'' +
-                ", video=" + video +
-                '}';
     }
 }
