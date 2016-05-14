@@ -45,11 +45,13 @@ public class ImgurUtils {
         String path = url.getPath();
 
         if (path.startsWith("/gallery/")) {
-            return ParseUtils.hashRegex(path, "/gallery/(\\w{" + IMAGE_HASH_LENGTH + "})");
-        }
-
-        if (path.startsWith("/gallery/")) {
-            return ParseUtils.hashRegex(path, "/gallery/(\\w{" + ALBUM_HASH_LENGTH + "})");
+            // /gallery URLs can contain both album and image hashes, try to regex for an image hash, if not return
+            // the album hash result instead
+            String result = ParseUtils.hashRegex(path, "/gallery/(\\w{" + IMAGE_HASH_LENGTH + "})");
+            if (result == null) {
+                return ParseUtils.hashRegex(path, "/gallery/(\\w{" + ALBUM_HASH_LENGTH + "})");
+            }
+            return result;
         }
 
         if (path.startsWith("/a/")) {
