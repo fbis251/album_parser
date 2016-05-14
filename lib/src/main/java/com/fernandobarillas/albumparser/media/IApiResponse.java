@@ -49,6 +49,8 @@ public interface IApiResponse {
     /**
      * Sets the hash that was used to make the API request. This is extremely important to set if you want to keep track
      * of where the response data came from
+     *
+     * @param hash The hash to set
      */
     void setHash(String hash);
 
