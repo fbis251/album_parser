@@ -58,18 +58,18 @@ public class StreamableUtils {
 
     /**
      * @param hash The hash to get the URL for
-     * @return A URL to a high quality vid.me MP4
-     */
-    public static String getMp4Url(String hash) {
-        return getMp4Url(hash, true);
-    }
-
-    /**
-     * @param hash The hash to get the URL for
      * @return A URL to a mobile quality vid.me MP4
      */
     public static String getMp4MobileUrl(String hash) {
         return getMp4Url(hash, false);
+    }
+
+    /**
+     * @param hash The hash to get the URL for
+     * @return A URL to a high quality vid.me MP4
+     */
+    public static String getMp4Url(String hash) {
+        return getMp4Url(hash, true);
     }
 
     /**

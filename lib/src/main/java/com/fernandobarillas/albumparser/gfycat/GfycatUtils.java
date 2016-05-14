@@ -56,14 +56,6 @@ public class GfycatUtils {
     }
 
     /**
-     * @param hash The hash to get the URL for
-     * @return The JPG preview URL
-     */
-    public static String getPosterUrl(String hash) {
-        return getPosterOrMobileUrl(hash, false);
-    }
-
-    /**
      * @param hash          The hash to get the URL for
      * @param isMobileVideo True to get the mobile video URL, false to get the poster JPG url
      * @return The URL to the mobile version of the video or to the preview poster URL
@@ -73,5 +65,13 @@ public class GfycatUtils {
         String ext  = (isMobileVideo) ? IMedia.EXT_MP4 : IMedia.EXT_JPG;
         String type = (isMobileVideo) ? TYPE_MOBILE : TYPE_POSTER;
         return String.format("%s/%s%s.%s", GfycatApi.THUMB_URL, hash, type, ext);
+    }
+
+    /**
+     * @param hash The hash to get the URL for
+     * @return The JPG preview URL
+     */
+    public static String getPosterUrl(String hash) {
+        return getPosterOrMobileUrl(hash, false);
     }
 }

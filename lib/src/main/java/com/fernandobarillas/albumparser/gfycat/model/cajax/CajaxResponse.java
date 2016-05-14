@@ -38,10 +38,10 @@ public class CajaxResponse extends BaseApiResponse {
 
     @SerializedName("gfyItem")
     @Expose
-    public  GfyItem gfyItem;
+    public GfyItem gfyItem;
     @SerializedName("error")
     @Expose
-    public  String  error;
+    public String  error;
 
     @Override
     public String getApiDomain() {
@@ -49,13 +49,13 @@ public class CajaxResponse extends BaseApiResponse {
     }
 
     @Override
-    public String getErrorMessage() {
-        return error;
+    public String getHash() {
+        return (gfyItem != null) ? gfyItem.gfyName : null;
     }
 
     @Override
-    public String getHash() {
-        return (gfyItem != null) ? gfyItem.gfyName : null;
+    public String getErrorMessage() {
+        return error;
     }
 
     @Override

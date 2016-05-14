@@ -20,8 +20,8 @@
 
 package com.fernandobarillas.albumparser;
 
-import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IApiResponse;
+import com.fernandobarillas.albumparser.media.IMedia;
 
 /**
  * Class that facilitates getting API responses, regardless of which API returned them. This class will always try to
@@ -42,8 +42,7 @@ public class ParserResponse {
     }
 
     /**
-     * Constructor for full API IApiResponse. These can contain one or several IMedia objects or a full album in
-     * them.
+     * Constructor for full API IApiResponse. These can contain one or several IMedia objects or a full album in them.
      *
      * @param apiResponse The API response to return in this response
      */
@@ -52,17 +51,17 @@ public class ParserResponse {
     }
 
     /**
-     * @return The IMedia returned by the parser
-     */
-    public IMedia getMedia() {
-        return mMedia;
-    }
-
-    /**
      * @return The IApiResponse returned by the parser
      */
     public IApiResponse getApiResponse() {
         return mApiResponse;
+    }
+
+    /**
+     * @return The IMedia returned by the parser
+     */
+    public IMedia getMedia() {
+        return mMedia;
     }
 
     /**
