@@ -21,8 +21,8 @@
 package com.fernandobarillas.albumparser.streamable.model;
 
 import com.fernandobarillas.albumparser.media.BaseMedia;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -64,11 +64,9 @@ public class StreamableMedia extends BaseMedia {
         if (!highQuality) {
             mediaUrl = (mMp4Mobile != null) ? mMp4Mobile.url : null;
         }
-        try {
-            return new URL(PROTOCOL_HTTPS + ":" + mediaUrl);
-        } catch (MalformedURLException ignored) {
-        }
-        return null;
+        if (mediaUrl == null) return null;
+        String resultUrl = mediaUrl.startsWith("http") ? mediaUrl : PROTOCOL_HTTPS + ":" + mediaUrl;
+        return ParseUtils.getUrlObject(resultUrl);
     }
 
     @Override
