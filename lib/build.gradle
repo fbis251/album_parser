@@ -6,6 +6,9 @@ version '0.6.0'
 // Output jar filename
 archivesBaseName = 'albumparser'
 
+sourceCompatibility = 1.7 // java 7
+targetCompatibility = 1.7
+
 dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.google.code.gson:gson:2.6.2'
