@@ -40,6 +40,10 @@ public class AlbumParserTest {
             "https://fat.gfycat.com/PotableLeftAbalone.mp4",
             "https://gfycat.com/IndelibleMerryBuck",
             "https://thumbs.gfycat.com/PotableLeftAbalone-mobile.mp4",
+            "https://giphy.com/gifs/omaze-chris-pratt-dinosaurs-l0NhZ0aUSE8fXag12",
+            "http://giphy.com/embed/l0NhZ0aUSE8fXag12?html5=true",
+            "https://i.giphy.com/iWZt0CknIElFu.gif",
+            "https://media.giphy.com/media/PNSCRvHld1eP6/giphy.gif",
             "https://imgur.com/gallery/WKauF",  // Album with gallery URL
             "http://imgur.com/awsGf9p",
             "http://imgur.com/gallery/0Kqrz",

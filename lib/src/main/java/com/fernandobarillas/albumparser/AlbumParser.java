@@ -24,6 +24,8 @@ package com.fernandobarillas.albumparser;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.gfycat.GfycatParser;
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
+import com.fernandobarillas.albumparser.giphy.GiphyParser;
+import com.fernandobarillas.albumparser.giphy.api.GiphyApi;
 import com.fernandobarillas.albumparser.imgur.ImgurParser;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.media.DirectMedia;
@@ -52,10 +54,11 @@ public class AlbumParser {
     private static final int UNKNOWN    = -1;
     private static final int DIRECT     = 0;
     private static final int GFYCAT     = 1;
-    private static final int IMGUR      = 2;
-    private static final int STREAMABLE = 3;
-    private static final int VIDBLE     = 4;
-    private static final int VIDME      = 5;
+    private static final int GIPHY      = 2;
+    private static final int IMGUR      = 3;
+    private static final int STREAMABLE = 4;
+    private static final int VIDBLE     = 5;
+    private static final int VIDME      = 6;
 
     /**
      * @param urlString The URL to parse and receive data for
@@ -71,6 +74,8 @@ public class AlbumParser {
         switch (getMediaProvider(mediaUrl)) {
             case GFYCAT:
                 return new GfycatParser().parse(mediaUrl);
+            case GIPHY:
+                return new GiphyParser().parse(mediaUrl);
             case IMGUR:
                 return new ImgurParser().parse(mediaUrl);
             case STREAMABLE:
@@ -102,6 +107,9 @@ public class AlbumParser {
 
         if (domain.endsWith(GfycatApi.BASE_DOMAIN)) {
             return GFYCAT;
+        }
+        if (domain.endsWith(GiphyApi.BASE_DOMAIN)) {
+            return GIPHY;
         }
         if (domain.endsWith(ImgurApi.BASE_DOMAIN)) {
             return IMGUR;
