@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group 'com.fernandobarillas.albumparser'
-version '0.6.0'
+version '0.7.0'
 
 // Output jar filename
 archivesBaseName = 'albumparser'
