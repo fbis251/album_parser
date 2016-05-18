@@ -34,6 +34,7 @@ public class AlbumParserTest {
     protected final static String SEPARATOR = "\n--------------------\n";
     // @formatter:off
     private static final String[] TEST_URLS = {
+            "https://gfycat.com/AngryFrequentChuckwalla",
             "https://gfycat.com/UnconsciousTalkativeBluejay", // 404
             "https://fat.gfycat.com/PotableLeftAbalone.webm",
             "https://fat.gfycat.com/PotableLeftAbalone.mp4",
@@ -66,6 +67,7 @@ public class AlbumParserTest {
 
     public static final boolean testAlbumParser() {
         AlbumParser albumParser = new AlbumParser();
+        int         count       = 0;
         for (String testUrl : TEST_URLS) {
             System.out.println("Testing " + testUrl);
             try {
@@ -81,10 +83,12 @@ public class AlbumParserTest {
             } catch (Exception e) {
                 System.err.println("Error: " + testUrl + " " + e.getMessage());
                 e.printStackTrace();
-                return false;
+                break;
             }
+            count++;
         }
 
+        System.out.println(String.format("%d/%d done", count, TEST_URLS.length));
         return true;
     }
 
@@ -140,8 +144,10 @@ public class AlbumParserTest {
     private static String getVideoInfo(IMedia media, boolean highQuality) {
         if (media == null) return null;
         String result = "";
-        if (media.getWidth(highQuality) > 0) result += String.format("%dw", media.getWidth(highQuality));
-        if (media.getHeight(highQuality) > 0) result += String.format(" %dh", media.getHeight(highQuality));
+        if (media.getWidth(highQuality) > 0)
+            result += String.format("%dw", media.getWidth(highQuality));
+        if (media.getHeight(highQuality) > 0)
+            result += String.format(" %dh", media.getHeight(highQuality));
         if (media.getDuration() > 0) result += String.format(" %.1fs", media.getDuration());
         if (media.getByteSize(highQuality) > 0)
             result += " " + ParseUtils.getSizeInMbString(media.getByteSize(highQuality)) + "MB";
