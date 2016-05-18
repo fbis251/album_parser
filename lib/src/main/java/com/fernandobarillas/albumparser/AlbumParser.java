@@ -8,7 +8,8 @@
  * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial
  * portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
@@ -28,6 +29,7 @@ import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.media.DirectMedia;
 import com.fernandobarillas.albumparser.streamable.StreamableParser;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.vidble.VidbleParser;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.fernandobarillas.albumparser.vidme.VidmeParser;
@@ -39,10 +41,11 @@ import java.net.URL;
 import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
 
 /**
- * Class that facilitates parsing API responses from various image/video hosting services. This class makes it as easy
- * as passing in a URL and receiving a response with either an album or media that the API returned, regardless of which
- * API provider was used. All responses conform to the interfaces in the media package so iterating and parsing the
- * returned Objects is simple, reducing code redundancy.
+ * Class that facilitates parsing API responses from various image/video hosting services. This
+ * class makes it as easy as passing in a URL and receiving a response with either an album or media
+ * that the API returned, regardless of which API provider was used. All responses conform to the
+ * interfaces in the media package so iterating and parsing the returned Objects is simple, reducing
+ * code redundancy.
  */
 public class AlbumParser {
 
@@ -57,8 +60,10 @@ public class AlbumParser {
     /**
      * @param urlString The URL to parse and receive data for
      * @return The API response for the passed-in URL.
-     * @throws IOException              When there are any network issues such as a host not being reached.
-     * @throws InvalidMediaUrlException When the passed-in URL is not supported by this library and cannot be parsed
+     * @throws IOException              When there are any network issues such as a host not being
+     *                                  reached.
+     * @throws InvalidMediaUrlException When the passed-in URL is not supported by this library and
+     *                                  cannot be parsed
      */
     public ParserResponse parseUrl(String urlString) throws IOException, InvalidMediaUrlException {
         URL mediaUrl = new URL(urlString);
@@ -83,7 +88,16 @@ public class AlbumParser {
         }
     }
 
-    private int getMediaProvider(URL url) {
+    public static boolean isSupported(String url) {
+        return isSupported(ParseUtils.getUrlObject(url));
+    }
+
+    public static boolean isSupported(URL url) {
+        return getMediaProvider(url) != UNKNOWN;
+    }
+
+    private static int getMediaProvider(URL url) {
+        if (url == null) return UNKNOWN;
         String domain = url.getHost();
 
         if (domain.endsWith(GfycatApi.BASE_DOMAIN)) {
