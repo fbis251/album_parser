@@ -8,7 +8,8 @@
  * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial
  * portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
@@ -61,8 +62,8 @@ public class StreamableMedia extends BaseMedia {
     public URL getUrl(boolean highQuality) {
         // By default always try to return the high quality URL
         String mediaUrl = (mMp4 != null) ? mMp4.url : null;
-        if (!highQuality) {
-            mediaUrl = (mMp4Mobile != null) ? mMp4Mobile.url : null;
+        if (!highQuality && mMp4Mobile != null) {
+            mediaUrl = mMp4Mobile.url;
         }
         if (mediaUrl == null) return null;
         String resultUrl = mediaUrl.startsWith("http") ? mediaUrl : PROTOCOL_HTTPS + ":" + mediaUrl;
