@@ -55,7 +55,7 @@ public class ParseUtils {
      * @param byteSize The number of bytes to convert to megabytes
      * @return The byteSize in megabytes
      */
-    public static double getSizeInMb(int byteSize) {
+    public static double getSizeInMb(long byteSize) {
         return byteSize / 1024.0 / 1024.0;
     }
 
