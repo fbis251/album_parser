@@ -66,6 +66,8 @@ public class AlbumParserTest {
             "https://vidble.com/7VRBiHVRco_med.jpg", // GIF with JPG extension
             "https://vid.me/2wl6",
             "https://vid.me/e/QUIs",
+            "http://inkyshade.deviantart.com/art/Steven-is-my-Universe-524095996", // GIF
+            "http://mlewin.deviantart.com/art/Cyclops-611427095",
     };
     // @formatter:on
 

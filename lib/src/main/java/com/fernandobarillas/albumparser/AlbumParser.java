@@ -21,6 +21,8 @@
 
 package com.fernandobarillas.albumparser;
 
+import com.fernandobarillas.albumparser.deviantart.DeviantartParser;
+import com.fernandobarillas.albumparser.deviantart.api.DeviantartApi;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.gfycat.GfycatParser;
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
@@ -53,12 +55,21 @@ public class AlbumParser {
 
     private static final int UNKNOWN    = -1;
     private static final int DIRECT     = 0;
-    private static final int GFYCAT     = 1;
-    private static final int GIPHY      = 2;
-    private static final int IMGUR      = 3;
-    private static final int STREAMABLE = 4;
-    private static final int VIDBLE     = 5;
-    private static final int VIDME      = 6;
+    private static final int DEVIANTART = 1;
+    private static final int GFYCAT     = 2;
+    private static final int GIPHY      = 3;
+    private static final int IMGUR      = 4;
+    private static final int STREAMABLE = 5;
+    private static final int VIDBLE     = 6;
+    private static final int VIDME      = 7;
+
+    public static boolean isSupported(String url) {
+        return isSupported(ParseUtils.getUrlObject(url));
+    }
+
+    public static boolean isSupported(URL url) {
+        return getMediaProvider(url) != UNKNOWN;
+    }
 
     /**
      * @param urlString The URL to parse and receive data for
@@ -72,6 +83,8 @@ public class AlbumParser {
         URL mediaUrl = new URL(urlString);
 
         switch (getMediaProvider(mediaUrl)) {
+            case DEVIANTART:
+                return new DeviantartParser().parse(mediaUrl);
             case GFYCAT:
                 return new GfycatParser().parse(mediaUrl);
             case GIPHY:
@@ -93,34 +106,30 @@ public class AlbumParser {
         }
     }
 
-    public static boolean isSupported(String url) {
-        return isSupported(ParseUtils.getUrlObject(url));
-    }
-
-    public static boolean isSupported(URL url) {
-        return getMediaProvider(url) != UNKNOWN;
-    }
-
     private static int getMediaProvider(URL url) {
         if (url == null) return UNKNOWN;
-        String domain = url.getHost();
+        String domain = url.getHost()
+                .toLowerCase();
 
-        if (domain.endsWith(GfycatApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, DeviantartApi.BASE_DOMAIN)) {
+            return DEVIANTART;
+        }
+        if (isDomainMatch(domain, GfycatApi.BASE_DOMAIN)) {
             return GFYCAT;
         }
-        if (domain.endsWith(GiphyApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, GiphyApi.BASE_DOMAIN)) {
             return GIPHY;
         }
-        if (domain.endsWith(ImgurApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, ImgurApi.BASE_DOMAIN)) {
             return IMGUR;
         }
-        if (domain.endsWith(StreamableApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, StreamableApi.BASE_DOMAIN)) {
             return STREAMABLE;
         }
-        if (domain.endsWith(VidmeApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, VidmeApi.BASE_DOMAIN)) {
             return VIDME;
         }
-        if (domain.endsWith(VidbleApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, VidbleApi.BASE_DOMAIN)) {
             return VIDBLE;
         }
         if (isDirectUrl(url)) {
@@ -128,5 +137,9 @@ public class AlbumParser {
         }
 
         return UNKNOWN;
+    }
+
+    private static boolean isDomainMatch(String domain, String providerDomain) {
+        return domain.endsWith("." + providerDomain) || domain.equals(providerDomain);
     }
 }
