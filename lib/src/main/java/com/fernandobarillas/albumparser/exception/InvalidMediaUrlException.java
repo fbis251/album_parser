@@ -21,10 +21,26 @@
 package com.fernandobarillas.albumparser.exception;
 
 /**
+ * This Exception is thrown when the library is unable to parse a particular URL and is thus
+ * unsupported
  * Created by fb on 5/13/16.
  */
 public class InvalidMediaUrlException extends Exception {
+    private static final String message = "URL not a media URL or not supported by library";
+
     public InvalidMediaUrlException() {
-        super("URL not a media URL or not supported by library");
+        super(message);
+    }
+
+    public InvalidMediaUrlException(String url) {
+        super(message + urlParameter(url));
+    }
+
+    public InvalidMediaUrlException(String url, Throwable cause) {
+        super(message + urlParameter(url), cause);
+    }
+
+    private static String urlParameter(String url) {
+        return ": url = [" + url + "]";
     }
 }
