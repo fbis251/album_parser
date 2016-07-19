@@ -123,11 +123,11 @@ public class Image extends BaseMedia {
     }
 
     /**
-     * Wrapper for {@link #getImageUrl(String, boolean)} that always gets a GIF/GIFV URL for animations in {@link
-     * #ORIGINAL} quality
+     * Wrapper for {@link #getImageUrl(String, boolean)} that always gets a GIF/GIFV URL for
+     * animations in {@link #ORIGINAL} quality
      *
-     * @param quality The quality to use in the returned URL, for example to return the URL for the small thumbnail
-     *                image you can pass in {@link #SMALL_THUMBNAIL}
+     * @param quality The quality to use in the returned URL, for example to return the URL for the
+     *                small thumbnail image you can pass in {@link #SMALL_THUMBNAIL}
      * @return The URL to the image with the selected quality
      */
     public URL getImageUrl(String quality) {
@@ -137,10 +137,11 @@ public class Image extends BaseMedia {
     /**
      * Gets the url to the image with the passed in quality.
      *
-     * @param quality   The quality to use in the returned URL, for example to return the URL for the small thumbnail
-     *                  image you can pass in {@link #SMALL_THUMBNAIL}
-     * @param preferMp4 True to get an MP4 extension instead of a GIF/GIFV extension, false for original extension. This
-     *                  only works when {@link #ORIGINAL} quality is requested
+     * @param quality   The quality to use in the returned URL, for example to return the URL for
+     *                  the small thumbnail image you can pass in {@link #SMALL_THUMBNAIL}
+     * @param preferMp4 True to get an MP4 extension instead of a GIF/GIFV extension, false for
+     *                  original extension. This only works when {@link #ORIGINAL} quality is
+     *                  requested
      * @return The URL to the image with the selected quality
      */
     public URL getImageUrl(String quality, boolean preferMp4) {
@@ -164,11 +165,10 @@ public class Image extends BaseMedia {
     }
 
     /**
-     * @return A URL to an mp4 file if this this is a GIF/GIFV, null for all other file types. Useful when combined with
-     * {@link #isVideo()} before calling this method
+     * @return A URL to an mp4 file if this this is a GIF/GIFV, null for all other file types.
+     * Useful when combined with {@link #isVideo()} before calling this method
      */
     public URL getMp4Url() {
-        System.out.println("Animated: ? " + animated);
         return (animated) ? getImageUrl(ORIGINAL, true) : null;
     }
 }
