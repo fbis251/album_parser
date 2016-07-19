@@ -43,6 +43,8 @@ import com.fernandobarillas.albumparser.vidme.api.VidmeApi;
 import java.io.IOException;
 import java.net.URL;
 
+import okhttp3.OkHttpClient;
+
 import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
 
 /**
@@ -64,10 +66,44 @@ public class AlbumParser {
     private static final int VIDBLE     = 6;
     private static final int VIDME      = 7;
 
+    /** The OkHttpClient instance to use when making all the API calls */
+    private OkHttpClient mClient;
+
+    /**
+     * Instantiates an AlbumParser instance. The library will use its own OkHttpClient instance to
+     * make all the HTTP calls.
+     */
+    public AlbumParser() {
+        mClient = new OkHttpClient();
+    }
+
+    /**
+     * Instantiates an AlbumParser instance with the passed in OkHttpClient. This is useful when
+     * you're setting custom headers such as the username. You can also set up a Proxy in the client
+     * before passing it into this class.
+     *
+     * @param client The OkHttpClient instance to use with all the HTTP calls this library makes
+     */
+    public AlbumParser(OkHttpClient client) {
+        mClient = client;
+    }
+
+    /**
+     * Checks whether a particular URL is supported by this library
+     *
+     * @param url The URL to check for support
+     * @return True if the URL can be parsed by this library, false if the URL is unsupported
+     */
     public static boolean isSupported(String url) {
         return isSupported(ParseUtils.getUrlObject(url));
     }
 
+    /**
+     * Checks whether a particular URL is supported by this library
+     *
+     * @param url The URL to check for support
+     * @return True if the URL can be parsed by this library, false if the URL is unsupported
+     */
     public static boolean isSupported(URL url) {
         return getMediaProvider(url) != UNKNOWN;
     }
@@ -83,34 +119,42 @@ public class AlbumParser {
     public ParserResponse parseUrl(String urlString) throws IOException, InvalidMediaUrlException {
         URL mediaUrl = new URL(urlString);
 
-        switch (getMediaProvider(mediaUrl)) {
-            case DEVIANTART:
-                return new DeviantartParser().parse(mediaUrl);
-            case GFYCAT:
-                return new GfycatParser().parse(mediaUrl);
-            case GIPHY:
-                return new GiphyParser().parse(mediaUrl);
-            case IMGUR:
-                return new ImgurParser().parse(mediaUrl);
-            case STREAMABLE:
-                return new StreamableParser().parse(mediaUrl);
-            case VIDME:
-                return new VidmeParser().parse(mediaUrl);
-            case VIDBLE:
-                return new VidbleParser().parse(mediaUrl);
-            case DIRECT:
+        try {
+            switch (getMediaProvider(mediaUrl)) {
+                case DEVIANTART:
+                    return new DeviantartParser(mClient).parse(mediaUrl);
+                case GFYCAT:
+                    return new GfycatParser(mClient).parse(mediaUrl);
+                case GIPHY:
+                    return new GiphyParser().parse(mediaUrl);
+                case IMGUR:
+                    return new ImgurParser(mClient).parse(mediaUrl);
+                case STREAMABLE:
+                    return new StreamableParser(mClient).parse(mediaUrl);
+                case VIDME:
+                    return new VidmeParser(mClient).parse(mediaUrl);
+                case VIDBLE:
+                    return new VidbleParser(mClient).parse(mediaUrl);
+                case DIRECT:
+                    return new ParserResponse(new DirectMedia(mediaUrl));
+                case UNKNOWN:
+                default:
+                    // Media is not supported or a URL that doesn't point to any media passed in
+                    throw new InvalidMediaUrlException(mediaUrl.toString());
+            }
+        } catch (InvalidMediaUrlException e) {
+            // The API parsers could not get a response, try to return a DirectMedia if possible
+            if (isDirectUrl(mediaUrl)) {
                 return new ParserResponse(new DirectMedia(mediaUrl));
-            case UNKNOWN:
-            default:
-                // Media is not supported or a URL that doesn't point to any media passed in
-                throw new InvalidMediaUrlException();
+            } else {
+                throw e;
+            }
         }
     }
 
     private static int getMediaProvider(URL url) {
-        if (url == null) return UNKNOWN;
-        String domain = url.getHost()
-                .toLowerCase();
+        if (url == null || url.getHost() == null) return UNKNOWN;
+        String domain = url.getHost().toLowerCase();
 
         if (isDomainMatch(domain, DeviantartApi.BASE_DOMAIN)) {
             return DEVIANTART;
