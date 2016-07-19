@@ -36,7 +36,8 @@ public class ParseUtils {
      * Tries to get the extension of the passed-in URL
      *
      * @param url The URL to get an extension from
-     * @return A String containing only the extension with no . prefix if an extension could be found, null otherwise
+     * @return A String containing only the extension with no . prefix if an extension could be
+     * found, null otherwise
      */
     public static String getExtension(URL url) {
         if (url == null) return null;
@@ -44,8 +45,7 @@ public class ParseUtils {
         if (!path.contains(".")) return null;
         int extensionIndex = path.lastIndexOf(".") + 1;
         if (extensionIndex > path.length()) return null;
-        String extension = path.substring(extensionIndex)
-                .toLowerCase();
+        String extension = path.substring(extensionIndex).toLowerCase();
         return (!extension.isEmpty()) ? extension : null;
     }
 
@@ -70,11 +70,12 @@ public class ParseUtils {
     }
 
     /**
-     * Verifies that a URL contains a certain TLD or a subdomain of the passed in TLD. Additionally the passed-in
-     * urlString will be converted to a valid URL object
+     * Verifies that a URL contains a certain TLD or a subdomain of the passed in TLD. Additionally
+     * the passed-in urlString will be converted to a valid URL object
      *
      * @param urlString  A url to attempt to convert to a URL object
-     * @param baseDomain The TLD to match with no subdomain prefix or trailing slash, example: imgur.com
+     * @param baseDomain The TLD to match with no subdomain prefix or trailing slash, example:
+     *                   imgur.com
      * @return A URL Object representation of the passed in urlString
      */
     public static URL getUrlObject(String urlString, String baseDomain) {
@@ -108,7 +109,8 @@ public class ParseUtils {
      *
      * @param haystack    A String target for the regex
      * @param needleRegex A regex String with exactly 1 capturing group
-     * @return The text captured by the needledRegex capturing group if the regex matched, null otherwise
+     * @return The text captured by the needledRegex capturing group if the regex matched, null
+     * otherwise
      */
     public static String hashRegex(String haystack, String needleRegex) {
         Pattern pattern = Pattern.compile(needleRegex);
@@ -128,8 +130,18 @@ public class ParseUtils {
     }
 
     /**
+     * @param url The URL to check for a GIF extension
+     * @return True if the extension of the file in the URL appears to be for a GIF, false otherwise
+     */
+    public static boolean isGifExtension(URL url) {
+        String extension = getExtension(url);
+        return extension != null && extension.equals(IMedia.EXT_GIF);
+    }
+
+    /**
      * @param url The URL to check for an image extension
-     * @return True if the extension of the file in the URL appears to be for an image, false otherwise
+     * @return True if the extension of the file in the URL appears to be for an image, false
+     * otherwise
      */
     public static boolean isImageExtension(URL url) {
         String extension = getExtension(url);
@@ -148,7 +160,8 @@ public class ParseUtils {
 
     /**
      * @param url The URL to check for a video extension
-     * @return True if the extension of the file in the URL appears to be for a video or GIF, false otherwise
+     * @return True if the extension of the file in the URL appears to be for a video or GIF, false
+     * otherwise
      */
     public static boolean isVideoExtension(URL url) {
         String extension = getExtension(url);
