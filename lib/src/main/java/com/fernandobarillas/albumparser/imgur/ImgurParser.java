@@ -20,8 +20,8 @@
 
 package com.fernandobarillas.albumparser.imgur;
 
-import com.fernandobarillas.albumparser.IApiParser;
-import com.fernandobarillas.albumparser.ParserResponse;
+import com.fernandobarillas.albumparser.parser.AbstractApiParser;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.imgur.model.Image;
@@ -37,7 +37,7 @@ import retrofit2.Response;
 /**
  * Parser for Imgur API responses
  */
-public class ImgurParser extends IApiParser {
+public class ImgurParser extends AbstractApiParser {
     public ImgurParser(OkHttpClient client) {
         super(client);
     }

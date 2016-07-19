@@ -20,8 +20,8 @@
 
 package com.fernandobarillas.albumparser.gfycat;
 
-import com.fernandobarillas.albumparser.IApiParser;
-import com.fernandobarillas.albumparser.ParserResponse;
+import com.fernandobarillas.albumparser.parser.AbstractApiParser;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
 import com.fernandobarillas.albumparser.gfycat.model.cajax.CajaxResponse;
@@ -38,7 +38,7 @@ import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
 /**
  * Parser for Gfycat API responses
  */
-public class GfycatParser extends IApiParser {
+public class GfycatParser extends AbstractApiParser {
     public GfycatParser(OkHttpClient client) {
         super(client);
     }

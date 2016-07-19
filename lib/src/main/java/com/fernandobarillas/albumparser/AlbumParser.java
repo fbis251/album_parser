@@ -31,6 +31,7 @@ import com.fernandobarillas.albumparser.giphy.api.GiphyApi;
 import com.fernandobarillas.albumparser.imgur.ImgurParser;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.media.DirectMedia;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.streamable.StreamableParser;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
 import com.fernandobarillas.albumparser.util.ParseUtils;

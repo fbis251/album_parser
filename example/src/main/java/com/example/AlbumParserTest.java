@@ -21,7 +21,7 @@
 package com.example;
 
 import com.fernandobarillas.albumparser.AlbumParser;
-import com.fernandobarillas.albumparser.ParserResponse;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;

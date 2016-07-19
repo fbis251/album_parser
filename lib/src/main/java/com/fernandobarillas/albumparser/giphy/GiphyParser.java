@@ -20,8 +20,8 @@
 
 package com.fernandobarillas.albumparser.giphy;
 
-import com.fernandobarillas.albumparser.IApiParser;
-import com.fernandobarillas.albumparser.ParserResponse;
+import com.fernandobarillas.albumparser.parser.AbstractApiParser;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.giphy.model.GiphyMedia;
 
@@ -31,7 +31,7 @@ import java.net.URL;
 /**
  * Parser for Giphy API responses
  */
-public class GiphyParser extends IApiParser {
+public class GiphyParser extends AbstractApiParser {
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = GiphyUtils.getHash(mediaUrl.toString());

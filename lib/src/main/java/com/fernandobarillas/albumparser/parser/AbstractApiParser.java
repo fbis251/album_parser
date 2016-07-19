@@ -18,7 +18,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser;
+package com.fernandobarillas.albumparser.parser;
 
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 
@@ -32,13 +32,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Abstract class for parsers for API responses
  */
-public abstract class IApiParser {
+public abstract class AbstractApiParser {
     protected OkHttpClient mClient;
 
     /**
      * Instantiates the parser using the default OkHttpClient in Retrofit
      */
-    public IApiParser() {
+    public AbstractApiParser() {
     }
 
     /**
@@ -46,7 +46,7 @@ public abstract class IApiParser {
      *
      * @param client The client to use with all the retrofit requests
      */
-    public IApiParser(OkHttpClient client) {
+    public AbstractApiParser(OkHttpClient client) {
         mClient = client;
     }
 

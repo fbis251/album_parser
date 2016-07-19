@@ -20,8 +20,8 @@
 
 package com.fernandobarillas.albumparser.vidme;
 
-import com.fernandobarillas.albumparser.IApiParser;
-import com.fernandobarillas.albumparser.ParserResponse;
+import com.fernandobarillas.albumparser.parser.AbstractApiParser;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.vidme.api.VidmeApi;
 import com.fernandobarillas.albumparser.vidme.model.VidmeResponse;
@@ -35,7 +35,7 @@ import retrofit2.Response;
 /**
  * Parser for vid.me API responses
  */
-public class VidmeParser extends IApiParser {
+public class VidmeParser extends AbstractApiParser {
     public VidmeParser(OkHttpClient client) {
         super(client);
     }

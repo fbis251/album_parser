@@ -20,8 +20,8 @@
 
 package com.fernandobarillas.albumparser.vidble;
 
-import com.fernandobarillas.albumparser.IApiParser;
-import com.fernandobarillas.albumparser.ParserResponse;
+import com.fernandobarillas.albumparser.parser.AbstractApiParser;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.fernandobarillas.albumparser.vidble.model.VidbleMedia;
@@ -36,7 +36,7 @@ import retrofit2.Response;
 /**
  * Parser for Vidble API responses
  */
-public class VidbleParser extends IApiParser {
+public class VidbleParser extends AbstractApiParser {
     public VidbleParser(OkHttpClient client) {
         super(client);
     }

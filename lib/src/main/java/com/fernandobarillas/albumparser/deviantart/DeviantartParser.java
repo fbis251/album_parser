@@ -20,8 +20,8 @@
 
 package com.fernandobarillas.albumparser.deviantart;
 
-import com.fernandobarillas.albumparser.IApiParser;
-import com.fernandobarillas.albumparser.ParserResponse;
+import com.fernandobarillas.albumparser.parser.AbstractApiParser;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.deviantart.api.DeviantartApi;
 import com.fernandobarillas.albumparser.deviantart.model.DeviantartResponse;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
@@ -37,7 +37,7 @@ import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
 /**
  * Created by fb on 5/26/16.
  */
-public class DeviantartParser extends IApiParser {
+public class DeviantartParser extends AbstractApiParser {
     public DeviantartParser(OkHttpClient client) {
         super(client);
     }

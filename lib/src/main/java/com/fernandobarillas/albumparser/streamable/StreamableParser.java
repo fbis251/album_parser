@@ -20,8 +20,8 @@
 
 package com.fernandobarillas.albumparser.streamable;
 
-import com.fernandobarillas.albumparser.IApiParser;
-import com.fernandobarillas.albumparser.ParserResponse;
+import com.fernandobarillas.albumparser.parser.AbstractApiParser;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
 import com.fernandobarillas.albumparser.streamable.model.Mp4;
@@ -39,7 +39,7 @@ import retrofit2.Response;
 /**
  * Parser for Streamable API responses
  */
-public class StreamableParser extends IApiParser {
+public class StreamableParser extends AbstractApiParser {
     public StreamableParser(OkHttpClient client) {
         super(client);
     }
