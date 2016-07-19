@@ -30,14 +30,17 @@ import com.fernandobarillas.albumparser.vidble.model.VidbleResponse;
 import java.io.IOException;
 import java.net.URL;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Parser for Vidble API responses
  */
-public class VidbleParser implements IApiParser {
+public class VidbleParser extends IApiParser {
+    public VidbleParser(OkHttpClient client) {
+        super(client);
+    }
+
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = VidbleUtils.getHash(mediaUrl);
@@ -46,12 +49,8 @@ public class VidbleParser implements IApiParser {
         }
 
         if (VidbleUtils.isAlbum(hash)) {
-            Retrofit retrofit = new Retrofit.Builder().baseUrl(VidbleApi.API_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            VidbleApi service = retrofit.create(VidbleApi.class);
-            Response<VidbleResponse> response = service.getAlbumData(hash)
-                    .execute();
+            VidbleApi service = getRetrofit(VidbleApi.API_URL).create(VidbleApi.class);
+            Response<VidbleResponse> response = service.getAlbumData(hash).execute();
             VidbleResponse vidbleResponse = response.body();
             vidbleResponse.setHash(hash);
             vidbleResponse.setOriginalUrl(mediaUrl.toString());

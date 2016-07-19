@@ -33,14 +33,17 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 import java.io.IOException;
 import java.net.URL;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Parser for Streamable API responses
  */
-public class StreamableParser implements IApiParser {
+public class StreamableParser extends IApiParser {
+    public StreamableParser(OkHttpClient client) {
+        super(client);
+    }
+
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = StreamableUtils.getHash(mediaUrl.toString());
@@ -49,7 +52,7 @@ public class StreamableParser implements IApiParser {
         }
 
         if (ParseUtils.isDirectUrl(mediaUrl)) {
-            Mp4       mp4       = new Mp4();
+            Mp4 mp4 = new Mp4();
             Mp4Mobile mp4Mobile = new Mp4Mobile();
             mp4.url = StreamableUtils.getMp4Url(hash);
             mp4Mobile.url = StreamableUtils.getMp4MobileUrl(hash);
@@ -57,12 +60,8 @@ public class StreamableParser implements IApiParser {
             return new ParserResponse(streamableMedia);
         }
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(StreamableApi.API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        StreamableApi service = retrofit.create(StreamableApi.class);
-        Response<StreamableResponse> response = service.getVideo(hash)
-                .execute();
+        StreamableApi service = getRetrofit(StreamableApi.API_URL).create(StreamableApi.class);
+        Response<StreamableResponse> response = service.getVideo(hash).execute();
         StreamableResponse streamableResponse = response.body();
         streamableResponse.setHash(hash);
         streamableResponse.setOriginalUrl(mediaUrl.toString());

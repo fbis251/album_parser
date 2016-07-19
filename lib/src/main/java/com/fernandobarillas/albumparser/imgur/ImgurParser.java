@@ -31,14 +31,17 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 import java.io.IOException;
 import java.net.URL;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Parser for Imgur API responses
  */
-public class ImgurParser implements IApiParser {
+public class ImgurParser extends IApiParser {
+    public ImgurParser(OkHttpClient client) {
+        super(client);
+    }
+
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = ImgurUtils.getHash(mediaUrl.toString());
@@ -47,22 +50,18 @@ public class ImgurParser implements IApiParser {
         }
 
         if (ImgurUtils.isAlbum(hash)) {
-            Retrofit retrofit = new Retrofit.Builder().baseUrl(ImgurApi.API_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            ImgurApi service = retrofit.create(ImgurApi.class);
+            ImgurApi service = getRetrofit(ImgurApi.API_URL).create(ImgurApi.class);
 
             // Make an API call to get the album images
-            Response<ImgurResponse> response = service.getAlbumData(hash)
-                    .execute();
+            Response<ImgurResponse> response = service.getAlbumData(hash).execute();
             ImgurResponse imgurResponse = response.body();
             imgurResponse.setHash(hash);
             imgurResponse.setOriginalUrl(mediaUrl.toString());
             return new ParserResponse(imgurResponse);
         } else {
             // Generate a new image object for the hash we got
-            Image  image = new Image();
-            String ext   = ParseUtils.getExtension(mediaUrl);
+            Image image = new Image();
+            String ext = ParseUtils.getExtension(mediaUrl);
             if (ext != null) {
                 image.ext = "." + ext;
             }

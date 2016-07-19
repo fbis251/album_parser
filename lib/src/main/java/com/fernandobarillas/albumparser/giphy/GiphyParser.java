@@ -31,7 +31,7 @@ import java.net.URL;
 /**
  * Parser for Giphy API responses
  */
-public class GiphyParser implements IApiParser {
+public class GiphyParser extends IApiParser {
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = GiphyUtils.getHash(mediaUrl.toString());

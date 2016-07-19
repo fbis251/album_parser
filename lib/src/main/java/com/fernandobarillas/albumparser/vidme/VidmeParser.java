@@ -29,26 +29,26 @@ import com.fernandobarillas.albumparser.vidme.model.VidmeResponse;
 import java.io.IOException;
 import java.net.URL;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Parser for vid.me API responses
  */
-public class VidmeParser implements IApiParser {
+public class VidmeParser extends IApiParser {
+    public VidmeParser(OkHttpClient client) {
+        super(client);
+    }
+
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = VidmeUtils.getHash(mediaUrl.toString());
         if (hash == null) {
             throw new InvalidMediaUrlException();
         }
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(VidmeApi.API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        VidmeApi service = retrofit.create(VidmeApi.class);
-        Response<VidmeResponse> response = service.getVideoData(hash)
-                .execute();
+
+        VidmeApi service = getRetrofit(VidmeApi.API_URL).create(VidmeApi.class);
+        Response<VidmeResponse> response = service.getVideoData(hash).execute();
         VidmeResponse apiResponse = response.body();
         apiResponse.setOriginalUrl(mediaUrl.toString());
         return new ParserResponse(apiResponse);

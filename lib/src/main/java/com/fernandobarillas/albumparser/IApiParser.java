@@ -25,9 +25,52 @@ import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import java.io.IOException;
 import java.net.URL;
 
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 /**
- * Interface for parsers for API responses
+ * Abstract class for parsers for API responses
  */
-public interface IApiParser {
-    ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException;
+public abstract class IApiParser {
+    protected OkHttpClient mClient;
+
+    /**
+     * Instantiates the parser using the default OkHttpClient in Retrofit
+     */
+    public IApiParser() {
+    }
+
+    /**
+     * Instantiates the parser using the passed-in OkHttpClient
+     *
+     * @param client The client to use with all the retrofit requests
+     */
+    public IApiParser(OkHttpClient client) {
+        mClient = client;
+    }
+
+    /**
+     * @param apiUrl The URL to use when building the instance
+     * @return A Retrofit instance for the passed-in API URL.
+     */
+    protected Retrofit getRetrofit(String apiUrl) {
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder().baseUrl(apiUrl)
+                .addConverterFactory(GsonConverterFactory.create());
+        if (mClient != null) {
+            retrofitBuilder = retrofitBuilder.client(mClient);
+        }
+        return retrofitBuilder.build();
+    }
+
+    /**
+     * Parses a media URL and attempts to get a response from the respective API
+     *
+     * @param mediaUrl The URL to attempt to parse and get an API response for
+     * @return The parsed API response for the passed-in mediaUrl
+     * @throws InvalidMediaUrlException When the passed-in mediaUrl was not supported by the parser
+     * @throws IOException              When there was an error during the HTTP call
+     */
+    protected abstract ParserResponse parse(URL mediaUrl)
+            throws InvalidMediaUrlException, IOException;
 }

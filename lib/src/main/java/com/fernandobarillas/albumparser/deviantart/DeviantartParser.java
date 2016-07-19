@@ -29,16 +29,19 @@ import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import java.io.IOException;
 import java.net.URL;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
 
 /**
  * Created by fb on 5/26/16.
  */
-public class DeviantartParser implements IApiParser {
+public class DeviantartParser extends IApiParser {
+    public DeviantartParser(OkHttpClient client) {
+        super(client);
+    }
+
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String url = mediaUrl.toString();
@@ -52,10 +55,7 @@ public class DeviantartParser implements IApiParser {
             return new ParserResponse(response);
         }
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(DeviantartApi.API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        DeviantartApi service = retrofit.create(DeviantartApi.class);
+        DeviantartApi service = getRetrofit(DeviantartApi.API_URL).create(DeviantartApi.class);
         Response<DeviantartResponse> response = service.getOembed(url).execute();
         DeviantartResponse deviantartResponse = response.body();
         return new ParserResponse(deviantartResponse);

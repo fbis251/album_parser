@@ -30,16 +30,19 @@ import com.fernandobarillas.albumparser.gfycat.model.cajax.GfyItem;
 import java.io.IOException;
 import java.net.URL;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
 
 /**
  * Parser for Gfycat API responses
  */
-public class GfycatParser implements IApiParser {
+public class GfycatParser extends IApiParser {
+    public GfycatParser(OkHttpClient client) {
+        super(client);
+    }
+
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = GfycatUtils.getHash(mediaUrl.toString());
@@ -55,15 +58,11 @@ public class GfycatParser implements IApiParser {
             return new ParserResponse(gfyItem);
         }
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(GfycatApi.API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        GfycatApi service = retrofit.create(GfycatApi.class);
-        Response<CajaxResponse> response = service.getCajax(hash)
-                .execute();
+        GfycatApi service = getRetrofit(GfycatApi.API_URL).create(GfycatApi.class);
+        Response<CajaxResponse> response = service.getCajax(hash).execute();
         CajaxResponse apiResponse = response.body();
         apiResponse.setOriginalUrl(mediaUrl.toString());
-
+        System.out.println(apiResponse);
         return new ParserResponse(apiResponse);
     }
 }
