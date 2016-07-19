@@ -37,12 +37,6 @@ public class GiphyMedia extends BaseMedia {
     }
 
     @Override
-    public URL getPreviewUrl() {
-        if (mHash == null) return null;
-        return getMediaUrl(true);
-    }
-
-    @Override
     public URL getUrl(boolean highQuality) {
         if (mHash == null) return null;
         return getMediaUrl(false);
