@@ -20,15 +20,11 @@
 
 package com.fernandobarillas.albumparser.streamable;
 
+import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
-import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
-import com.fernandobarillas.albumparser.streamable.model.Mp4;
-import com.fernandobarillas.albumparser.streamable.model.Mp4Mobile;
-import com.fernandobarillas.albumparser.streamable.model.StreamableMedia;
 import com.fernandobarillas.albumparser.streamable.model.StreamableResponse;
-import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -51,21 +47,11 @@ public class StreamableParser extends AbstractApiParser {
             throw new InvalidMediaUrlException();
         }
 
-        if (ParseUtils.isDirectUrl(mediaUrl)) {
-            Mp4 mp4 = new Mp4();
-            Mp4Mobile mp4Mobile = new Mp4Mobile();
-            mp4.url = StreamableUtils.getMp4Url(hash);
-            mp4Mobile.url = StreamableUtils.getMp4MobileUrl(hash);
-            StreamableMedia streamableMedia = new StreamableMedia(mp4, mp4Mobile);
-            return new ParserResponse(streamableMedia);
-        }
-
         StreamableApi service = getRetrofit(StreamableApi.API_URL).create(StreamableApi.class);
         Response<StreamableResponse> response = service.getVideo(hash).execute();
         StreamableResponse streamableResponse = response.body();
         streamableResponse.setHash(hash);
         streamableResponse.setOriginalUrl(mediaUrl.toString());
-
         return new ParserResponse(streamableResponse);
     }
 }
