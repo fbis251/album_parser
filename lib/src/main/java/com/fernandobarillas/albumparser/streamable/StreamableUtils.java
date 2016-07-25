@@ -80,6 +80,7 @@ public class StreamableUtils {
     public static String getMp4Url(String hash, boolean highQuality) {
         if (hash == null) return null;
         String quality = (highQuality) ? MP4_URL : MP4_MOBILE_URL;
-        return String.format("%s%s%s.%s", StreamableApi.CDN_URL, quality, hash, IMedia.EXT_MP4);
+        return String.format("%s%s%s.%s", StreamableApi.CDN_VIDEO_URL, quality, hash,
+                IMedia.EXT_MP4);
     }
 }

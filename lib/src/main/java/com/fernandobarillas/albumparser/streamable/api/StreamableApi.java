@@ -31,9 +31,11 @@ import retrofit2.http.Path;
  */
 public interface StreamableApi {
     // No trailing slash!
-    String BASE_DOMAIN = "streamable.com";
-    String API_URL     = "https://api." + BASE_DOMAIN;
-    String CDN_URL     = "https://cdn." + BASE_DOMAIN + "/video";
+    String BASE_DOMAIN   = "streamable.com";
+    String API_URL       = "https://api." + BASE_DOMAIN;
+    String CDN_URL       = "https://cdn." + BASE_DOMAIN;
+    String CDN_IMAGE_URL = CDN_URL + "/image";
+    String CDN_VIDEO_URL = CDN_URL + "/video";
 
     @GET("/videos/{hash}")
     Call<StreamableResponse> getVideo(@Path("hash") String hash);
