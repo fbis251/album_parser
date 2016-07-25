@@ -91,7 +91,7 @@ public class StreamableResponse extends BaseApiResponse {
         if (files == null) return null;
 
         if (mStreamableMedia == null) {
-            mStreamableMedia = new StreamableMedia(files.mp4, files.mp4Mobile);
+            mStreamableMedia = new StreamableMedia(files.mp4, files.mp4Mobile, getPreviewUrl());
         }
         return mStreamableMedia;
     }

@@ -32,10 +32,12 @@ import java.net.URL;
 public class StreamableMedia extends BaseMedia {
     Mp4       mMp4;
     Mp4Mobile mMp4Mobile;
+    URL       mPreviewUrl;
 
-    public StreamableMedia(Mp4 mp4, Mp4Mobile mp4Mobile) {
+    public StreamableMedia(Mp4 mp4, Mp4Mobile mp4Mobile, URL previewUrl) {
         mMp4 = mp4;
         mMp4Mobile = mp4Mobile;
+        mPreviewUrl = previewUrl;
     }
 
     @Override
@@ -56,6 +58,11 @@ public class StreamableMedia extends BaseMedia {
             resultHeight = (mMp4Mobile != null) ? mMp4Mobile.height : SIZE_UNAVAILABLE;
         }
         return resultHeight;
+    }
+
+    @Override
+    public URL getPreviewUrl() {
+        return mPreviewUrl;
     }
 
     @Override
