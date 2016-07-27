@@ -33,8 +33,6 @@ import java.net.URL;
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
 
-import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
-
 /**
  * Parser for Gfycat API responses
  */
@@ -48,14 +46,6 @@ public class GfycatParser extends AbstractApiParser {
         String hash = GfycatUtils.getHash(mediaUrl.toString());
         if (hash == null) {
             throw new InvalidMediaUrlException();
-        }
-
-        if (isDirectUrl(mediaUrl)) {
-            GfyItem gfyItem = new GfyItem();
-            gfyItem.mp4Url = mediaUrl.toString();
-            gfyItem.mobileUrl = GfycatUtils.getMobileUrl(hash);
-            gfyItem.posterUrl = GfycatUtils.getPosterUrl(hash);
-            return new ParserResponse(gfyItem);
         }
 
         GfycatApi service = getRetrofit(GfycatApi.API_URL).create(GfycatApi.class);
