@@ -35,7 +35,6 @@ import javax.annotation.Generated;
  */
 @Generated("org.jsonschema2pojo")
 public class VidmeResponse extends BaseApiResponse {
-
     @SerializedName("status")
     @Expose
     public boolean status;
@@ -77,5 +76,21 @@ public class VidmeResponse extends BaseApiResponse {
     @Override
     public boolean isSuccessful() {
         return status;
+    }
+
+    @Override
+    public String toString() {
+        return "VidmeResponse{"
+                + "status="
+                + status
+                + ", error='"
+                + error
+                + '\''
+                + ", code='"
+                + code
+                + '\''
+                + ", video="
+                + video
+                + '}';
     }
 }
