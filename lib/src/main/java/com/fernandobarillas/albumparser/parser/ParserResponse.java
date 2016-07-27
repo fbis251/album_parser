@@ -24,9 +24,9 @@ import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 
 /**
- * Class that facilitates getting API responses, regardless of which API returned them. This class will always try to
- * return either a full API response when a call was made to the API, or it will return an IMedia Object with a URL that
- * links directly to video or an image
+ * Class that facilitates getting API responses, regardless of which API returned them. This class
+ * will always try to return either a full API response when a call was made to the API, or it will
+ * return an IMedia Object with a URL that links directly to video or an image
  */
 public class ParserResponse {
     private IApiResponse mApiResponse;
@@ -42,12 +42,18 @@ public class ParserResponse {
     }
 
     /**
-     * Constructor for full API IApiResponse. These can contain one or several IMedia objects or a full album in them.
+     * Constructor for full API IApiResponse. These can contain one or several IMedia objects or a
+     * full album in them.
      *
      * @param apiResponse The API response to return in this response
      */
     public ParserResponse(IApiResponse apiResponse) {
         mApiResponse = apiResponse;
+    }
+
+    @Override
+    public String toString() {
+        return "ParserResponse{" + "mApiResponse=" + mApiResponse + ", mMedia=" + mMedia + '}';
     }
 
     /**
@@ -61,11 +67,17 @@ public class ParserResponse {
      * @return The IMedia returned by the parser
      */
     public IMedia getMedia() {
-        return mMedia;
+        if (mMedia != null) return mMedia;
+        if (mApiResponse != null && !mApiResponse.isAlbum()) {
+            return mApiResponse.getMedia();
+        }
+
+        return null;
     }
 
     /**
-     * @return True when there is only a single media, false when there is a full response from the API available
+     * @return True when there is only a single media, false when there is a full response from the
+     * API available
      */
     public boolean isSingleMedia() {
         return mMedia != null;
