@@ -133,9 +133,26 @@ public class ParseUtils {
      * @param url The URL to check for a GIF extension
      * @return True if the extension of the file in the URL appears to be for a GIF, false otherwise
      */
+    public static boolean isGifExtension(String url) {
+        return isGifExtension(getUrlObject(url));
+    }
+
+    /**
+     * @param url The URL to check for a GIF extension
+     * @return True if the extension of the file in the URL appears to be for a GIF, false otherwise
+     */
     public static boolean isGifExtension(URL url) {
         String extension = getExtension(url);
         return extension != null && extension.equals(IMedia.EXT_GIF);
+    }
+
+    /**
+     * @param url The URL to check for an image extension
+     * @return True if the extension of the file in the URL appears to be for an image, false
+     * otherwise
+     */
+    public static boolean isImageExtension(String url) {
+        return isImageExtension(getUrlObject(url));
     }
 
     /**
@@ -163,12 +180,20 @@ public class ParseUtils {
      * @return True if the extension of the file in the URL appears to be for a video or GIF, false
      * otherwise
      */
+    public static boolean isVideoExtension(String url) {
+        return isVideoExtension(getUrlObject(url));
+    }
+
+    /**
+     * @param url The URL to check for a video extension
+     * @return True if the extension of the file in the URL appears to be for a video or GIF, false
+     * otherwise
+     */
     public static boolean isVideoExtension(URL url) {
         String extension = getExtension(url);
         if (extension == null) return false;
         switch (extension) {
             case IMedia.EXT_3GP:
-            case IMedia.EXT_GIF:
             case IMedia.EXT_GIFV:
             case IMedia.EXT_MKV:
             case IMedia.EXT_MP4:
