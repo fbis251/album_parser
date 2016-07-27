@@ -47,12 +47,24 @@ public class GfycatUtils {
         return ParseUtils.hashRegex(path, "/(\\w+)");
     }
 
+    public static URL getUrlFromHash(String gfyHash) {
+        return ParseUtils.getUrlObject(String.format("%s/%s", GfycatApi.API_URL, gfyHash));
+    }
+
     /**
      * @param hash The hash to get the URL for
      * @return The mobile mp4 version URL
      */
-    public static String getMobileUrl(String hash) {
+    static String getMobileUrl(String hash) {
         return getPosterOrMobileUrl(hash, true);
+    }
+
+    /**
+     * @param hash The hash to get the URL for
+     * @return The JPG preview URL
+     */
+    static String getPosterUrl(String hash) {
+        return getPosterOrMobileUrl(hash, false);
     }
 
     /**
@@ -60,18 +72,10 @@ public class GfycatUtils {
      * @param isMobileVideo True to get the mobile video URL, false to get the poster JPG url
      * @return The URL to the mobile version of the video or to the preview poster URL
      */
-    public static String getPosterOrMobileUrl(String hash, boolean isMobileVideo) {
-        if (hash == null) return null;
-        String ext  = (isMobileVideo) ? IMedia.EXT_MP4 : IMedia.EXT_JPG;
+    private static String getPosterOrMobileUrl(String hash, boolean isMobileVideo) {
+        if (hash == null || hash.trim().length() == 0) return null;
+        String ext = (isMobileVideo) ? IMedia.EXT_MP4 : IMedia.EXT_JPG;
         String type = (isMobileVideo) ? TYPE_MOBILE : TYPE_POSTER;
         return String.format("%s/%s%s.%s", GfycatApi.THUMB_URL, hash, type, ext);
-    }
-
-    /**
-     * @param hash The hash to get the URL for
-     * @return The JPG preview URL
-     */
-    public static String getPosterUrl(String hash) {
-        return getPosterOrMobileUrl(hash, false);
     }
 }
