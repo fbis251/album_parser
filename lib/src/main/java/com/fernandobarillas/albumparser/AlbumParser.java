@@ -85,7 +85,7 @@ public class AlbumParser {
      * @param client The OkHttpClient instance to use with all the HTTP calls this library makes
      */
     public AlbumParser(OkHttpClient client) {
-        mClient = client;
+        if(client != null) mClient = client;
     }
 
     /**
