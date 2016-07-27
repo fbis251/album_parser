@@ -131,7 +131,7 @@ public class Image extends BaseMedia {
      * @return The URL to the image with the selected quality
      */
     public URL getImageUrl(String quality) {
-        return getImageUrl(quality, false);
+        return getImageUrl(quality, true);
     }
 
     /**
@@ -146,9 +146,10 @@ public class Image extends BaseMedia {
      */
     public URL getImageUrl(String quality, boolean preferMp4) {
         String newExt = (ext != null) ? ext : "." + EXT_JPG;
-        if (animated && !quality.equals(ORIGINAL)) {
-            // Imgur returns a JPG image for non-ORIGINAL URLs for animations regardless of the extension in the request
-            // The client shouldn't have to use the response MIME type to figure this out
+        if (!quality.equals(ORIGINAL)) {
+            // Imgur returns a JPG image for non-ORIGINAL URLs for animations regardless of the
+            // extension in the request. The client shouldn't have to use the response MIME type
+            // to figure this out
             newExt = "." + EXT_JPG;
         }
 
