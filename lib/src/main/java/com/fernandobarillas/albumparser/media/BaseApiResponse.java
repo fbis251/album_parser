@@ -28,7 +28,7 @@ import java.net.URL;
  * Class that sets default values for the IApiResponse interface
  */
 public abstract class BaseApiResponse implements IApiResponse {
-    String mOriginalUrl;
+    private String mOriginalUrl;
 
     @Override
     public IMediaAlbum getAlbum() {
