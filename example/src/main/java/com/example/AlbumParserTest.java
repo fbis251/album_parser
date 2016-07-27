@@ -21,11 +21,13 @@
 package com.example;
 
 import com.fernandobarillas.albumparser.AlbumParser;
-import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
+
+import okhttp3.OkHttpClient;
 
 /**
  * Created by fb on 5/13/16.
@@ -71,9 +73,9 @@ public class AlbumParserTest {
     };
     // @formatter:on
 
-    public static final boolean testAlbumParser() {
-        AlbumParser albumParser = new AlbumParser();
-        int         count       = 0;
+    public static final boolean testAlbumParser(final OkHttpClient client) {
+        AlbumParser albumParser = new AlbumParser(client);
+        int count = 0;
         for (String testUrl : TEST_URLS) {
             System.out.println("Testing " + testUrl);
             try {
@@ -100,16 +102,33 @@ public class AlbumParserTest {
 
     protected static String getMediaInfo(String hash, IMedia media) {
         if (media == null) return hash + " Error: media is null";
-        return hash + " Media{" +
-                "Title='" + media.getTitle() + '\'' +
-                ", Description='" + media.getDescription() + '\'' +
-                ", isVideo='" + media.isVideo() + '\'' +
-                ", highQuality='" + media.getUrl(true) + '\'' +
-                ", highStats='" + getVideoInfo(media, true) + '\'' +
-                ", lowQuality='" + media.getUrl(false) + '\'' +
-                ", lowStats='" + getVideoInfo(media, false) + '\'' +
-                ", preview='" + media.getPreviewUrl() + '\'' +
-                '}';
+        return hash
+                + " Media{"
+                + "Title='"
+                + media.getTitle()
+                + '\''
+                + ", Description='"
+                + media.getDescription()
+                + '\''
+                + ", isVideo='"
+                + media.isVideo()
+                + '\''
+                + ", highQuality='"
+                + media.getUrl(true)
+                + '\''
+                + ", highStats='"
+                + getVideoInfo(media, true)
+                + '\''
+                + ", lowQuality='"
+                + media.getUrl(false)
+                + '\''
+                + ", lowStats='"
+                + getVideoInfo(media, false)
+                + '\''
+                + ", preview='"
+                + media.getPreviewUrl()
+                + '\''
+                + '}';
     }
 
     protected static void testApiResponse(IApiResponse apiResponse) {
@@ -150,13 +169,16 @@ public class AlbumParserTest {
     private static String getVideoInfo(IMedia media, boolean highQuality) {
         if (media == null) return null;
         String result = "";
-        if (media.getWidth(highQuality) > 0)
+        if (media.getWidth(highQuality) > 0) {
             result += String.format("%dw", media.getWidth(highQuality));
-        if (media.getHeight(highQuality) > 0)
+        }
+        if (media.getHeight(highQuality) > 0) {
             result += String.format(" %dh", media.getHeight(highQuality));
+        }
         if (media.getDuration() > 0) result += String.format(" %.1fs", media.getDuration());
-        if (media.getByteSize(highQuality) > 0)
+        if (media.getByteSize(highQuality) > 0) {
             result += " " + ParseUtils.getSizeInMbString(media.getByteSize(highQuality)) + "MB";
+        }
         return result;
     }
 }
