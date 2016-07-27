@@ -18,7 +18,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.gfycat.model.cajax;
+package com.fernandobarillas.albumparser.gfycat.model;
 
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
@@ -34,7 +34,7 @@ import javax.annotation.Generated;
  * Created by fb on 5/9/16.
  */
 @Generated("org.jsonschema2pojo")
-public class CajaxResponse extends BaseApiResponse {
+public class QueryHashResponse extends BaseApiResponse {
 
     @SerializedName("gfyItem")
     @Expose
@@ -71,5 +71,10 @@ public class CajaxResponse extends BaseApiResponse {
     @Override
     public boolean isSuccessful() {
         return gfyItem != null;
+    }
+
+    @Override
+    public String toString() {
+        return "QueryHashResponse{" + "gfyItem=" + gfyItem + ", error='" + error + '\'' + '}';
     }
 }

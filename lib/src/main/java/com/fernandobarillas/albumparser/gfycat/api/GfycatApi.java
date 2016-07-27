@@ -20,8 +20,10 @@
 
 package com.fernandobarillas.albumparser.gfycat.api;
 
-import com.fernandobarillas.albumparser.gfycat.model.cajax.CajaxResponse;
-import com.fernandobarillas.albumparser.gfycat.model.transcode.TranscodeResponse;
+import com.fernandobarillas.albumparser.gfycat.model.CheckLinkResponse;
+import com.fernandobarillas.albumparser.gfycat.model.GfyItem;
+import com.fernandobarillas.albumparser.gfycat.model.QueryHashResponse;
+import com.fernandobarillas.albumparser.gfycat.model.TranscodeResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -38,9 +40,15 @@ public interface GfycatApi {
     String UPLOAD_URL  = "https://upload." + BASE_DOMAIN;
     String THUMB_URL   = "https://thumbs." + BASE_DOMAIN;
 
-    @GET("/cajax/get/{hash}")
-    Call<CajaxResponse> getCajax(@Path("hash") String hash);
+    @GET("/cajax/checkUrl/{url}")
+    Call<CheckLinkResponse> checkLink(@Path("url") String url);
 
     @GET(UPLOAD_URL + "/transcode")
-    Call<TranscodeResponse> getTranscode(@Query("fetchUrl") String gifUrl);
+    Call<GfyItem> convertGif(@Query("fetchUrl") String gifUrl);
+
+    @GET(UPLOAD_URL + "/transcodeRelease/{randomString}")
+    Call<TranscodeResponse> convertGif(@Path("randomString") String randomString, @Query("fetchUrl") String gifUrl);
+
+    @GET("/cajax/get/{hash}")
+    Call<QueryHashResponse> queryHash(@Path("hash") String hash);
 }

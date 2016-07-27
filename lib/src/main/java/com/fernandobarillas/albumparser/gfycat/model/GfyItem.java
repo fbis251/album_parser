@@ -18,13 +18,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.gfycat.model.cajax;
+package com.fernandobarillas.albumparser.gfycat.model;
 
 import com.fernandobarillas.albumparser.media.BaseMedia;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -198,12 +198,8 @@ public class GfyItem extends BaseMedia {
 
     @Override
     public URL getPreviewUrl() {
-        try {
-            return new URL(posterUrl);
-        } catch (MalformedURLException ignored) {
-        }
-
-        return null;
+        if (mobilePosterUrl != null) return ParseUtils.getUrlObject(mobilePosterUrl);
+        return ParseUtils.getUrlObject(posterUrl);
     }
 
     @Override
@@ -213,12 +209,11 @@ public class GfyItem extends BaseMedia {
 
     @Override
     public URL getUrl(boolean highQuality) {
-        String resultUrl = (highQuality) ? mp4Url : mobileUrl;
-        try {
-            return new URL(resultUrl);
-        } catch (MalformedURLException ignored) {
+        String resultUrl = mp4Url;
+        if (!highQuality && mobileUrl != null) {
+            resultUrl = mobileUrl;
         }
-        return null;
+        return ParseUtils.getUrlObject(resultUrl);
     }
 
     @Override

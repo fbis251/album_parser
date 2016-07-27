@@ -20,12 +20,11 @@
 
 package com.fernandobarillas.albumparser.gfycat;
 
-import com.fernandobarillas.albumparser.parser.AbstractApiParser;
-import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
-import com.fernandobarillas.albumparser.gfycat.model.cajax.CajaxResponse;
-import com.fernandobarillas.albumparser.gfycat.model.cajax.GfyItem;
+import com.fernandobarillas.albumparser.gfycat.model.QueryHashResponse;
+import com.fernandobarillas.albumparser.parser.AbstractApiParser;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 
 import java.io.IOException;
 import java.net.URL;
@@ -49,10 +48,9 @@ public class GfycatParser extends AbstractApiParser {
         }
 
         GfycatApi service = getRetrofit(GfycatApi.API_URL).create(GfycatApi.class);
-        Response<CajaxResponse> response = service.getCajax(hash).execute();
-        CajaxResponse apiResponse = response.body();
-        apiResponse.setOriginalUrl(mediaUrl.toString());
-        System.out.println(apiResponse);
-        return new ParserResponse(apiResponse);
+        Response<QueryHashResponse> response = service.queryHash(hash).execute();
+        QueryHashResponse queryResponse = response.body();
+        queryResponse.setOriginalUrl(mediaUrl.toString());
+        return new ParserResponse(queryResponse);
     }
 }
