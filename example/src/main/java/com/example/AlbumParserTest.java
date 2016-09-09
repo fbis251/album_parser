@@ -90,8 +90,6 @@ public class AlbumParserTest {
                 }
             } catch (Exception e) {
                 System.err.println("Error: " + testUrl + " " + e.getMessage());
-                e.printStackTrace();
-                break;
             }
             count++;
         }
