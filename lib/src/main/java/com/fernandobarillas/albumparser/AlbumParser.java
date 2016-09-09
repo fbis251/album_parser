@@ -39,6 +39,8 @@ import com.fernandobarillas.albumparser.vidble.VidbleParser;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.fernandobarillas.albumparser.vidme.VidmeParser;
 import com.fernandobarillas.albumparser.vidme.api.VidmeApi;
+import com.fernandobarillas.albumparser.xkcd.XkcdParser;
+import com.fernandobarillas.albumparser.xkcd.api.XkcdApi;
 
 import java.io.IOException;
 import java.net.URL;
@@ -65,6 +67,7 @@ public class AlbumParser {
     private static final int STREAMABLE = 5;
     private static final int VIDBLE     = 6;
     private static final int VIDME      = 7;
+    private static final int XKCD       = 8;
 
     /** The OkHttpClient instance to use when making all the API calls */
     private OkHttpClient mClient;
@@ -135,6 +138,8 @@ public class AlbumParser {
                     return new VidbleParser(mClient).parse(mediaUrl);
                 case VIDME:
                     return new VidmeParser(mClient).parse(mediaUrl);
+                case XKCD:
+                    return new XkcdParser(mClient).parse(mediaUrl);
                 case DIRECT:
                     return new ParserResponse(new DirectMedia(mediaUrl));
                 case UNKNOWN:
@@ -177,6 +182,8 @@ public class AlbumParser {
         if (isDomainMatch(domain, VidmeApi.BASE_DOMAIN)) {
             return VIDME;
         }
+        if (isDomainMatch(domain, XkcdApi.BASE_DOMAIN)) {
+            return XKCD;
         }
         if (isDirectUrl(url)) {
             return DIRECT;

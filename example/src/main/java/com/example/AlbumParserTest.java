@@ -70,6 +70,9 @@ public class AlbumParserTest {
             "https://vid.me/e/QUIs",
             "http://inkyshade.deviantart.com/art/Steven-is-my-Universe-524095996", // GIF
             "http://mlewin.deviantart.com/art/Cyclops-611427095",
+            "http://m.xkcd.com/1728/",
+            "http://www.xkcd.com/1722/#",
+            "http://xkcd.com/1099/",
     };
     // @formatter:on
 
