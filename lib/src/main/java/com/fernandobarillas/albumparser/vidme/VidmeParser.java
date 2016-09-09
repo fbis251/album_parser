@@ -43,7 +43,7 @@ public class VidmeParser extends AbstractApiParser {
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         if(mediaUrl == null) {
-            throw new InvalidMediaUrlException();
+            throw new InvalidMediaUrlException(mediaUrl);
         }
         String hash = VidmeUtils.getHash(mediaUrl.toString());
         if (hash == null) {

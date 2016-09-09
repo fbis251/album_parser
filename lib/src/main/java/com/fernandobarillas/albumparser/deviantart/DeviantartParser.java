@@ -46,7 +46,7 @@ public class DeviantartParser extends AbstractApiParser {
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String url = mediaUrl.toString();
         if (url == null) {
-            throw new InvalidMediaUrlException();
+            throw new InvalidMediaUrlException(mediaUrl);
         }
 
         if (isDirectUrl(mediaUrl)) {

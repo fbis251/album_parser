@@ -44,7 +44,7 @@ public class GfycatParser extends AbstractApiParser {
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = GfycatUtils.getHash(mediaUrl.toString());
         if (hash == null) {
-            throw new InvalidMediaUrlException();
+            throw new InvalidMediaUrlException(mediaUrl);
         }
 
         GfycatApi service = getRetrofit(GfycatApi.API_URL).create(GfycatApi.class);

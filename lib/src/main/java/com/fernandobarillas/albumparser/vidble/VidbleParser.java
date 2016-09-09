@@ -45,7 +45,7 @@ public class VidbleParser extends AbstractApiParser {
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = VidbleUtils.getHash(mediaUrl);
         if (hash == null) {
-            throw new InvalidMediaUrlException();
+            throw new InvalidMediaUrlException(mediaUrl);
         }
 
         if (VidbleUtils.isAlbum(hash)) {

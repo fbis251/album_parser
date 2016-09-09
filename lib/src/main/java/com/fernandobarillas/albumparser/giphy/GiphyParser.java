@@ -36,7 +36,7 @@ public class GiphyParser extends AbstractApiParser {
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = GiphyUtils.getHash(mediaUrl.toString());
         if (hash == null) {
-            throw new InvalidMediaUrlException();
+            throw new InvalidMediaUrlException(mediaUrl);
         }
 
         return new ParserResponse(new GiphyMedia(hash));

@@ -46,7 +46,7 @@ public class ImgurParser extends AbstractApiParser {
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = ImgurUtils.getHash(mediaUrl.toString());
         if (hash == null) {
-            throw new InvalidMediaUrlException();
+            throw new InvalidMediaUrlException(mediaUrl);
         }
 
         if (ImgurUtils.isAlbum(hash)) {

@@ -44,7 +44,7 @@ public class StreamableParser extends AbstractApiParser {
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
         String hash = StreamableUtils.getHash(mediaUrl.toString());
         if (hash == null) {
-            throw new InvalidMediaUrlException();
+            throw new InvalidMediaUrlException(mediaUrl);
         }
 
         StreamableApi service = getRetrofit(StreamableApi.API_URL).create(StreamableApi.class);

@@ -140,7 +140,7 @@ public class AlbumParser {
                 case UNKNOWN:
                 default:
                     // Media is not supported or a URL that doesn't point to any media passed in
-                    throw new InvalidMediaUrlException(mediaUrl.toString());
+                    throw new InvalidMediaUrlException(mediaUrl);
             }
         } catch (InvalidMediaUrlException e) {
             // The API parsers could not get a response, try to return a DirectMedia if possible
