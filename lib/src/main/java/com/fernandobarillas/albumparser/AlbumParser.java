@@ -71,6 +71,7 @@ public class AlbumParser {
 
     /** The OkHttpClient instance to use when making all the API calls */
     private OkHttpClient mClient;
+    private String       mImgurClientId;
 
     /**
      * Instantiates an AlbumParser instance. The library will use its own OkHttpClient instance to
@@ -112,6 +113,25 @@ public class AlbumParser {
     }
 
     /**
+     * Gets the client ID token that will be used when making requests to the Imgur API.
+     *
+     * @return The Imgur Client ID if one was set by {@link #setImgurClientId(String)}, null
+     * otherwise
+     */
+    public String getImgurClientId() {
+        return mImgurClientId;
+    }
+
+    /**
+     * Sets the client ID to use when making requests to the Imgur API
+     *
+     * @param imgurClientId The client ID to use when making requests to the Imgur API
+     */
+    public void setImgurClientId(String imgurClientId) {
+        mImgurClientId = imgurClientId;
+    }
+
+    /**
      * @param urlString The URL to parse and receive data for
      * @return The API response for the passed-in URL.
      * @throws IOException              When there are any network issues such as a host not being
@@ -131,7 +151,7 @@ public class AlbumParser {
                 case GIPHY:
                     return new GiphyParser().parse(mediaUrl);
                 case IMGUR:
-                    return new ImgurParser(mClient).parse(mediaUrl);
+                    return new ImgurParser(mClient, mImgurClientId).parse(mediaUrl);
                 case STREAMABLE:
                     return new StreamableParser(mClient).parse(mediaUrl);
                 case VIDBLE:

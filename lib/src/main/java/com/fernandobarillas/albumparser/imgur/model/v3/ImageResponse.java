@@ -18,56 +18,64 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.imgur.model;
+package com.fernandobarillas.albumparser.imgur.model.v3;
 
-import com.fernandobarillas.albumparser.media.BaseMediaAlbum;
+import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
+import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Generated;
 
-/**
- * Created by fb on 5/3/16.
- */
-
 @Generated("org.jsonschema2pojo")
-public class Data extends BaseMediaAlbum {
-
-    @SerializedName("count")
+public class ImageResponse extends BaseApiResponse {
+    @SerializedName("data")
     @Expose
-    public int count;
-    @SerializedName("images")
+    public ImageData data;
+    @SerializedName("success")
     @Expose
-    public List<Image> images = new ArrayList<>();
+    public boolean   success;
+    @SerializedName("status")
+    @Expose
+    public int       status;
 
-    private List<IMedia> mMediaList;
+    private String mImageHash;
 
     @Override
-    public List<IMedia> getAlbumMedia() {
-        if (mMediaList == null) {
-            mMediaList = new ArrayList<>();
-            mMediaList.addAll(images);
-        }
-        return mMediaList;
+    public String getApiDomain() {
+        return ImgurApi.BASE_DOMAIN;
     }
 
     @Override
-    public int getCount() {
-        return count;
+    public String getHash() {
+        return mImageHash;
     }
 
     @Override
-    public URL getPreviewUrl() {
-        if (images != null && images.size() > 0) {
-            // Return the first image as the preview
-            return getAlbumMedia().get(0).getPreviewUrl();
-        }
+    public void setHash(String hash) {
+        mImageHash = hash;
+    }
 
-        return null;
+    @Override
+    public IMedia getMedia() {
+        return data;
+    }
+
+    @Override
+    public boolean isSuccessful() {
+        return success && data != null;
+    }
+
+    @Override
+    public String toString() {
+        return "ImageResponse{"
+                + "data="
+                + data
+                + ", success="
+                + success
+                + ", status="
+                + status
+                + '}';
     }
 }

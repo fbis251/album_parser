@@ -22,10 +22,10 @@ package com.fernandobarillas.albumparser.imgur.model;
 
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.media.BaseMedia;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.annotation.Generated;
@@ -98,7 +98,7 @@ public class Image extends BaseMedia {
 
     @Override
     public URL getPreviewUrl() {
-        return getImageUrl(HUGE_THUMBNAIL);
+        return getImageUrl(LARGE_THUMBNAIL);
     }
 
     @Override
@@ -158,11 +158,7 @@ public class Image extends BaseMedia {
         }
 
         String resultUrl = ImgurApi.IMAGE_URL + "/" + hash + quality + newExt;
-        try {
-            return new URL(resultUrl);
-        } catch (MalformedURLException ignored) {
-        }
-        return null;
+        return ParseUtils.getUrlObject(resultUrl);
     }
 
     /**

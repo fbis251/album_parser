@@ -21,9 +21,12 @@
 package com.fernandobarillas.albumparser.imgur.api;
 
 import com.fernandobarillas.albumparser.imgur.model.ImgurResponse;
+import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponse;
+import com.fernandobarillas.albumparser.imgur.model.v3.ImageResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Path;
 
 /**
@@ -31,10 +34,22 @@ import retrofit2.http.Path;
  */
 public interface ImgurApi {
     // No trailing slash!
-    String BASE_DOMAIN = "imgur.com";
-    String API_URL     = "https://" + BASE_DOMAIN;
-    String IMAGE_URL   = "https://i." + BASE_DOMAIN;
+    String BASE_DOMAIN             = "imgur.com";
+    String API_URL                 = "https://" + BASE_DOMAIN;
+    String API_URL_V3              = "https://api." + BASE_DOMAIN + "/3";
+    String IMAGE_URL               = "https://i." + BASE_DOMAIN;
+    String CLIENT_ID_HEADER_PREFIX = "Client-ID";
 
     @GET("/ajaxalbums/getimages/{hash}/hit.json?all=true")
     Call<ImgurResponse> getAlbumData(@Path("hash") String hash);
+
+    // https://api.imgur.com/3/album/{id}
+    @GET(API_URL_V3 + "/album/{hash}")
+    Call<AlbumResponse> getV3Album(@Header("Authorization") String contentRange,
+            @Path("hash") String hash);
+
+    // https://api.imgur.com/3/image/{id}
+    @GET(API_URL_V3 + "/image/{hash}")
+    Call<ImageResponse> getV3Image(@Header("Authorization") String contentRange,
+            @Path("hash") String hash);
 }
