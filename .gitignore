@@ -26,6 +26,7 @@ gradle-app.setting
 .gradletasknamecache
 
 # Idea files white/blacklist
+*.iml
 .idea/*
 !.idea/copyright/*
 !.idea/codeStyleSettings.xml
