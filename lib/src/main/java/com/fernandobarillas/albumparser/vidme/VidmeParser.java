@@ -42,9 +42,12 @@ public class VidmeParser extends AbstractApiParser {
 
     @Override
     public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
+        if(mediaUrl == null) {
+            throw new InvalidMediaUrlException();
+        }
         String hash = VidmeUtils.getHash(mediaUrl.toString());
         if (hash == null) {
-            throw new InvalidMediaUrlException();
+            throw new InvalidMediaUrlException(mediaUrl);
         }
 
         VidmeApi service = getRetrofit(VidmeApi.API_URL).create(VidmeApi.class);

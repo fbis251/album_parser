@@ -85,7 +85,7 @@ public class AlbumParser {
      * @param client The OkHttpClient instance to use with all the HTTP calls this library makes
      */
     public AlbumParser(OkHttpClient client) {
-        if(client != null) mClient = client;
+        if (client != null) mClient = client;
     }
 
     /**
@@ -131,10 +131,10 @@ public class AlbumParser {
                     return new ImgurParser(mClient).parse(mediaUrl);
                 case STREAMABLE:
                     return new StreamableParser(mClient).parse(mediaUrl);
-                case VIDME:
-                    return new VidmeParser(mClient).parse(mediaUrl);
                 case VIDBLE:
                     return new VidbleParser(mClient).parse(mediaUrl);
+                case VIDME:
+                    return new VidmeParser(mClient).parse(mediaUrl);
                 case DIRECT:
                     return new ParserResponse(new DirectMedia(mediaUrl));
                 case UNKNOWN:
@@ -171,11 +171,12 @@ public class AlbumParser {
         if (isDomainMatch(domain, StreamableApi.BASE_DOMAIN)) {
             return STREAMABLE;
         }
+        if (isDomainMatch(domain, VidbleApi.BASE_DOMAIN)) {
+            return VIDBLE;
+        }
         if (isDomainMatch(domain, VidmeApi.BASE_DOMAIN)) {
             return VIDME;
         }
-        if (isDomainMatch(domain, VidbleApi.BASE_DOMAIN)) {
-            return VIDBLE;
         }
         if (isDirectUrl(url)) {
             return DIRECT;

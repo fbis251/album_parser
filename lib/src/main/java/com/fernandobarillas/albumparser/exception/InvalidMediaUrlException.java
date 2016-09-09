@@ -20,6 +20,8 @@
 
 package com.fernandobarillas.albumparser.exception;
 
+import java.net.URL;
+
 /**
  * This Exception is thrown when the library is unable to parse a particular URL and is thus
  * unsupported
@@ -34,6 +36,10 @@ public class InvalidMediaUrlException extends Exception {
 
     public InvalidMediaUrlException(String url) {
         super(message + urlParameter(url));
+    }
+
+    public InvalidMediaUrlException(URL url) {
+        super(message + urlParameter((url != null) ? url.toString() : null));
     }
 
     public InvalidMediaUrlException(String url, Throwable cause) {
