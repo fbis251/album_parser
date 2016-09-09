@@ -22,6 +22,7 @@ package com.fernandobarillas.albumparser.parser;
 
 import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.IMediaAlbum;
 
 /**
  * Class that facilitates getting API responses, regardless of which API returned them. This class
@@ -56,6 +57,14 @@ public class ParserResponse {
         return "ParserResponse{" + "mApiResponse=" + mApiResponse + ", mMedia=" + mMedia + '}';
     }
 
+    public IMediaAlbum getAlbum() {
+        if (mApiResponse != null && mApiResponse.isAlbum()) {
+            return mApiResponse.getAlbum();
+        }
+
+        return null;
+    }
+
     /**
      * @return The IApiResponse returned by the parser
      */
@@ -76,10 +85,17 @@ public class ParserResponse {
     }
 
     /**
+     * @return True when the response is an album, false otherwise
+     */
+    public boolean isAlbum() {
+        return getAlbum() != null;
+    }
+
+    /**
      * @return True when there is only a single media, false when there is a full response from the
      * API available
      */
     public boolean isSingleMedia() {
-        return mMedia != null;
+        return getMedia() != null;
     }
 }
