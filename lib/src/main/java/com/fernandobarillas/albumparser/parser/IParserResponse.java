@@ -29,65 +29,31 @@ import com.fernandobarillas.albumparser.media.IMediaAlbum;
  * will always try to return either a full API response when a call was made to the API, or it will
  * return an IMedia Object with a URL that links directly to video or an image
  */
-public class ParserResponse implements IParserResponse {
-    private IApiResponse mApiResponse;
-    private IMedia       mMedia;
+public interface IParserResponse {
 
     /**
-     * Constructor for direct IMedia objects
-     *
-     * @param media The media to return in this response
+     * @return The IMediaAlbum returned by the parser
      */
-    public ParserResponse(IMedia media) {
-        mMedia = media;
-    }
+    IMediaAlbum getAlbum();
 
     /**
-     * Constructor for full API IApiResponse. These can contain one or several IMedia objects or a
-     * full album in them.
-     *
-     * @param apiResponse The API response to return in this response
+     * @return The IApiResponse returned by the parser
      */
-    public ParserResponse(IApiResponse apiResponse) {
-        mApiResponse = apiResponse;
-    }
+    IApiResponse getApiResponse();
 
-    @Override
-    public IMediaAlbum getAlbum() {
-        if (mApiResponse != null && mApiResponse.isAlbum()) {
-            return mApiResponse.getAlbum();
-        }
+    /**
+     * @return The IMedia returned by the parser
+     */
+    IMedia getMedia();
 
-        return null;
-    }
+    /**
+     * @return True when the response is an album, false otherwise
+     */
+    boolean isAlbum();
 
-    @Override
-    public IApiResponse getApiResponse() {
-        return mApiResponse;
-    }
-
-    @Override
-    public IMedia getMedia() {
-        if (mMedia != null) return mMedia;
-        if (mApiResponse != null && !mApiResponse.isAlbum()) {
-            return mApiResponse.getMedia();
-        }
-
-        return null;
-    }
-
-    @Override
-    public boolean isAlbum() {
-        return getAlbum() != null;
-    }
-
-    @Override
-    public boolean isSingleMedia() {
-        return getMedia() != null;
-    }
-
-    @Override
-    public String toString() {
-        return "ParserResponse{" + "mApiResponse=" + mApiResponse + ", mMedia=" + mMedia + '}';
-    }
+    /**
+     * @return True when there is only a single media, false when there is a full response from the
+     * API available
+     */
+    boolean isSingleMedia();
 }
