@@ -6,7 +6,8 @@ version '0.10'
 // Output jar filename
 archivesBaseName = 'albumparser'
 
-sourceCompatibility = 1.7 // java 7
+// Retrofit requires at minimum Java 7
+sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
