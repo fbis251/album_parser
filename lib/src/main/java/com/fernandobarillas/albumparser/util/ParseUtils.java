@@ -182,7 +182,9 @@ public class ParseUtils {
      * @return True when the URL likely links to an image or video, false otherwise
      */
     public static boolean isDirectUrl(URL mediaUrl) {
-        return ParseUtils.isVideoExtension(mediaUrl) || ParseUtils.isImageExtension(mediaUrl);
+        return ParseUtils.isVideoExtension(mediaUrl)
+                || ParseUtils.isImageExtension(mediaUrl)
+                || isGifExtension(mediaUrl);
     }
 
     /**
