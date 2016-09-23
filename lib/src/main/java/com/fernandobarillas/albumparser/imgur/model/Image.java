@@ -37,13 +37,15 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class Image extends BaseMedia {
     // https://api.imgur.com/models/image
-    public static final String ORIGINAL         = "";
     public static final String SMALL_SQUARE     = "s";
     public static final String BIG_SQUARE       = "b";
     public static final String SMALL_THUMBNAIL  = "t";
     public static final String MEDIUM_THUMBNAIL = "m";
-    public static final String LARGE_THUMBNAIL  = "l";
-    public static final String HUGE_THUMBNAIL   = "h";
+    public static final String LARGE_THUMBNAIL  = "l"; // ~640px
+    public static final String GIANT_THUMBNAIL  = "g"; // ~680px
+    public static final String HUGE_THUMBNAIL   = "h"; // ~1024px
+    public static final String RETINA_THUMBNAIL = "r"; // ~1360px
+    public static final String ORIGINAL         = "";  // Full resolution
 
     @SerializedName("hash")
     @Expose
@@ -98,7 +100,7 @@ public class Image extends BaseMedia {
 
     @Override
     public URL getPreviewUrl() {
-        return getImageUrl(LARGE_THUMBNAIL);
+        return getImageUrl(MEDIUM_THUMBNAIL);
     }
 
     @Override
@@ -108,6 +110,8 @@ public class Image extends BaseMedia {
 
     @Override
     public URL getUrl(boolean highQuality) {
+        // Imgur doesn't support low quality animations/video
+        if (animated) return highQuality ? getImageUrl(ORIGINAL) : null;
         return (highQuality) ? getImageUrl(ORIGINAL) : getImageUrl(HUGE_THUMBNAIL);
     }
 
@@ -159,13 +163,5 @@ public class Image extends BaseMedia {
 
         String resultUrl = ImgurApi.IMAGE_URL + "/" + hash + quality + newExt;
         return ParseUtils.getUrlObject(resultUrl);
-    }
-
-    /**
-     * @return A URL to an mp4 file if this this is a GIF/GIFV, null for all other file types.
-     * Useful when combined with {@link #isVideo()} before calling this method
-     */
-    public URL getMp4Url() {
-        return (animated) ? getImageUrl(ORIGINAL, true) : null;
     }
 }

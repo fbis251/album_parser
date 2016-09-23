@@ -32,7 +32,7 @@ import java.net.URL;
 import javax.annotation.Generated;
 
 import static com.fernandobarillas.albumparser.imgur.model.Image.HUGE_THUMBNAIL;
-import static com.fernandobarillas.albumparser.imgur.model.Image.LARGE_THUMBNAIL;
+import static com.fernandobarillas.albumparser.imgur.model.Image.MEDIUM_THUMBNAIL;
 import static com.fernandobarillas.albumparser.imgur.model.Image.ORIGINAL;
 
 @Generated("org.jsonschema2pojo")
@@ -131,8 +131,7 @@ public class ImageData extends BaseMedia implements IMedia {
 
     @Override
     public URL getPreviewUrl() {
-        // TODO: Allow dynamically changing thumbnail size
-        return getImageUrl(LARGE_THUMBNAIL);
+        return getImageUrl(MEDIUM_THUMBNAIL);
     }
 
     @Override
@@ -142,7 +141,8 @@ public class ImageData extends BaseMedia implements IMedia {
 
     @Override
     public URL getUrl(boolean highQuality) {
-        if (animated) return getImageUrl(ORIGINAL); // Always returning MP4 URL if animated
+        // Imgur doesn't support low quality animations/video
+        if (animated) return highQuality ? getImageUrl(ORIGINAL) : null;
         return (highQuality) ? getImageUrl(ORIGINAL) : getImageUrl(HUGE_THUMBNAIL);
     }
 
