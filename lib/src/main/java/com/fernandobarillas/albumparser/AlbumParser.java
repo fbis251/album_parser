@@ -23,6 +23,8 @@ package com.fernandobarillas.albumparser;
 
 import com.fernandobarillas.albumparser.deviantart.DeviantartParser;
 import com.fernandobarillas.albumparser.deviantart.api.DeviantartApi;
+import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
+import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.gfycat.GfycatParser;
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
@@ -34,6 +36,8 @@ import com.fernandobarillas.albumparser.media.DirectMedia;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.streamable.StreamableParser;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
+import com.fernandobarillas.albumparser.tumblr.TumblrParser;
+import com.fernandobarillas.albumparser.tumblr.api.TumblrApi;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.vidble.VidbleParser;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
@@ -58,20 +62,25 @@ import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
  */
 public class AlbumParser {
 
-    private static final int UNKNOWN    = -1;
-    private static final int DIRECT     = 0;
-    private static final int DEVIANTART = 1;
-    private static final int GFYCAT     = 2;
-    private static final int GIPHY      = 3;
-    private static final int IMGUR      = 4;
-    private static final int STREAMABLE = 5;
-    private static final int VIDBLE     = 6;
-    private static final int VIDME      = 7;
-    private static final int XKCD       = 8;
+    private static final int UNKNOWN       = -1;
+    private static final int DIRECT        = 0;
+    private static final int DIRECT_GIF    = 1;
+    private static final int DEVIANTART    = 2;
+    private static final int GFYCAT        = 3;
+    private static final int GIPHY         = 4;
+    private static final int IMGUR         = 5;
+    private static final int REDDITMEDIA   = 6;
+    private static final int REDDITUPLOADS = 7;
+    private static final int STREAMABLE    = 8;
+    private static final int VIDBLE        = 9;
+    private static final int VIDME         = 10;
+    private static final int TUMBLR        = 11;
+    private static final int XKCD          = 12;
 
     /** The OkHttpClient instance to use when making all the API calls */
     private OkHttpClient mClient;
     private String       mImgurClientId;
+    private String       mTumblrApiKey;
 
     /**
      * Instantiates an AlbumParser instance. The library will use its own OkHttpClient instance to
@@ -113,6 +122,13 @@ public class AlbumParser {
     }
 
     /**
+     * @return The OkHttpClient instance that the library is using for its HTTP calls.
+     */
+    public OkHttpClient getClient() {
+        return mClient;
+    }
+
+    /**
      * Gets the client ID token that will be used when making requests to the Imgur API.
      *
      * @return The Imgur Client ID if one was set by {@link #setImgurClientId(String)}, null
@@ -132,14 +148,38 @@ public class AlbumParser {
     }
 
     /**
+     * @return The API key used to make calls to the Tumblr API
+     */
+    public String getTumblrApiKey() {
+        return mTumblrApiKey;
+    }
+
+    /**
+     * Sets the API key used to make calls to the Tumblr API. Notice, the Tumblr API will not send
+     * a response unless you have first set the key using this method. If you attempt to make calls
+     * to the Tumblr API with no key set, the parser will return an {@link InvalidApiKeyException}
+     *
+     * @param tumblrApiKey The key to use to make calls to the Tumblr API
+     */
+    public void setTumblrApiKey(String tumblrApiKey) {
+        mTumblrApiKey = tumblrApiKey;
+    }
+
+    /**
      * @param urlString The URL to parse and receive data for
      * @return The API response for the passed-in URL.
-     * @throws IOException              When there are any network issues such as a host not being
-     *                                  reached.
-     * @throws InvalidMediaUrlException When the passed-in URL is not supported by this library and
-     *                                  cannot be parsed
+     * @throws IOException                 When there are any network issues such as a host not
+     *                                     being reached.
+     * @throws InvalidApiKeyException      When you attempt to use an API that requires a key
+     *                                     without first setting the key
+     * @throws InvalidApiResponseException When the API returns a null response or a response which
+     *                                     the library could not parse.
+     * @throws InvalidMediaUrlException    When the passed-in URL is not supported by this library
+     *                                     and cannot be parsed
      */
-    public ParserResponse parseUrl(String urlString) throws IOException, InvalidMediaUrlException {
+    public ParserResponse parseUrl(String urlString)
+            throws IOException, InvalidApiKeyException, InvalidApiResponseException,
+            InvalidMediaUrlException {
         URL mediaUrl = new URL(urlString);
 
         try {
@@ -158,6 +198,8 @@ public class AlbumParser {
                     return new VidbleParser(mClient).parse(mediaUrl);
                 case VIDME:
                     return new VidmeParser(mClient).parse(mediaUrl);
+                case TUMBLR:
+                    return new TumblrParser(mClient, mTumblrApiKey).parse(mediaUrl);
                 case XKCD:
                     return new XkcdParser(mClient).parse(mediaUrl);
                 case DIRECT:
@@ -202,10 +244,18 @@ public class AlbumParser {
         if (isDomainMatch(domain, VidmeApi.BASE_DOMAIN)) {
             return VIDME;
         }
-        if (isDomainMatch(domain, XkcdApi.BASE_DOMAIN)) {
-            return XKCD;
+        if (isDomainMatch(domain, TumblrApi.BASE_DOMAIN)) {
+            TumblrParser parser = new TumblrParser(null, null);
+            if (parser.canParse(url)) {
+                return TUMBLR;
+            }
         }
-        if (isDirectUrl(url)) {
+        if (isDomainMatch(domain, XkcdApi.BASE_DOMAIN)) {
+            if (new XkcdParser(null).canParse(url)) {
+                return XKCD;
+            }
+        }
+        if (ParseUtils.isDirectUrl(url)) {
             return DIRECT;
         }
 
