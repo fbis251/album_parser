@@ -57,6 +57,21 @@ public class ExpectedParserResponse implements IParserResponse {
         return mIsSingleMedia;
     }
 
+    @Override
+    public String toString() {
+        return "ExpectedParserResponse{"
+                + "mOriginalUrl="
+                + mOriginalUrl
+                + ", mMediaAlbum="
+                + mMediaAlbum
+                + ", mMedia="
+                + mMedia
+                + ", mIsAlbum="
+                + mIsAlbum
+                + ", mIsSingleMedia="
+                + mIsSingleMedia
+                + '}';
+    }
 
     public static class Builder {
 

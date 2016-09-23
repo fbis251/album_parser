@@ -1,7 +1,7 @@
 package com.fernandobarillas.albumparser.model;
 
+import com.fernandobarillas.albumparser.media.BaseMediaAlbum;
 import com.fernandobarillas.albumparser.media.IMedia;
-import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.net.URL;
@@ -10,18 +10,16 @@ import java.util.List;
 /**
  * Created by fb on 9/22/16.
  */
-public class ExpectedAlbum implements IMediaAlbum {
+public class ExpectedAlbum extends BaseMediaAlbum {
 
     private List<IMedia> mAlbumMedia;
     private int          mCount;
-    private boolean      mIsEmpty;
     private URL          mPreviewUrl;
 
     private ExpectedAlbum() {
         mAlbumMedia = null;
         mCount = COUNT_UNAVAILABLE;
         mPreviewUrl = null;
-        mIsEmpty = true;
     }
 
     @Override
@@ -37,11 +35,6 @@ public class ExpectedAlbum implements IMediaAlbum {
     @Override
     public URL getPreviewUrl() {
         return mPreviewUrl;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return mIsEmpty;
     }
 
     public static class Builder {
@@ -63,11 +56,6 @@ public class ExpectedAlbum implements IMediaAlbum {
 
         public Builder setCount(int count) {
             mExpectedAlbum.mCount = count;
-            return this;
-        }
-
-        public Builder setIsEmpty(boolean isEmpty) {
-            mExpectedAlbum.mIsEmpty = isEmpty;
             return this;
         }
 

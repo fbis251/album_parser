@@ -39,7 +39,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ImgurParserTest.class})
 public class AllTests {
-    static final int API_CALL_TIMEOUT_MS = 10000; // Wait time for HTTP call to finish
+    public static final int API_CALL_TIMEOUT_MS = 10000; // Wait time for HTTP call to finish
 
     public static void compareAlbum(final URL originalUrl, final IMediaAlbum expectedAlbum,
             final IMediaAlbum mediaAlbum) {
@@ -111,10 +111,10 @@ public class AllTests {
                 parserResponse.isAlbum());
         assertEquals(originalUrl + " Is single media", expectedParserResponse.isSingleMedia(),
                 parserResponse.isSingleMedia());
-        assertEquals(originalUrl + " Media", expectedParserResponse.getMedia() == null,
+        assertEquals(originalUrl + " Media is null", expectedParserResponse.getMedia() == null,
                 parserResponse.getMedia() == null);
-        assertEquals(originalUrl + " Media Album", expectedParserResponse.getAlbum() == null,
-                parserResponse.getAlbum() == null);
+        assertEquals(originalUrl + " Media Album is null",
+                expectedParserResponse.getAlbum() == null, parserResponse.getAlbum() == null);
 
         if (expectedParserResponse.isAlbum()) {
             compareAlbum(originalUrl, expectedParserResponse.getAlbum(), parserResponse.getAlbum());

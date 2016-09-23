@@ -1,6 +1,6 @@
 package com.fernandobarillas.albumparser.model;
 
-import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.net.URL;
@@ -8,7 +8,7 @@ import java.net.URL;
 /**
  * Created by fb on 9/22/16.
  */
-public class ExpectedMedia implements IMedia {
+public class ExpectedMedia extends BaseMedia {
 
     private boolean mIsVideo;
     private boolean mIsGif;
