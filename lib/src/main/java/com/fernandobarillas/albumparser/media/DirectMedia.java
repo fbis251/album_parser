@@ -41,6 +41,11 @@ public class DirectMedia extends BaseMedia {
     }
 
     @Override
+    public boolean isGif() {
+        return ParseUtils.isGifExtension(mUrl);
+    }
+
+    @Override
     public boolean isVideo() {
         return ParseUtils.isVideoExtension(mUrl);
     }
