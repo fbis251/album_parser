@@ -34,7 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Abstract class for parsers for API responses. This defines a few helper methods to make getting
- * the correct Retrofit service instance easier such as {@link #getRetrofit(String)}
+ * the correct Retrofit service instance easier such as {@link #getRetrofit()}
  */
 public abstract class AbstractApiParser {
     private OkHttpClient mClient;
@@ -67,9 +67,18 @@ public abstract class AbstractApiParser {
      * @return True if this parser can properly parse the passed-in media URL, false otherwise.
      */
     public boolean canParse(URL mediaUrl) {
-        return mediaUrl != null
-                && isDomainMatch(mediaUrl.getHost(), getBaseDomain())
-                && getHash(mediaUrl) != null;
+        if (mediaUrl == null) return false;
+        if (isDomainMatch(mediaUrl.getHost(), getBaseDomain())) {
+            try {
+                // The parser can actually produce a hash, we can attempt to call the API
+                if (getHash(mediaUrl) != null) return true;
+            } catch (InvalidMediaUrlException ignored) {
+            }
+            // See if it's a direct media URL to the Service's domain
+            if (ParseUtils.isDirectUrl(mediaUrl)) return true;
+        }
+
+        return false;
     }
 
     /**
