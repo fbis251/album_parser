@@ -33,7 +33,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Response;
 
 /**
- * Parser for Streamable API responses
+ * Parser for the Streamable API
  */
 public class StreamableParser extends AbstractApiParser {
     public StreamableParser(OkHttpClient client) {
@@ -41,17 +41,32 @@ public class StreamableParser extends AbstractApiParser {
     }
 
     @Override
-    public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
-        String hash = StreamableUtils.getHash(mediaUrl.toString());
-        if (hash == null) {
-            throw new InvalidMediaUrlException(mediaUrl);
-        }
+    public String getApiUrl() {
+        return StreamableApi.API_URL;
+    }
 
-        StreamableApi service = getRetrofit(StreamableApi.API_URL).create(StreamableApi.class);
-        Response<StreamableResponse> response = service.getVideo(hash).execute();
-        StreamableResponse streamableResponse = response.body();
-        streamableResponse.setHash(hash);
-        streamableResponse.setOriginalUrl(mediaUrl.toString());
-        return new ParserResponse(streamableResponse);
+    @Override
+    public String getBaseDomain() {
+        return StreamableApi.BASE_DOMAIN;
+    }
+
+    @Override
+    public String getHash(URL mediaUrl) throws InvalidMediaUrlException {
+        if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
+        String hash =
+                StreamableUtils.getHash(mediaUrl.toString()); // TODO: Implement me in this method
+        if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
+        return hash;
+    }
+
+    @Override
+    public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
+        String hash = getHash(mediaUrl);
+
+        StreamableApi service = getRetrofit().create(StreamableApi.class);
+        ;
+        Response<StreamableResponse> serviceResponse = service.getVideo(hash).execute();
+        StreamableResponse apiResponse = serviceResponse.body();
+        return getParserResponse(mediaUrl, apiResponse);
     }
 }

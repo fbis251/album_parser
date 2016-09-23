@@ -20,7 +20,10 @@
 
 package com.fernandobarillas.albumparser.parser;
 
+import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
+import com.fernandobarillas.albumparser.media.IApiResponse;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,10 +33,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Abstract class for parsers for API responses
+ * Abstract class for parsers for API responses. This defines a few helper methods to make getting
+ * the correct Retrofit service instance easier such as {@link #getRetrofit(String)}
  */
 public abstract class AbstractApiParser {
-    protected OkHttpClient mClient;
+    private OkHttpClient mClient;
 
     /**
      * Instantiates the parser using the default OkHttpClient in Retrofit
@@ -50,12 +54,67 @@ public abstract class AbstractApiParser {
         mClient = client;
     }
 
+    public boolean canParse(String mediaUrl) {
+        return canParse(ParseUtils.getUrlObject(mediaUrl));
+    }
+
     /**
-     * @param apiUrl The URL to use when building the instance
+     * Checks whether the passed-in media URL can be parsed based on the URL alone, the API may
+     * still return an invalid response. This is useful for filtering URLs based on whether a
+     * certain parser is able to call the API for a response.
+     *
+     * @param mediaUrl The URL to check whether the parser can attempt to call the API for
+     * @return True if this parser can properly parse the passed-in media URL, false otherwise.
+     */
+    public boolean canParse(URL mediaUrl) {
+        return mediaUrl != null
+                && isDomainMatch(mediaUrl.getHost(), getBaseDomain())
+                && getHash(mediaUrl) != null;
+    }
+
+    /**
+     * @return The API URL used to make all API service calls, for example:
+     * "https://api.imgur.com/3"
+     */
+    public abstract String getApiUrl();
+
+    /**
+     * @return The base domain name of the API provider, for example: imgur.com, streamable.com,
+     * gfycat.com
+     */
+    public abstract String getBaseDomain();
+
+    /**
+     * Gets the hash for the passed-in media URL
+     *
+     * @param mediaUrl The URL to get the hash for
+     * @return A hash that can be used in an API call if the URL can be parsed, null otherwise
+     */
+    public String getHash(String mediaUrl) {
+        return getHash(ParseUtils.getUrlObject(mediaUrl));
+    }
+
+    /**
+     * Gets the hash for the passed-in media URL
+     *
+     * @param mediaUrl The URL to get the hash for
+     * @return A hash that can be used in an API call if the URL can be parsed, null otherwise
+     */
+    public abstract String getHash(URL mediaUrl) throws InvalidMediaUrlException;
+
+    public ParserResponse getParserResponse(final URL mediaUrl, final IApiResponse apiResponse)
+            throws InvalidApiResponseException {
+        if (apiResponse == null) throw new InvalidApiResponseException(mediaUrl);
+        ParserResponse parserResponse = new ParserResponse(apiResponse);
+        parserResponse.setOriginalUrl(mediaUrl);
+        return parserResponse;
+    }
+
+    /**
      * @return A Retrofit instance for the passed-in API URL.
      */
-    protected Retrofit getRetrofit(String apiUrl) {
-        Retrofit.Builder retrofitBuilder = new Retrofit.Builder().baseUrl(apiUrl)
+    protected Retrofit getRetrofit() {
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder().baseUrl(getApiUrl())
                 .addConverterFactory(GsonConverterFactory.create());
         if (mClient != null) {
             retrofitBuilder = retrofitBuilder.client(mClient);
@@ -68,9 +127,15 @@ public abstract class AbstractApiParser {
      *
      * @param mediaUrl The URL to attempt to parse and get an API response for
      * @return The parsed API response for the passed-in mediaUrl
-     * @throws InvalidMediaUrlException When the passed-in mediaUrl was not supported by the parser
-     * @throws IOException              When there was an error during the HTTP call
+     * @throws IOException      When there was an error during the HTTP call
+     * @throws RuntimeException When the passed-in media URL was not supported by the parser, the
+     *                          API returns a null response or a response which the library could
+     *                          not parse.
      */
-    protected abstract ParserResponse parse(URL mediaUrl)
-            throws InvalidMediaUrlException, IOException;
+    protected abstract ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException;
+
+    private boolean isDomainMatch(String domain, String providerDomain) {
+        return domain != null && providerDomain != null && (domain.endsWith("." + providerDomain)
+                || domain.equals(providerDomain));
+    }
 }

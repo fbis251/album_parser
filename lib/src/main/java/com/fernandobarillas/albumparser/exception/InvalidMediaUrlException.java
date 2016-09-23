@@ -24,29 +24,16 @@ import java.net.URL;
 
 /**
  * This Exception is thrown when the library is unable to parse a particular URL and is thus
- * unsupported
- * Created by fb on 5/13/16.
+ * unsupported Created by fb on 5/13/16.
  */
-public class InvalidMediaUrlException extends Exception {
+public class InvalidMediaUrlException extends IllegalArgumentException {
     private static final String message = "URL not a media URL or not supported by library";
 
-    public InvalidMediaUrlException() {
-        super(message);
-    }
-
-    public InvalidMediaUrlException(String url) {
-        super(message + urlParameter(url));
+    public InvalidMediaUrlException(URL url, String errorMessage) {
+        super(message + ": url = [" + url + "], errorMessage = [" + errorMessage + "]");
     }
 
     public InvalidMediaUrlException(URL url) {
-        super(message + urlParameter((url != null) ? url.toString() : null));
-    }
-
-    public InvalidMediaUrlException(String url, Throwable cause) {
-        super(message + urlParameter(url), cause);
-    }
-
-    private static String urlParameter(String url) {
-        return ": url = [" + url + "]";
+        super(message + ": url = [" + url + "]");
     }
 }

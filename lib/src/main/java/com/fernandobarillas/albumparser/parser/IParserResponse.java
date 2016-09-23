@@ -24,6 +24,8 @@ import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 
+import java.net.URL;
+
 /**
  * Class that facilitates getting API responses, regardless of which API returned them. This class
  * will always try to return either a full API response when a call was made to the API, or it will
@@ -45,6 +47,12 @@ public interface IParserResponse {
      * @return The IMedia returned by the parser
      */
     IMedia getMedia();
+
+    /**
+     * @return The original URL used by the parser before the request was made to the API. For
+     * example, an Imgur original URL might be: https://imgur.com/gallery/PBTrqAA
+     */
+    URL getOriginalUrl();
 
     /**
      * @return True when the response is an album, false otherwise

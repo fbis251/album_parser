@@ -20,7 +20,6 @@
 
 package com.fernandobarillas.albumparser.imgur.model.v3;
 
-import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.google.gson.annotations.Expose;
@@ -39,23 +38,6 @@ public class ImageResponse extends BaseApiResponse {
     @SerializedName("status")
     @Expose
     public int       status;
-
-    private String mImageHash;
-
-    @Override
-    public String getApiDomain() {
-        return ImgurApi.BASE_DOMAIN;
-    }
-
-    @Override
-    public String getHash() {
-        return mImageHash;
-    }
-
-    @Override
-    public void setHash(String hash) {
-        mImageHash = hash;
-    }
 
     @Override
     public IMedia getMedia() {

@@ -20,11 +20,11 @@
 
 package com.fernandobarillas.albumparser.vidme.model;
 
-import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.BaseMedia;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.annotation.Generated;
@@ -34,7 +34,7 @@ import javax.annotation.Generated;
  */
 
 @Generated("org.jsonschema2pojo")
-public class Video implements IMedia {
+public class Video extends BaseMedia {
 
     @SerializedName("video_id")
     @Expose
@@ -170,11 +170,7 @@ public class Video implements IMedia {
 
     @Override
     public URL getPreviewUrl() {
-        try {
-            return new URL(thumbnailUrl);
-        } catch (MalformedURLException ignored) {
-        }
-        return null;
+        return ParseUtils.getUrlObject(thumbnailUrl);
     }
 
     @Override
@@ -184,11 +180,7 @@ public class Video implements IMedia {
 
     @Override
     public URL getUrl(boolean highQuality) {
-        try {
-            return new URL(completeUrl);
-        } catch (MalformedURLException ignored) {
-        }
-        return null;
+        return ParseUtils.getUrlObject(completeUrl);
     }
 
     @Override
@@ -203,13 +195,22 @@ public class Video implements IMedia {
 
     @Override
     public String toString() {
-        return "Video{" +
-                "url='" + url + '\'' +
-                ", completeUrl='" + completeUrl + '\'' +
-                ", height=" + height +
-                ", width=" + width +
-                ", duration=" + duration +
-                ", thumbnailUrl='" + thumbnailUrl + '\'' +
-                '}';
+        return "Video{"
+                + "url='"
+                + url
+                + '\''
+                + ", completeUrl='"
+                + completeUrl
+                + '\''
+                + ", height="
+                + height
+                + ", width="
+                + width
+                + ", duration="
+                + duration
+                + ", thumbnailUrl='"
+                + thumbnailUrl
+                + '\''
+                + '}';
     }
 }

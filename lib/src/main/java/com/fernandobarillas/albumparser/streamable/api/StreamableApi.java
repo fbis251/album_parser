@@ -27,7 +27,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 /**
- * Created by fb on 5/10/16.
+ * Retrofit Interface for the Streamable API
  */
 public interface StreamableApi {
     // No trailing slash!

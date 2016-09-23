@@ -27,7 +27,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 /**
- * Created by fb on 5/26/16.
+ * Retrofit Interface for the DeviantArt API
  */
 public interface DeviantartApi {
     // No trailing slash!

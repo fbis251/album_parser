@@ -33,24 +33,44 @@ import okhttp3.OkHttpClient;
 import retrofit2.Response;
 
 /**
- * Parser for Gfycat API responses
+ * Parser for the Gfycat API
  */
 public class GfycatParser extends AbstractApiParser {
     public GfycatParser(OkHttpClient client) {
         super(client);
     }
 
+
     @Override
-    public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
-        String hash = GfycatUtils.getHash(mediaUrl.toString());
+    public String getApiUrl() {
+        return GfycatApi.API_URL;
+    }
+
+    @Override
+    public String getBaseDomain() {
+        return GfycatApi.BASE_DOMAIN;
+    }
+
+
+    @Override
+    public String getHash(URL mediaUrl) {
+        if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
+        String hash = GfycatUtils.getHash(mediaUrl); // TODO: Implement me in this method
+        if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
+        return hash;
+    }
+
+    @Override
+    public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
+        String hash = getHash(mediaUrl);
         if (hash == null) {
             throw new InvalidMediaUrlException(mediaUrl);
         }
 
-        GfycatApi service = getRetrofit(GfycatApi.API_URL).create(GfycatApi.class);
-        Response<QueryHashResponse> response = service.queryHash(hash).execute();
-        QueryHashResponse queryResponse = response.body();
-        queryResponse.setOriginalUrl(mediaUrl.toString());
-        return new ParserResponse(queryResponse);
+        GfycatApi service = getRetrofit().create(GfycatApi.class);
+        ;
+        Response<QueryHashResponse> serviceResponse = service.queryHash(hash).execute();
+        QueryHashResponse apiResponse = serviceResponse.body();
+        return getParserResponse(mediaUrl, apiResponse);
     }
 }

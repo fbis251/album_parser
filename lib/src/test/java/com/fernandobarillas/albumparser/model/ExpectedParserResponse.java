@@ -5,17 +5,21 @@ import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.parser.IParserResponse;
 
+import java.net.URL;
+
 /**
  * Created by fb on 9/22/16.
  */
 public class ExpectedParserResponse implements IParserResponse {
 
+    private URL         mOriginalUrl;
     private IMediaAlbum mMediaAlbum;
     private IMedia      mMedia;
     private boolean     mIsAlbum;
     private boolean     mIsSingleMedia;
 
-    private ExpectedParserResponse() {
+    private ExpectedParserResponse(URL originalUrl) {
+        mOriginalUrl = originalUrl;
         mMediaAlbum = null;
         mMedia = null;
         mIsAlbum = false;
@@ -39,6 +43,11 @@ public class ExpectedParserResponse implements IParserResponse {
     }
 
     @Override
+    public URL getOriginalUrl() {
+        return mOriginalUrl;
+    }
+
+    @Override
     public boolean isAlbum() {
         return mIsAlbum;
     }
@@ -51,33 +60,33 @@ public class ExpectedParserResponse implements IParserResponse {
 
     public static class Builder {
 
-        private ExpectedParserResponse mExpectedAlbum;
+        private ExpectedParserResponse mExpectedParserResponse;
 
-        public Builder() {
-            mExpectedAlbum = new ExpectedParserResponse();
+        public Builder(URL originalUrl) {
+            mExpectedParserResponse = new ExpectedParserResponse(originalUrl);
         }
 
         public ExpectedParserResponse build() {
-            return mExpectedAlbum;
+            return mExpectedParserResponse;
         }
 
         public Builder setIsAlbum(boolean isAlbum) {
-            mExpectedAlbum.mIsAlbum = isAlbum;
+            mExpectedParserResponse.mIsAlbum = isAlbum;
             return this;
         }
 
         public Builder setIsSingleMedia(boolean isSingleMedia) {
-            mExpectedAlbum.mIsSingleMedia = isSingleMedia;
+            mExpectedParserResponse.mIsSingleMedia = isSingleMedia;
             return this;
         }
 
         public Builder setMedia(IMedia media) {
-            mExpectedAlbum.mMedia = media;
+            mExpectedParserResponse.mMedia = media;
             return this;
         }
 
         public Builder setMediaAlbum(IMediaAlbum mediaAlbum) {
-            mExpectedAlbum.mMediaAlbum = mediaAlbum;
+            mExpectedParserResponse.mMediaAlbum = mediaAlbum;
             return this;
         }
     }

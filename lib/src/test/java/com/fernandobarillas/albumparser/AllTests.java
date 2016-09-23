@@ -105,6 +105,8 @@ public class AllTests {
         assertNotNull(originalUrl + " Expected Parser Response null", expectedParserResponse);
         assertNotNull(originalUrl + " Parser Response null", parserResponse);
 
+        assertEquals(originalUrl + " Original URL", expectedParserResponse.getOriginalUrl(),
+                parserResponse.getOriginalUrl());
         assertEquals(originalUrl + " Is album", expectedParserResponse.isAlbum(),
                 parserResponse.isAlbum());
         assertEquals(originalUrl + " Is single media", expectedParserResponse.isSingleMedia(),

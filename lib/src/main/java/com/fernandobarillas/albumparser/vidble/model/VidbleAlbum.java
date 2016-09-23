@@ -50,8 +50,7 @@ public class VidbleAlbum extends BaseMediaAlbum {
     public URL getPreviewUrl() {
         if (!isEmpty()) {
             // Return the first image as the preview
-            return mMediaList.get(0)
-                    .getPreviewUrl();
+            return mMediaList.get(0).getPreviewUrl();
         }
 
         return null;

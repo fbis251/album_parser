@@ -22,7 +22,6 @@ package com.fernandobarillas.albumparser.vidble.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -41,8 +40,7 @@ public class VidbleResponse extends BaseApiResponse {
     @SerializedName("pics")
     @Expose
     public List<String> pics = new ArrayList<String>();
-    VidbleAlbum mAlbum;
-    private String mHash;
+    private VidbleAlbum mAlbum;
 
     @Override
     public IMediaAlbum getAlbum() {
@@ -50,21 +48,6 @@ public class VidbleResponse extends BaseApiResponse {
             mAlbum = new VidbleAlbum(pics);
         }
         return mAlbum;
-    }
-
-    @Override
-    public String getApiDomain() {
-        return VidbleApi.BASE_DOMAIN;
-    }
-
-    @Override
-    public String getHash() {
-        return mHash;
-    }
-
-    @Override
-    public void setHash(String hash) {
-        mHash = hash;
     }
 
     @Override

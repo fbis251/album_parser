@@ -20,7 +20,6 @@
 
 package com.fernandobarillas.albumparser.gfycat.model;
 
-import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.google.gson.annotations.Expose;
@@ -42,16 +41,6 @@ public class QueryHashResponse extends BaseApiResponse {
     @SerializedName("error")
     @Expose
     public String  error;
-
-    @Override
-    public String getApiDomain() {
-        return GfycatApi.BASE_DOMAIN;
-    }
-
-    @Override
-    public String getHash() {
-        return (gfyItem != null) ? gfyItem.gfyName : null;
-    }
 
     @Override
     public String getErrorMessage() {

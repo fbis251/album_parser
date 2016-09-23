@@ -34,7 +34,8 @@ public class BaseMediaAlbum implements IMediaAlbum {
 
     @Override
     public int getCount() {
-        return (getAlbumMedia() != null) ? getAlbumMedia().size() : 0;
+        List<IMedia> albumMedia = getAlbumMedia();
+        return (albumMedia != null) ? albumMedia.size() : COUNT_UNAVAILABLE;
     }
 
     @Override
@@ -44,6 +45,6 @@ public class BaseMediaAlbum implements IMediaAlbum {
 
     @Override
     public boolean isEmpty() {
-        return getCount() == 0;
+        return getCount() < 1;
     }
 }

@@ -32,27 +32,9 @@ public interface IApiResponse {
     IMediaAlbum getAlbum();
 
     /**
-     * @return The domain name of the API provider, for example: imgur.com, streamable.com, gfycat.com
-     */
-    String getApiDomain();
-
-    /**
      * @return The error message returned by an API response, null if no error message was returned
      */
     String getErrorMessage();
-
-    /**
-     * @return Gets the unique hash to this media for calls made to the API provider
-     */
-    String getHash();
-
-    /**
-     * Sets the hash that was used to make the API request. This is extremely important to set if you want to keep track
-     * of where the response data came from
-     *
-     * @param hash The hash to set
-     */
-    void setHash(String hash);
 
     /**
      * @return This Object as a JSON String
@@ -60,15 +42,10 @@ public interface IApiResponse {
     String getJson();
 
     /**
-     * @return A direct link to the media returned by the API, null if no direct media link was returned by the API
+     * @return A direct link to the media returned by the API, null if no direct media link was
+     * returned by the API
      */
     IMedia getMedia();
-
-    /**
-     * @return The original URL that was made before the API request was made. If you want to keep track of the original
-     * URL you need to set it using {@link #setOriginalUrl(String)}
-     */
-    String getOriginalUrlString();
 
     /**
      * @return A URL to the media's preview image, null if no preview is available
@@ -76,7 +53,8 @@ public interface IApiResponse {
     URL getPreviewUrl();
 
     /**
-     * @return True when the API response contains multiple video/images in an album, false otherwise
+     * @return True when the API response contains multiple video/images in an album, false
+     * otherwise
      */
     boolean isAlbum();
 
@@ -84,10 +62,4 @@ public interface IApiResponse {
      * @return True when the API request was successful, false otherwise
      */
     boolean isSuccessful();
-
-    /**
-     * @param originalUrl Sets the original URL used by the media before the request was made to the API. For example,
-     *                    an Imgur original URL might be: https://imgur.com/gallery/PBTrqAA
-     */
-    void setOriginalUrl(String originalUrl);
 }

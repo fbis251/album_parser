@@ -31,7 +31,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
- * Created by fb on 5/9/16.
+ * Retrofit Interface for the Gfycat API
  */
 public interface GfycatApi {
     // No trailing slash!
@@ -47,7 +47,8 @@ public interface GfycatApi {
     Call<GfyItem> convertGif(@Query("fetchUrl") String gifUrl);
 
     @GET(UPLOAD_URL + "/transcodeRelease/{randomString}")
-    Call<TranscodeResponse> convertGif(@Path("randomString") String randomString, @Query("fetchUrl") String gifUrl);
+    Call<TranscodeResponse> convertGif(@Path("randomString") String randomString,
+            @Query("fetchUrl") String gifUrl);
 
     @GET("/cajax/get/{hash}")
     Call<QueryHashResponse> queryHash(@Path("hash") String hash);

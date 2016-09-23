@@ -27,7 +27,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 /**
- * Created by fb on 5/10/16.
+ * Retrofit Interface for the vid.me API
  */
 public interface VidmeApi {
     // No trailing slash!
@@ -37,8 +37,8 @@ public interface VidmeApi {
     /**
      * Calls the vid.me API to get data about a vid.me url
      *
-     * @param url Note, that although the parameter is called url, the API accepts hashes too: Example (both
-     *            acceptable): Y8JS https://vid.me/Y8JS
+     * @param url Note, that although the parameter is called url, the API accepts hashes too:
+     *            Examples (both acceptable): "Y8JS" and "https://vid.me/Y8JS"
      * @return The vid.me API response for the requested URL
      */
     @GET("/videoByUrl")

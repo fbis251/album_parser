@@ -20,11 +20,11 @@
 
 package com.fernandobarillas.albumparser.deviantart;
 
-import com.fernandobarillas.albumparser.parser.AbstractApiParser;
-import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.deviantart.api.DeviantartApi;
 import com.fernandobarillas.albumparser.deviantart.model.DeviantartResponse;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
+import com.fernandobarillas.albumparser.parser.AbstractApiParser;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,7 +35,7 @@ import retrofit2.Response;
 import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
 
 /**
- * Created by fb on 5/26/16.
+ * Parser for the DeviantArt API
  */
 public class DeviantartParser extends AbstractApiParser {
     public DeviantartParser(OkHttpClient client) {
@@ -43,20 +43,34 @@ public class DeviantartParser extends AbstractApiParser {
     }
 
     @Override
-    public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
-        String url = mediaUrl.toString();
-        if (url == null) {
-            throw new InvalidMediaUrlException(mediaUrl);
-        }
+    public String getApiUrl() {
+        return DeviantartApi.API_URL;
+    }
+
+    @Override
+    public String getBaseDomain() {
+        return DeviantartApi.BASE_DOMAIN;
+    }
+
+    @Override
+    public String getHash(URL mediaUrl) throws InvalidMediaUrlException {
+        if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
+        return mediaUrl.toString();
+    }
+
+    @Override
+    public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
+        String hash = getHash(mediaUrl);
 
         if (isDirectUrl(mediaUrl)) {
             DeviantartResponse response = new DeviantartResponse();
-            response.url = url;
+            // DeviantArt won't return OEmbed data for direct URLs
+            response.url = mediaUrl.toString();
             return new ParserResponse(response);
         }
 
-        DeviantartApi service = getRetrofit(DeviantartApi.API_URL).create(DeviantartApi.class);
-        Response<DeviantartResponse> response = service.getOembed(url).execute();
+        DeviantartApi service = getRetrofit().create(DeviantartApi.class);
+        Response<DeviantartResponse> response = service.getOembed(hash).execute();
         DeviantartResponse deviantartResponse = response.body();
         return new ParserResponse(deviantartResponse);
     }

@@ -27,7 +27,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 /**
- * XKCD API Interface
+ * Retrofit Interface for the XKCD API
  */
 public interface XkcdApi {
     String BASE_DOMAIN = "xkcd.com"; // No trailing slash!

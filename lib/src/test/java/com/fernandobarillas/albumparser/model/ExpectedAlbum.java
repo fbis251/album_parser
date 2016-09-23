@@ -35,13 +35,13 @@ public class ExpectedAlbum implements IMediaAlbum {
     }
 
     @Override
-    public boolean isEmpty() {
-        return mIsEmpty;
+    public URL getPreviewUrl() {
+        return mPreviewUrl;
     }
 
     @Override
-    public URL getPreviewUrl() {
-        return mPreviewUrl;
+    public boolean isEmpty() {
+        return mIsEmpty;
     }
 
     public static class Builder {

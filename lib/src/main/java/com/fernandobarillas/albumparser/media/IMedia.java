@@ -29,7 +29,7 @@ public interface IMedia {
     int SIZE_UNAVAILABLE     = -1;
     int DURATION_UNAVAILABLE = -1;
 
-    // Only protocol, no : or /
+    // Only protocol, no : or /, example: "http" not "http://"
     String PROTOCOL_HTTP  = "http";
     String PROTOCOL_HTTPS = "https";
 
@@ -47,9 +47,10 @@ public interface IMedia {
     String EXT_WEBP = "webp";
 
     /**
-     * @param highQuality True to get the size of the high quality media, false to get the size of the low quality
-     *                    media
-     * @return The size in bytes of this media, {@link #SIZE_UNAVAILABLE} if no size returned by the API
+     * @param highQuality True to get the size of the high quality media, false to get the size of
+     *                    the low quality media
+     * @return The size in bytes of this media, {@link #SIZE_UNAVAILABLE} if no size returned by the
+     * API
      */
     int getByteSize(boolean highQuality);
 
@@ -64,8 +65,8 @@ public interface IMedia {
     double getDuration();
 
     /**
-     * @param highQuality True to get the height of the high quality media, false to get the height of the low quality
-     *                    media
+     * @param highQuality True to get the height of the high quality media, false to get the height
+     *                    of the low quality media
      * @return The height of the media, {@link #SIZE_UNAVAILABLE} if no size returned by the API
      */
     int getHeight(boolean highQuality);
@@ -81,20 +82,26 @@ public interface IMedia {
     String getTitle();
 
     /**
-     * @param highQuality True to get high quality media, false to attempt to get the low quality version
+     * @param highQuality True to get high quality media, false to attempt to get the low quality
+     *                    version
      * @return The URL to the media, null if no URL is available
      */
     URL getUrl(boolean highQuality);
 
     /**
-     * @param highQuality True to get the width of the high quality media, false to get the width of the low quality
-     *                    media
+     * @param highQuality True to get the width of the high quality media, false to get the width of
+     *                    the low quality media
      * @return The height of the media, {@link #SIZE_UNAVAILABLE} if no size returned by the API
      */
     int getWidth(boolean highQuality);
 
     /**
-     * @return True if this media is a video (mp4, webm, etc.) or a GIF, false otherwise
+     * @return True if this media is a GIF, false otherwise
+     */
+    boolean isGif();
+
+    /**
+     * @return True if this media is a video (mp4, webm, etc.), false otherwise
      */
     boolean isVideo();
 }

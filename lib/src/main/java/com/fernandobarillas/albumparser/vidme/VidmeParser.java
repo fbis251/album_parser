@@ -20,9 +20,9 @@
 
 package com.fernandobarillas.albumparser.vidme;
 
+import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
-import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.vidme.api.VidmeApi;
 import com.fernandobarillas.albumparser.vidme.model.VidmeResponse;
 
@@ -33,7 +33,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Response;
 
 /**
- * Parser for vid.me API responses
+ * Parser for the vid.me API
  */
 public class VidmeParser extends AbstractApiParser {
     public VidmeParser(OkHttpClient client) {
@@ -41,19 +41,30 @@ public class VidmeParser extends AbstractApiParser {
     }
 
     @Override
-    public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
-        if(mediaUrl == null) {
-            throw new InvalidMediaUrlException(mediaUrl);
-        }
-        String hash = VidmeUtils.getHash(mediaUrl.toString());
-        if (hash == null) {
-            throw new InvalidMediaUrlException(mediaUrl);
-        }
+    public String getApiUrl() {
+        return VidmeApi.API_URL;
+    }
 
-        VidmeApi service = getRetrofit(VidmeApi.API_URL).create(VidmeApi.class);
-        Response<VidmeResponse> response = service.getVideoData(hash).execute();
-        VidmeResponse apiResponse = response.body();
-        apiResponse.setOriginalUrl(mediaUrl.toString());
-        return new ParserResponse(apiResponse);
+    @Override
+    public String getBaseDomain() {
+        return VidmeApi.BASE_DOMAIN;
+    }
+
+    @Override
+    public String getHash(URL mediaUrl) {
+        if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
+        String hash = VidmeUtils.getHash(mediaUrl.toString()); // TODO: Implement me in this method
+        if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
+        return hash;
+    }
+
+    @Override
+    public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
+        String hash = getHash(mediaUrl);
+        VidmeApi service = getRetrofit().create(VidmeApi.class);
+        ;
+        Response<VidmeResponse> serviceResponse = service.getVideoData(hash).execute();
+        VidmeResponse apiResponse = serviceResponse.body();
+        return getParserResponse(mediaUrl, apiResponse);
     }
 }

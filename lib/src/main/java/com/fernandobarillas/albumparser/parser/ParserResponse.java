@@ -24,6 +24,8 @@ import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 
+import java.net.URL;
+
 /**
  * Class that facilitates getting API responses, regardless of which API returned them. This class
  * will always try to return either a full API response when a call was made to the API, or it will
@@ -32,6 +34,7 @@ import com.fernandobarillas.albumparser.media.IMediaAlbum;
 public class ParserResponse implements IParserResponse {
     private IApiResponse mApiResponse;
     private IMedia       mMedia;
+    private URL          mOriginalUrl;
 
     /**
      * Constructor for direct IMedia objects
@@ -77,6 +80,15 @@ public class ParserResponse implements IParserResponse {
     }
 
     @Override
+    public URL getOriginalUrl() {
+        return mOriginalUrl;
+    }
+
+    public void setOriginalUrl(URL originalUrl) {
+        mOriginalUrl = originalUrl;
+    }
+
+    @Override
     public boolean isAlbum() {
         return getAlbum() != null;
     }
@@ -88,6 +100,13 @@ public class ParserResponse implements IParserResponse {
 
     @Override
     public String toString() {
-        return "ParserResponse{" + "mApiResponse=" + mApiResponse + ", mMedia=" + mMedia + '}';
+        return "ParserResponse{"
+                + "mApiResponse="
+                + mApiResponse
+                + ", mMedia="
+                + mMedia
+                + ", mOriginalUrl="
+                + mOriginalUrl
+                + '}';
     }
 }

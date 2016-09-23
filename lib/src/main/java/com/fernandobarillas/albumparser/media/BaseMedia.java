@@ -68,19 +68,39 @@ public class BaseMedia implements IMedia {
     }
 
     @Override
+    public boolean isGif() {
+        return false;
+    }
+
+    @Override
     public boolean isVideo() {
         return false;
     }
 
     @Override
     public String toString() {
-        return " Media{" +
-                "Title='" + getTitle() + '\'' +
-                ", Description='" + getDescription() + '\'' +
-                ", isVideo='" + isVideo() + '\'' +
-                ", highQuality='" + getUrl(true) + '\'' +
-                ", lowQuality='" + getUrl(false) + '\'' +
-                ", preview='" + getPreviewUrl() + '\'' +
-                '}';
+        return " Media{"
+                + "Title='"
+                + getTitle()
+                + '\''
+                + ", Description='"
+                + getDescription()
+                + '\''
+                + ", isGif='"
+                + isGif()
+                + '\''
+                + ", isVideo='"
+                + isVideo()
+                + '\''
+                + ", highQuality='"
+                + getUrl(true)
+                + '\''
+                + ", lowQuality='"
+                + getUrl(false)
+                + '\''
+                + ", preview='"
+                + getPreviewUrl()
+                + '\''
+                + '}';
     }
 }

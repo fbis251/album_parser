@@ -28,7 +28,6 @@ import java.net.URL;
  * Class that sets default values for the IApiResponse interface
  */
 public abstract class BaseApiResponse implements IApiResponse {
-    private String mOriginalUrl;
 
     @Override
     public IMediaAlbum getAlbum() {
@@ -41,10 +40,6 @@ public abstract class BaseApiResponse implements IApiResponse {
     }
 
     @Override
-    public void setHash(String hash) {
-    }
-
-    @Override
     public String getJson() {
         return new Gson().toJson(this);
     }
@@ -52,11 +47,6 @@ public abstract class BaseApiResponse implements IApiResponse {
     @Override
     public IMedia getMedia() {
         return null;
-    }
-
-    @Override
-    public String getOriginalUrlString() {
-        return mOriginalUrl;
     }
 
     @Override
@@ -72,10 +62,5 @@ public abstract class BaseApiResponse implements IApiResponse {
     @Override
     public boolean isSuccessful() {
         return false;
-    }
-
-    @Override
-    public void setOriginalUrl(String originalUrl) {
-        mOriginalUrl = originalUrl;
     }
 }

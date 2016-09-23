@@ -20,9 +20,9 @@
 
 package com.fernandobarillas.albumparser.vidble;
 
+import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
-import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.fernandobarillas.albumparser.vidble.model.VidbleMedia;
 import com.fernandobarillas.albumparser.vidble.model.VidbleResponse;
@@ -34,7 +34,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Response;
 
 /**
- * Parser for Vidble API responses
+ * Parser for the Vidble API
  */
 public class VidbleParser extends AbstractApiParser {
     public VidbleParser(OkHttpClient client) {
@@ -42,21 +42,37 @@ public class VidbleParser extends AbstractApiParser {
     }
 
     @Override
-    public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
-        String hash = VidbleUtils.getHash(mediaUrl);
-        if (hash == null) {
-            throw new InvalidMediaUrlException(mediaUrl);
-        }
+    public String getApiUrl() {
+        return VidbleApi.API_URL;
+    }
+
+    @Override
+    public String getBaseDomain() {
+        return VidbleApi.BASE_DOMAIN;
+    }
+
+    @Override
+    public String getHash(URL mediaUrl) {
+        if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
+        String hash = VidbleUtils.getHash(mediaUrl.toString()); // TODO: Implement me in this method
+        if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
+        return hash;
+    }
+
+    @Override
+    public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
+        String hash = getHash(mediaUrl);
 
         if (VidbleUtils.isAlbum(hash)) {
-            VidbleApi service = getRetrofit(VidbleApi.API_URL).create(VidbleApi.class);
-            Response<VidbleResponse> response = service.getAlbumData(hash).execute();
-            VidbleResponse vidbleResponse = response.body();
-            vidbleResponse.setHash(hash);
-            vidbleResponse.setOriginalUrl(mediaUrl.toString());
-            return new ParserResponse(vidbleResponse);
+            VidbleApi service = getRetrofit().create(VidbleApi.class);
+            Response<VidbleResponse> serviceResponse = service.getAlbumData(hash).execute();
+            VidbleResponse apiResponse = serviceResponse.body();
+            return getParserResponse(mediaUrl, apiResponse);
         } else {
-            return new ParserResponse(new VidbleMedia(mediaUrl.toString()));
+            ParserResponse parserResponse =
+                    new ParserResponse(new VidbleMedia(mediaUrl.toString()));
+            parserResponse.setOriginalUrl(mediaUrl);
+            return parserResponse;
         }
     }
 }

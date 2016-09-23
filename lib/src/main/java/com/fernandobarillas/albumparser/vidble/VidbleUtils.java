@@ -35,7 +35,8 @@ public class VidbleUtils {
      * Attempts to get Vidble hash for a passed in URL String
      *
      * @param vidbleUrl The String to attempt to get a hash from
-     * @return A Vidble album or URL hash if the passed in URL was a valid Vdible URL, null otherwise
+     * @return A Vidble album or URL hash if the passed in URL was a valid Vdible URL, null
+     * otherwise
      */
     public static String getHash(String vidbleUrl) {
         return getHash(ParseUtils.getUrlObject(vidbleUrl, VidbleApi.BASE_DOMAIN));
@@ -45,7 +46,8 @@ public class VidbleUtils {
      * Gets the Vidble hash for a URL
      *
      * @param url The URL to get a hash from
-     * @return A hash that can be used to get a Vidble image/album, null if the Vidble URL was invalid
+     * @return A hash that can be used to get a Vidble image/album, null if the Vidble URL was
+     * invalid
      */
     public static String getHash(URL url) {
         if (url == null) return null; // Passed in String wasn't a valid URL
@@ -64,8 +66,9 @@ public class VidbleUtils {
     }
 
     /**
-     * Attempts to return a direct link to an image based on a hash alone, without doing an HTTP call to the Imgur API.
-     * This means that this method might fail since it attempts to guess at a URL based on the passed in hash.
+     * Attempts to return a direct link to an image based on a hash alone, without doing an HTTP
+     * call to the Imgur API. This means that this method might fail since it attempts to guess at a
+     * URL based on the passed in hash.
      *
      * @param hash The hash to get an image URL for
      * @return A URL to an image if the passed in hash was a valid non-album hash, null otherwise;
@@ -77,8 +80,8 @@ public class VidbleUtils {
     }
 
     /**
-     * Attempts to tell whether the passed in hash is from an album or a gallery. This is most useful when the hash was
-     * gotten from {@link #getHash(String)}
+     * Attempts to tell whether the passed in hash is from an album or a gallery. This is most
+     * useful when the hash was gotten from {@link #getHash(String)}
      *
      * @param hash The hash to check
      * @return True if the hash appears to be for a Vidble album, false otherwise

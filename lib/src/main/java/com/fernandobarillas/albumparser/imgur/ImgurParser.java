@@ -37,7 +37,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Response;
 
 /**
- * Parser for Imgur API responses
+ * Parser for the Imgur API
  */
 public class ImgurParser extends AbstractApiParser {
     private String mImgurClientId = null;
@@ -52,55 +52,69 @@ public class ImgurParser extends AbstractApiParser {
     }
 
     @Override
-    public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
-        String hash = ImgurUtils.getHash(mediaUrl.toString());
-        if (hash == null) {
-            throw new InvalidMediaUrlException(mediaUrl);
-        }
+    public String getApiUrl() {
+        return ImgurApi.API_URL;
+    }
 
+    @Override
+    public String getBaseDomain() {
+        return ImgurApi.BASE_DOMAIN;
+    }
+
+    @Override
+    public String getHash(URL mediaUrl) throws InvalidMediaUrlException {
+        if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
+        String hash = ImgurUtils.getHash(mediaUrl.toString()); // TODO: Implement me in this method
+        if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
+        return hash;
+    }
+
+    @Override
+    public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
+        String hash = getHash(mediaUrl);
         String clientIdHeader = null;
         if (mImgurClientId != null) {
             clientIdHeader = ImgurApi.CLIENT_ID_HEADER_PREFIX + " " + mImgurClientId;
         }
 
-        ImgurApi service = getRetrofit(ImgurApi.API_URL).create(ImgurApi.class);
+        ImgurApi service = getRetrofit().create(ImgurApi.class);
         if (ImgurUtils.isAlbum(hash)) {
             if (clientIdHeader != null) {
                 // Use API v3 if the client ID is set
-                Response<AlbumResponse> response =
+                Response<AlbumResponse> serviceResponse =
                         service.getV3Album(clientIdHeader, hash).execute();
-                AlbumResponse albumResponse = response.body();
-                albumResponse.setHash(hash);
-                albumResponse.setOriginalUrl(mediaUrl.toString());
-                return new ParserResponse(albumResponse);
+                AlbumResponse apiResponse = serviceResponse.body();
+                return getParserResponse(mediaUrl, apiResponse);
             }
 
             // Make an API call to get the album images via the old API
-            Response<ImgurResponse> response = service.getAlbumData(hash).execute();
-            ImgurResponse imgurResponse = response.body();
-            imgurResponse.setHash(hash);
-            imgurResponse.setOriginalUrl(mediaUrl.toString());
-            return new ParserResponse(imgurResponse);
+            Response<ImgurResponse> serviceResponse = service.getAlbumData(hash).execute();
+            ImgurResponse apiResponse = serviceResponse.body();
+            return getParserResponse(mediaUrl, apiResponse);
         } else {
             if (clientIdHeader != null) {
                 // Use API v3 if the client ID is set
-                Response<ImageResponse> response =
+                Response<ImageResponse> serviceResponse =
                         service.getV3Image(clientIdHeader, hash).execute();
-                ImageResponse imageResponse = response.body();
-                imageResponse.setHash(hash);
-                imageResponse.setOriginalUrl(mediaUrl.toString());
-                return new ParserResponse(imageResponse);
+                ImageResponse apiResponse = serviceResponse.body();
+                return getParserResponse(mediaUrl, apiResponse);
             }
 
-            // Generate a new image object for the hash we got
+            // Last ditch effort, generate a new image object for the hash we got without making
+            // an API call at all. The extension is only guessed at if the original extension was
+            // null, so even though you might make a request for {hash}.jpg the Imgur servers might
+            // still return a GIF in the response
             Image image = new Image();
             String ext = ParseUtils.getExtension(mediaUrl);
             if (ext != null) {
                 image.ext = "." + ext;
             }
             image.hash = hash;
-            image.animated = ParseUtils.isVideoExtension(mediaUrl);
-            return new ParserResponse(image);
+            image.animated =
+                    ParseUtils.isVideoExtension(mediaUrl) || ParseUtils.isGifExtension(mediaUrl);
+            ParserResponse parserResponse = new ParserResponse(image);
+            parserResponse.setOriginalUrl(mediaUrl);
+            return parserResponse;
         }
     }
 }

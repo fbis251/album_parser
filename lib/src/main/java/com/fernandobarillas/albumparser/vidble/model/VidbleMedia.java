@@ -30,11 +30,9 @@ import java.net.URL;
 
 /**
  * This class is a wrapper by url Strings returned via the Vidble API. These URLs tend to look like:
- * //www.vidble.com/[HASH].[EXTENSION]
- * <p>
- * Note that the URLs have no protocol specification according to RFC 1808 https://www.ietf.org/rfc/rfc1808.txt
- * <p>
- * The constructor will also accept URLs with an http/https prefix [http/https]://www.vidble.com/[HASH].[EXTENSION]
+ * //www.vidble.com/[HASH].[EXTENSION] <p> Note that the URLs have no protocol specification
+ * according to RFC 1808 https://www.ietf.org/rfc/rfc1808.txt <p> The constructor will also accept
+ * URLs with an http/https prefix [http/https]://www.vidble.com/[HASH].[EXTENSION]
  */
 public class VidbleMedia extends BaseMedia {
     private final static String MEDIUM_QUALITY   = "_med";
@@ -59,7 +57,8 @@ public class VidbleMedia extends BaseMedia {
         mHash = VidbleUtils.getHash(url);
         mExtension = ParseUtils.getExtension(url);
         if (mExtension == null) {
-            mExtension = EXT_JPG; // Try to guess at it, even with a jpg extension the Vidble returns the image/gif
+            mExtension =
+                    EXT_JPG; // Try to guess at it, even with a jpg extension the Vidble returns the image/gif
         }
 
         mExtension = mExtension.toLowerCase();

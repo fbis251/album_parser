@@ -22,7 +22,6 @@ package com.fernandobarillas.albumparser.vidme.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
-import com.fernandobarillas.albumparser.vidme.api.VidmeApi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -47,16 +46,6 @@ public class VidmeResponse extends BaseApiResponse {
     @SerializedName("video")
     @Expose
     public Video   video;
-
-    @Override
-    public String getApiDomain() {
-        return VidmeApi.BASE_DOMAIN;
-    }
-
-    @Override
-    public String getHash() {
-        return (video != null) ? video.url : null;
-    }
 
     @Override
     public String getErrorMessage() {

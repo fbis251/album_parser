@@ -34,7 +34,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Response;
 
 /**
- * Parser for XKCD API responses
+ * Parser for the XKCD API
  */
 public class XkcdParser extends AbstractApiParser {
     public XkcdParser(OkHttpClient client) {
@@ -42,8 +42,26 @@ public class XkcdParser extends AbstractApiParser {
     }
 
     @Override
-    public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
-        String comicNumberString = getHash(mediaUrl.toString());
+    public String getApiUrl() {
+        return XkcdApi.API_URL;
+    }
+
+    @Override
+    public String getBaseDomain() {
+        return XkcdApi.BASE_DOMAIN;
+    }
+
+    @Override
+    public String getHash(URL mediaUrl) {
+        if (mediaUrl == null) return null; // Passed in String wasn't a valid URL
+        String domain = mediaUrl.getHost();
+        if (domain.equalsIgnoreCase("what-if.xkcd.com")) return null;
+        return ParseUtils.hashRegex(mediaUrl.getPath(), "/(\\d+)");
+    }
+
+    @Override
+    public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
+        String comicNumberString = getHash(mediaUrl);
         if (comicNumberString == null) {
             throw new InvalidMediaUrlException(mediaUrl);
         }
@@ -56,18 +74,10 @@ public class XkcdParser extends AbstractApiParser {
             throw new InvalidMediaUrlException(mediaUrl);
         }
 
-        XkcdApi service = getRetrofit(XkcdApi.API_URL).create(XkcdApi.class);
-        Response<XkcdResponse> response = service.getComic(comicNumber).execute();
-        XkcdResponse xkcdResponse = response.body();
+        XkcdApi service = getRetrofit().create(XkcdApi.class);
+        Response<XkcdResponse> apiResponse = service.getComic(comicNumber).execute();
+        XkcdResponse xkcdResponse = apiResponse.body();
 
         return new ParserResponse(xkcdResponse);
-    }
-
-    public static String getHash(String xkcdUrl) {
-        URL url = ParseUtils.getUrlObject(xkcdUrl, XkcdApi.BASE_DOMAIN);
-        if (url == null) return null; // Passed in String wasn't a valid URL
-        String domain = url.getHost();
-        if (domain.equalsIgnoreCase("what-if.xkcd.com")) return null;
-        return ParseUtils.hashRegex(url.getPath(), "/(\\d+)");
     }
 }

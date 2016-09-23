@@ -30,7 +30,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Path;
 
 /**
- * Created by fb on 5/3/16.
+ * Retrofit Interface for the Imgur API
  */
 public interface ImgurApi {
     // No trailing slash!
@@ -45,11 +45,11 @@ public interface ImgurApi {
 
     // https://api.imgur.com/3/album/{id}
     @GET(API_URL_V3 + "/album/{hash}")
-    Call<AlbumResponse> getV3Album(@Header("Authorization") String contentRange,
+    Call<AlbumResponse> getV3Album(@Header("Authorization") String authHeader,
             @Path("hash") String hash);
 
     // https://api.imgur.com/3/image/{id}
     @GET(API_URL_V3 + "/image/{hash}")
-    Call<ImageResponse> getV3Image(@Header("Authorization") String contentRange,
+    Call<ImageResponse> getV3Image(@Header("Authorization") String authHeader,
             @Path("hash") String hash);
 }

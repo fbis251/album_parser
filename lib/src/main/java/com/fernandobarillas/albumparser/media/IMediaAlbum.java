@@ -27,6 +27,8 @@ import java.util.List;
  * Created by fb on 5/11/16.
  */
 public interface IMediaAlbum {
+    int COUNT_UNAVAILABLE = -1;
+
     /**
      * @return A List of all the media contained in the album
      */

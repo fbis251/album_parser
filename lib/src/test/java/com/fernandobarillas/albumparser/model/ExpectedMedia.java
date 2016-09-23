@@ -11,6 +11,7 @@ import java.net.URL;
 public class ExpectedMedia implements IMedia {
 
     private boolean mIsVideo;
+    private boolean mIsGif;
     private double  mDuration;
     private int     mLowQualityByteSize;
     private int     mHighQualityByteSize;
@@ -75,6 +76,11 @@ public class ExpectedMedia implements IMedia {
     }
 
     @Override
+    public boolean isGif() {
+        return mIsGif;
+    }
+
+    @Override
     public boolean isVideo() {
         return mIsVideo;
     }
@@ -122,6 +128,11 @@ public class ExpectedMedia implements IMedia {
 
         public Builder setHighQualityWidth(int highQualityWidth) {
             mExpectedMedia.mHighQualityWidth = highQualityWidth;
+            return this;
+        }
+
+        public Builder setIsGif(boolean isGif) {
+            mExpectedMedia.mIsGif = isGif;
             return this;
         }
 

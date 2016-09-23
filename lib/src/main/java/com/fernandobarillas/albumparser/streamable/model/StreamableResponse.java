@@ -22,8 +22,6 @@ package com.fernandobarillas.albumparser.streamable.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
-import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
-import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -75,16 +73,6 @@ public class StreamableResponse extends BaseApiResponse {
     public int    percent;
 
     private StreamableMedia mStreamableMedia;
-
-    @Override
-    public String getApiDomain() {
-        return StreamableApi.BASE_DOMAIN;
-    }
-
-    @Override
-    public String getHash() {
-        return ParseUtils.hashRegex(url, StreamableApi.BASE_DOMAIN + "/(\\w+)");
-    }
 
     @Override
     public IMedia getMedia() {

@@ -25,8 +25,8 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 import java.net.URL;
 
 /**
- * Simple IMedia wrapper class to be used with direct media URLs. This is handy for any URLs that already link directly
- * to some media and the media host isn't directly supported by this library
+ * Simple IMedia wrapper class to be used with direct media URLs. This is handy for any URLs that
+ * already link directly to some media and the media host isn't directly supported by this library
  */
 public class DirectMedia extends BaseMedia {
     private URL mUrl;

@@ -27,7 +27,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 /**
- * Created by fb on 5/8/16.
+ * Retrofit Interface for the Vidble API
  */
 public interface VidbleApi {
     // No trailing slash!
