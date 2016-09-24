@@ -113,8 +113,12 @@ public class ImageData extends BaseMedia implements IMedia {
 
     @Override
     public int getByteSize(boolean highQuality) {
-        if (animated) return mp4Size;
-        return (highQuality) ? size : SIZE_UNAVAILABLE;
+        if (highQuality) {
+            if (animated) return mp4Size;
+            return size;
+        }
+
+        return SIZE_UNAVAILABLE;
     }
 
     @Override
@@ -125,7 +129,6 @@ public class ImageData extends BaseMedia implements IMedia {
     @Override
     public int getHeight(boolean highQuality) {
         // Imgur only returns height for original quality
-        if (animated) return height;
         return (highQuality) ? height : SIZE_UNAVAILABLE;
     }
 
@@ -149,7 +152,6 @@ public class ImageData extends BaseMedia implements IMedia {
     @Override
     public int getWidth(boolean highQuality) {
         // Imgur only returns width for original quality
-        if (animated) return width;
         return (highQuality) ? width : SIZE_UNAVAILABLE;
     }
 

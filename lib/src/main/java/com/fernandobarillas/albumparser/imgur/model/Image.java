@@ -49,22 +49,22 @@ public class Image extends BaseMedia {
 
     @SerializedName("hash")
     @Expose
-    public String  hash;
+    public String hash;
     @SerializedName("title")
     @Expose
-    public String  title;
+    public String title;
     @SerializedName("description")
     @Expose
-    public String  description;
+    public String description;
     @SerializedName("width")
     @Expose
-    public int     width;
+    public int width  = SIZE_UNAVAILABLE;
     @SerializedName("height")
     @Expose
-    public int     height;
+    public int height = SIZE_UNAVAILABLE;
     @SerializedName("size")
     @Expose
-    public int     size;
+    public int size   = SIZE_UNAVAILABLE;
     @SerializedName("ext")
     @Expose
     public String  ext;
@@ -84,7 +84,7 @@ public class Image extends BaseMedia {
     @Override
     public int getByteSize(boolean highQuality) {
         // Imgur only returns size for original quality images
-        return (highQuality) ? size : SIZE_UNAVAILABLE;
+        return (highQuality && !animated) ? size : SIZE_UNAVAILABLE;
     }
 
     @Override
