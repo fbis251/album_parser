@@ -67,18 +67,14 @@ public abstract class AbstractApiParser {
      * @return True if this parser can properly parse the passed-in media URL, false otherwise.
      */
     public boolean canParse(URL mediaUrl) {
-        if (mediaUrl == null) return false;
-        if (isDomainMatch(mediaUrl.getHost(), getBaseDomain())) {
-            try {
-                // The parser can actually produce a hash, we can attempt to call the API
-                if (getHash(mediaUrl) != null) return true;
-            } catch (InvalidMediaUrlException ignored) {
-            }
-            // See if it's a direct media URL to the Service's domain
-            if (ParseUtils.isDirectUrl(mediaUrl)) return true;
+        if (!isValidDomain(mediaUrl)) return false;
+        try {
+            // The parser can actually produce a hash, we can attempt to call the API
+            if (getHash(mediaUrl) != null) return true;
+        } catch (InvalidMediaUrlException ignored) {
         }
-
-        return false;
+        // See if it's a direct media URL to the Service's domain
+        return ParseUtils.isDirectUrl(mediaUrl);
     }
 
     /**
@@ -111,7 +107,7 @@ public abstract class AbstractApiParser {
      */
     public abstract String getHash(URL mediaUrl) throws InvalidMediaUrlException;
 
-    public ParserResponse getParserResponse(final URL mediaUrl, final IApiResponse apiResponse)
+    protected ParserResponse getParserResponse(final URL mediaUrl, final IApiResponse apiResponse)
             throws InvalidApiResponseException {
         if (apiResponse == null) throw new InvalidApiResponseException(mediaUrl);
         ParserResponse parserResponse = new ParserResponse(apiResponse);
@@ -132,6 +128,18 @@ public abstract class AbstractApiParser {
     }
 
     /**
+     * @param mediaUrl The URL to check for a valid domain/host
+     * @return True if the domain for the passed-in URL can be parsed by this parser, false
+     * otherwise
+     */
+    protected boolean isValidDomain(final URL mediaUrl) {
+        if (mediaUrl == null) return false;
+        String domain = mediaUrl.getHost();
+        String baseDomain = getBaseDomain();
+        return domain.equals(baseDomain) || domain.endsWith("." + baseDomain);
+    }
+
+    /**
      * Parses a media URL and attempts to get a response from the respective API
      *
      * @param mediaUrl The URL to attempt to parse and get an API response for
@@ -142,9 +150,4 @@ public abstract class AbstractApiParser {
      *                          not parse.
      */
     protected abstract ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException;
-
-    private boolean isDomainMatch(String domain, String providerDomain) {
-        return domain != null && providerDomain != null && (domain.endsWith("." + providerDomain)
-                || domain.equals(providerDomain));
-    }
 }
