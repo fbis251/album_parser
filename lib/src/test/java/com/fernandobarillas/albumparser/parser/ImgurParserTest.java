@@ -61,6 +61,14 @@ public class ImgurParserTest implements IParserTest {
         mImgurParserNoApiKey = new ImgurParser(mOkHttpClient, null);
     }
 
+    @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
+    @Override
+    public void testApi404Error() throws IOException, RuntimeException {
+        URL invalid404Url = ParseUtils.getUrlObject("https://imgur.com/a/a8sxH");
+        assertNotNull(invalid404Url);
+        mImgurParser.parse(invalid404Url);
+    }
+
     @Test
     @Override
     public void testApiUsesHttps() {
@@ -86,14 +94,6 @@ public class ImgurParserTest implements IParserTest {
 
 
         AllTests.validateCanParseAndHashes(mImgurParser, validHashes, false);
-    }
-
-    // Album URL returns 404 by API
-    @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
-    public void testAlbumWith404Error() throws IOException, RuntimeException {
-        URL albumUrl = ParseUtils.getUrlObject("https://imgur.com/a/a8sxH");
-        assertNotNull(albumUrl);
-        mImgurParser.parse(albumUrl);
     }
 
     // Tests a direct GIF URL with no API call

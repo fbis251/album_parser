@@ -22,6 +22,7 @@ package com.fernandobarillas.albumparser.parser;
 
 import com.fernandobarillas.albumparser.AllTests;
 import com.fernandobarillas.albumparser.ApiKeys;
+import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.giphy.GiphyParser;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
@@ -39,6 +40,7 @@ import okhttp3.OkHttpClient;
 import static com.fernandobarillas.albumparser.AllTests.API_CALL_TIMEOUT_MS;
 import static com.fernandobarillas.albumparser.AllTests.apiDomainValid;
 import static com.fernandobarillas.albumparser.AllTests.compareParserResponse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests for the Giphy API parser
@@ -53,6 +55,15 @@ public class GiphyParserTest implements IParserTest {
         mOkHttpClient = new OkHttpClient();
         mGiphyParser = new GiphyParser(mOkHttpClient, mGiphyApiKey);
         mGiphyParserNoApiKey = new GiphyParser(mOkHttpClient);
+    }
+
+    @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
+    @Override
+    public void testApi404Error() throws IOException, RuntimeException {
+        URL invalid404Url = ParseUtils.getUrlObject(
+                "https://giphy.com/gifs/omaze-chris-pratt-dinosaurs-l0NhZ0aUSE8fXag13");
+        assertNotNull(invalid404Url);
+        mGiphyParser.parse(invalid404Url);
     }
 
     @Test
@@ -90,7 +101,7 @@ public class GiphyParserTest implements IParserTest {
         AllTests.validateCanParseAndHashes(mGiphyParser, validHashes, false);
     }
 
-    // Tests an image URL using the v3 API
+    // Tests an image URL using
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testParser() throws IOException, RuntimeException {
         URL giphyUrl = ParseUtils.getUrlObject(
@@ -131,7 +142,7 @@ public class GiphyParserTest implements IParserTest {
         compareParserResponse(giphyUrl, expectedParserResponse, parserResponse);
     }
 
-    // Tests an image URL using the v3 API
+    // Tests an image URL that has no MP4 urls in the response
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testParserWithNullMp4() throws IOException, RuntimeException {
         URL giphyUrl = ParseUtils.getUrlObject("https://giphy.com/gifs/simpsons-l0HlD7sTICR75rDHy");

@@ -23,6 +23,7 @@ package com.fernandobarillas.albumparser.parser;
 import com.fernandobarillas.albumparser.AllTests;
 import com.fernandobarillas.albumparser.ApiKeys;
 import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
+import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.model.ExpectedAlbum;
@@ -45,6 +46,7 @@ import okhttp3.OkHttpClient;
 import static com.fernandobarillas.albumparser.AllTests.API_CALL_TIMEOUT_MS;
 import static com.fernandobarillas.albumparser.AllTests.apiDomainValid;
 import static com.fernandobarillas.albumparser.AllTests.compareParserResponse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests for the Imgur API parser
@@ -55,6 +57,14 @@ public class TumblrParserTest implements IParserTest {
 
     public TumblrParserTest() {
         mTumblrParser = new TumblrParser(new OkHttpClient(), mTumblrApiKey);
+    }
+
+    @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
+    @Override
+    public void testApi404Error() throws IOException, RuntimeException {
+        URL invalid404Url = ParseUtils.getUrlObject("http://fbis251.tumblr.com/post/150135750507/");
+        assertNotNull(invalid404Url);
+        mTumblrParser.parse(invalid404Url);
     }
 
     @Test
