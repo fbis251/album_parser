@@ -27,7 +27,7 @@ import java.net.URL;
  * unsupported Created by fb on 5/13/16.
  */
 public class InvalidApiKeyException extends IllegalArgumentException {
-    private static final String message = "Invalid API key set";
+    private static final String message = "Invalid API key";
 
     public InvalidApiKeyException(URL url, String apiKey, String errorMessage) {
         super(message
@@ -38,9 +38,5 @@ public class InvalidApiKeyException extends IllegalArgumentException {
                 + "], errorMessage = ["
                 + errorMessage
                 + "]");
-    }
-
-    public InvalidApiKeyException(URL url, String apiKey) {
-        super(message + ": url = [" + url + "], apiKey = [" + apiKey + "]");
     }
 }
