@@ -44,11 +44,9 @@ public class ParseUtils {
     public static String getExtension(URL url) {
         if (url == null) return null;
         String path = url.getPath();
-        if (!path.contains(".")) return null;
-        int extensionIndex = path.lastIndexOf(".") + 1;
-        if (extensionIndex > path.length()) return null;
-        String extension = path.substring(extensionIndex).toLowerCase();
-        return (!extension.isEmpty()) ? extension : null;
+        String filename = path.substring(path.lastIndexOf("/") + 1);
+        if (!filename.contains(".")) return null;
+        return filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
     }
 
     /**
@@ -111,18 +109,23 @@ public class ParseUtils {
      * @param byteSize The number of bytes to convert to megabytes
      * @return The byteSize in megabytes
      */
-    public static double getSizeInMb(long byteSize) {
-        return byteSize / 1024.0 / 1024.0;
+    public static long getSizeInMb(long byteSize) {
+        return getSizeInMb(byteSize, false);
     }
 
     /**
-     * Converts the input byte size to megabytes
+     * Converts the input byte size to megabytes as a String
      *
      * @param byteSize The number of bytes to convert to megabytes
-     * @return A String with the size in megabytes
+     * @return A String with the size in megabytes with 1 decimal of precision
      */
-    public static String getSizeInMbString(int byteSize) {
-        return String.format("%.1f", getSizeInMb(byteSize));
+    public static String getSizeInMbString(long byteSize) {
+        long sizeInMb = getSizeInMb(byteSize, true);
+        long divisor = 10;
+        if (byteSize > Long.MAX_VALUE / divisor) divisor = 1;
+        long quotient = sizeInMb / divisor;
+        long remainder = sizeInMb % divisor;
+        return String.format("%d.%d", quotient, remainder);
     }
 
     /**
@@ -169,12 +172,21 @@ public class ParseUtils {
      * otherwise
      */
     public static String hashRegex(String haystack, String needleRegex) {
+        if (haystack == null || needleRegex == null) return null;
         Pattern pattern = Pattern.compile(needleRegex);
         Matcher matcher = pattern.matcher(haystack);
         if (matcher.find() && matcher.groupCount() == 1) {
             return matcher.group(1);
         }
         return null;
+    }
+
+    /**
+     * @param mediaUrl The URL to check
+     * @return True when the URL likely links to an image or video, false otherwise
+     */
+    public static boolean isDirectUrl(String mediaUrl) {
+        return isDirectUrl(ParseUtils.getUrlObject(mediaUrl));
     }
 
     /**
@@ -260,5 +272,21 @@ public class ParseUtils {
         }
 
         return false;
+    }
+
+    /**
+     * Converts the input byte size to megabytes
+     *
+     * @param byteSize    The number of bytes to convert to megabytes
+     * @param isForString True if the result will be used in calculating the byte size as a String,
+     *                    false to return the true bytes to megabytes conversion
+     * @return The size of bytes in megabytes or 10 times the size of bytes in megabytes if
+     * <code>isForString</code> is true
+     */
+    private static long getSizeInMb(long byteSize, boolean isForString) {
+        if (byteSize < 0) return 0;
+        long coefficient = isForString ? 10 : 1;
+        if (byteSize > Long.MAX_VALUE / coefficient) coefficient = 1; // Prevent overflow
+        return (byteSize * coefficient) / 1024 / 1024;
     }
 }
