@@ -20,25 +20,88 @@
 
 package com.fernandobarillas.albumparser.giphy;
 
+import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
+import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
+import com.fernandobarillas.albumparser.giphy.api.GiphyApi;
+import com.fernandobarillas.albumparser.giphy.model.GiphyMedia;
+import com.fernandobarillas.albumparser.giphy.model.GiphyResponse;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
-import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
-import com.fernandobarillas.albumparser.giphy.model.GiphyMedia;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
 
+import okhttp3.OkHttpClient;
+import retrofit2.Response;
+
 /**
- * Parser for Giphy API responses
+ * Parser for the Giphy API
  */
 public class GiphyParser extends AbstractApiParser {
+    private String mGiphyApiKey = null;
+
+    public GiphyParser(OkHttpClient client) {
+        super(client);
+    }
+
+    public GiphyParser(OkHttpClient client, String giphyApiKey) {
+        this(client);
+        mGiphyApiKey = giphyApiKey;
+    }
+
     @Override
-    public ParserResponse parse(URL mediaUrl) throws InvalidMediaUrlException, IOException {
-        String hash = GiphyUtils.getHash(mediaUrl.toString());
-        if (hash == null) {
-            throw new InvalidMediaUrlException(mediaUrl);
+    public String getApiUrl() {
+        return GiphyApi.API_URL;
+    }
+
+    @Override
+    public String getBaseDomain() {
+        return GiphyApi.BASE_DOMAIN;
+    }
+
+    @Override
+    public String getHash(URL mediaUrl) throws InvalidMediaUrlException {
+        if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
+        String hash;
+        String path = mediaUrl.getPath();
+
+        if (path.startsWith("/gifs/")) {
+            hash = ParseUtils.hashRegex(path, "/gifs/(?:.*-)?(\\w+)\\/?.*$");
+        } else if (path.startsWith("/embed/")) {
+            hash = ParseUtils.hashRegex(path, "/embed/(\\w+)");
+        } else if (path.startsWith("/media/")) {
+            hash = ParseUtils.hashRegex(path, "/media/(\\w+)");
+        } else {
+            hash = ParseUtils.hashRegex(path, "/(\\w+)");
         }
 
-        return new ParserResponse(new GiphyMedia(hash));
+        if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
+        return hash;
+    }
+
+    @Override
+    public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
+        String hash = getHash(mediaUrl);
+        String apiKey = null;
+        if (mGiphyApiKey != null) {
+            apiKey = mGiphyApiKey.trim();
+            if (apiKey.isEmpty()) {
+                throw new InvalidApiKeyException(mediaUrl, apiKey,
+                        "Giphy API key cannot be blank. Please set the key to null to use API calls");
+            }
+        }
+        if (apiKey != null) {
+            GiphyApi service = getRetrofit().create(GiphyApi.class);
+            Response<GiphyResponse> serviceResponse = service.getGif(hash, apiKey).execute();
+            GiphyResponse apiResponse = serviceResponse.body();
+            return getParserResponse(mediaUrl, apiResponse);
+        }
+
+        // API key was null, try to generate a response anyway. Some of the URLs in the returned
+        // media might be invalid since we're guessing
+        ParserResponse parserResponse = new ParserResponse(new GiphyMedia(hash));
+        parserResponse.setOriginalUrl(mediaUrl);
+        return parserResponse;
     }
 }

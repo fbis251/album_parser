@@ -30,6 +30,8 @@ import java.net.URL;
  * Model for Giphy media URLs
  */
 public class GiphyMedia extends BaseMedia {
+    private URL    mHighQualityUrl;
+    private URL    mPreviewUrl;
     private String mHash;
 
     public GiphyMedia(String hash) {
@@ -37,9 +39,18 @@ public class GiphyMedia extends BaseMedia {
     }
 
     @Override
+    public URL getPreviewUrl() {
+        if (mPreviewUrl != null) return mPreviewUrl;
+        mPreviewUrl = getMediaUrl(true);
+        return mPreviewUrl;
+    }
+
+    @Override
     public URL getUrl(boolean highQuality) {
-        if (mHash == null) return null;
-        return getMediaUrl(false);
+        if (mHash == null || !highQuality) return null; // There's no guaranteed URL for low quality
+        if (mHighQualityUrl != null) return mHighQualityUrl;
+        mHighQualityUrl = getMediaUrl(false);
+        return mHighQualityUrl;
     }
 
     @Override
@@ -52,12 +63,16 @@ public class GiphyMedia extends BaseMedia {
      * @return A URL to a preview or MP4 file
      */
     private URL getMediaUrl(boolean isPreview) {
+        String filename = "giphy";
         String ext = EXT_MP4;
         if (isPreview) {
-            ext = EXT_WEBP;
+            filename = "giphy_s";
+            ext = EXT_GIF;
         }
-        // https://media.giphy.com/media/{hash}/giphy.mp4
-        String resultUrl = String.format("%s/media/%s/giphy.%s", GiphyApi.MEDIA_URL, mHash, ext);
+        // https://media.giphy.com/media/{hash}/giphy_s.gif -- preview
+        // https://media.giphy.com/media/{hash}/giphy.mp4   -- mp4
+        String resultUrl =
+                String.format("%s/media/%s/%s.%s", GiphyApi.MEDIA_URL, mHash, filename, ext);
         return ParseUtils.getUrlObject(resultUrl);
     }
 }

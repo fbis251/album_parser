@@ -34,6 +34,7 @@ import com.fernandobarillas.albumparser.imgur.ImgurParser;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.media.DirectMedia;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
+import com.fernandobarillas.albumparser.redditmedia.api.RedditMediaApi;
 import com.fernandobarillas.albumparser.streamable.StreamableParser;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
 import com.fernandobarillas.albumparser.tumblr.TumblrParser;
@@ -79,6 +80,7 @@ public class AlbumParser {
 
     /** The OkHttpClient instance to use when making all the API calls */
     private OkHttpClient mClient;
+    private String       mGiphyApiKey;
     private String       mImgurClientId;
     private String       mTumblrApiKey;
 
@@ -126,6 +128,22 @@ public class AlbumParser {
      */
     public OkHttpClient getClient() {
         return mClient;
+    }
+
+    /**
+     * @return The API key the library is using for its Giphy API calls
+     */
+    public String getGiphyApiKey() {
+        return mGiphyApiKey;
+    }
+
+    /**
+     * Sets the API key to use when making requests to the Giphy API
+     *
+     * @param giphyApiKey The API key to use when making requests to the Giphy API
+     */
+    public void setGiphyApiKey(String giphyApiKey) {
+        mGiphyApiKey = giphyApiKey;
     }
 
     /**
@@ -189,7 +207,7 @@ public class AlbumParser {
                 case GFYCAT:
                     return new GfycatParser(mClient).parse(mediaUrl);
                 case GIPHY:
-                    return new GiphyParser().parse(mediaUrl);
+                    return new GiphyParser(mClient, mGiphyApiKey).parse(mediaUrl);
                 case IMGUR:
                     return new ImgurParser(mClient, mImgurClientId).parse(mediaUrl);
                 case STREAMABLE:
@@ -229,7 +247,7 @@ public class AlbumParser {
         if (isDomainMatch(domain, GfycatApi.BASE_DOMAIN)) {
             return GFYCAT;
         }
-        if (isDomainMatch(domain, GiphyApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, GiphyApi.BASE_DOMAIN) && new GiphyParser(null).canParse(url)) {
             return GIPHY;
         }
         if (isDomainMatch(domain, ImgurApi.BASE_DOMAIN)) {

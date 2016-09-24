@@ -23,6 +23,7 @@ package com.fernandobarillas.albumparser;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
+import com.fernandobarillas.albumparser.parser.GiphyParserTest;
 import com.fernandobarillas.albumparser.parser.IParserResponse;
 import com.fernandobarillas.albumparser.parser.ImgurParserTest;
 import com.fernandobarillas.albumparser.parser.TumblrParserTest;
@@ -43,7 +44,7 @@ import static org.junit.Assert.assertTrue;
  * Runs all the parser tests provided by the library
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ImgurParserTest.class, TumblrParserTest.class})
+@Suite.SuiteClasses({GiphyParserTest.class, ImgurParserTest.class, TumblrParserTest.class})
 public class AllTests {
     public static final int API_CALL_TIMEOUT_MS = 10000; // Wait time for HTTP call to finish
 

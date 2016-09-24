@@ -20,13 +20,22 @@
 
 package com.fernandobarillas.albumparser.giphy.api;
 
+import com.fernandobarillas.albumparser.giphy.model.GiphyResponse;
+
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
+
 /**
- * Created by fb on 5/17/16.
+ * Retrofit Interface for the Giphy API
  */
 public interface GiphyApi {
     // No trailing slash!
     String BASE_DOMAIN = "giphy.com";
+    String API_URL     = "https://api." + BASE_DOMAIN;
     String MEDIA_URL   = "https://media." + BASE_DOMAIN;
 
-    // No API implementation yet since Giphy requires a client token
+    @GET("/v1/gifs/{hash}?api_key=dc6zaTOxFJmz")
+    Call<GiphyResponse> getGif(@Path("hash") String hash, @Query("api_key") String apiKey);
 }
