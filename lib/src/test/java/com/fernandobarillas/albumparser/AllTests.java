@@ -22,24 +22,39 @@ package com.fernandobarillas.albumparser;
 
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
+import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.IParserResponse;
+import com.fernandobarillas.albumparser.parser.TumblrParserTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Runs all the parser tests provided by the library
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ImgurParserTest.class})
+@Suite.SuiteClasses({ImgurParserTest.class, TumblrParserTest.class})
 public class AllTests {
     public static final int API_CALL_TIMEOUT_MS = 10000; // Wait time for HTTP call to finish
+
+    public static void validateCanParseAndHashes(final AbstractApiParser parser,
+            final Map<String, String> validHashes) {
+        for (Map.Entry<String, String> entry : validHashes.entrySet()) {
+            String expectedHash = entry.getKey();
+            String url = entry.getValue();
+            System.out.println("url = [" + url + ']');
+            assertTrue(url + " canParse", parser.canParse(url));
+            assertEquals(url + " hash equals", expectedHash, parser.getHash(url));
+        }
+    }
 
     public static void compareAlbum(final URL originalUrl, final IMediaAlbum expectedAlbum,
             final IMediaAlbum mediaAlbum) {

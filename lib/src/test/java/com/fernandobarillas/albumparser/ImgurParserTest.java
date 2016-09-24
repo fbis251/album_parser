@@ -21,8 +21,8 @@
 package com.fernandobarillas.albumparser;
 
 import com.fernandobarillas.albumparser.imgur.ImgurParser;
-import com.fernandobarillas.albumparser.imgur.model.Image;
 import com.fernandobarillas.albumparser.media.IApiResponse;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
@@ -31,6 +31,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.OkHttpClient;
 
@@ -45,10 +47,32 @@ import static org.junit.Assert.assertNull;
  * Tests for the Imgur API parser
  */
 public class ImgurParserTest {
-    private ImgurParser mImgurParser;
+    private OkHttpClient mOkHttpClient;
+    private ImgurParser  mImgurParser;
+    private String mImgurApiKey = ""; // TODO: Set your Imgur API key
 
     public ImgurParserTest() {
-        mImgurParser = new ImgurParser(new OkHttpClient());
+        mOkHttpClient = new OkHttpClient();
+        mImgurParser = new ImgurParser(mOkHttpClient, mImgurApiKey);
+    }
+
+    @Test
+    public void testCanParseAndGetHash() throws Exception {
+        Map<String, String> validHashes = new HashMap<>();
+
+        // Albums
+        validHashes.put("VhGBD", "http://imgur.com/r/motivation/VhGBD"); // Album with /r/ prefix
+        validHashes.put("WKauF", "https://imgur.com/gallery/WKauF"); // Album with gallery URL
+        validHashes.put("cvehZ", "http://imgur.com/a/cvehZ"); // /a/ prefix album
+
+        // Images
+        validHashes.put("awsGf9p", "http://imgur.com/awsGf9p"); // No prefix image URL
+        validHashes.put("sCjRLQG", "http://i.imgur.com/sCjRLQG.jpg?1"); // Direct url with param
+        validHashes.put("PBTrqAA", "https://imgur.com/gallery/PBTrqAA"); // gallery prefix
+        validHashes.put("mhcWa37", "http://imgur.com/gallery/mhcWa37/new"); // Extra path after hash
+        validHashes.put("SWSteYm", "http://imgur.com/r/google/SWSteYm"); // /r/ prefix
+
+        AllTests.validateCanParseAndHashes(mImgurParser, validHashes);
     }
 
     // Tests a standard album URL
@@ -122,9 +146,6 @@ public class ImgurParserTest {
 
         assertNotNull(albumHash + " getApiResponse", result.getApiResponse());
         IApiResponse apiResponse = result.getApiResponse();
-        assertEquals(albumHash + " albumHash parsed properly", albumHash, apiResponse.getHash());
-        assertEquals(albumHash + " Original URL", albumUrl.toString(),
-                apiResponse.getOriginalUrl());
         assertTrue(albumHash + " API Response Successful", apiResponse.isSuccessful());
         assertNull(albumHash + " Album should return null media", apiResponse.getMedia());
         assertNull(albumHash + " No error message on success", apiResponse.getErrorMessage());
@@ -141,22 +162,18 @@ public class ImgurParserTest {
     private void testSingleMediaWithNoApiCall(final URL imgurUrl, final String hash,
             final boolean isAnimated) throws IOException {
         assertNotNull(imgurUrl);
-        ParserResponse result = mImgurParser.parse(imgurUrl);
-        assertTrue(result.getMedia() instanceof Image);
-        Image image = (Image) result.getMedia();
+        ParserResponse result = new ImgurParser(mOkHttpClient).parse(imgurUrl);
+        IMedia media = result.getMedia();
+        assertNotNull(hash + " result media not null", media);
         String expectedExtension = isAnimated ? ".mp4" : ".jpg";
         assertTrue(hash + " isSingleMedia", result.isSingleMedia());
-        assertEquals(hash + " isVideo", isAnimated, image.isVideo());
+        assertEquals(hash + " isVideo", isAnimated, media.isVideo());
         assertEquals(hash + " preview URL", "https://i.imgur.com/" + hash + "m.jpg",
-                image.getPreviewUrl().toString());
+                media.getPreviewUrl().toString());
         assertEquals(hash + " high quality URL", "https://i.imgur.com/" + hash + expectedExtension,
-                image.getUrl(true).toString());
+                media.getUrl(true).toString());
         URL expectedLowQualityUrl = ParseUtils.getUrlObject(
                 isAnimated ? null : "https://i.imgur.com/" + hash + "h.jpg");
-        assertEquals(hash + " low quality URL", expectedLowQualityUrl, image.getUrl(false));
-        if (isAnimated) {
-            assertEquals(hash + " MP4 URL", "https://i.imgur.com/" + hash + expectedExtension,
-                    image.getMp4Url(true).toString());
-        }
+        assertEquals(hash + " low quality URL", expectedLowQualityUrl, media.getUrl(false));
     }
 }
