@@ -20,6 +20,7 @@
 
 package com.fernandobarillas.albumparser.parser;
 
+import com.fernandobarillas.albumparser.ApiKeys;
 import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
@@ -47,8 +48,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class TumblrParserTest {
     private TumblrParser mTumblrParser;
-
-    private String mTumblrApiKey = ""; // TODO: Set your Tumblr API key
+    private String mTumblrApiKey = ApiKeys.TUMBLR_API_KEY;
 
     public TumblrParserTest() {
         mTumblrParser = new TumblrParser(new OkHttpClient(), mTumblrApiKey);

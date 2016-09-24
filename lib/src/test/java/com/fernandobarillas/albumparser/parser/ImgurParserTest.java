@@ -21,6 +21,7 @@
 package com.fernandobarillas.albumparser.parser;
 
 import com.fernandobarillas.albumparser.AllTests;
+import com.fernandobarillas.albumparser.ApiKeys;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.imgur.ImgurParser;
 import com.fernandobarillas.albumparser.media.IMedia;
@@ -51,7 +52,7 @@ public class ImgurParserTest {
     private OkHttpClient mOkHttpClient;
     private ImgurParser  mImgurParser;
     private ImgurParser  mImgurParserNoApiKey;
-    private String mImgurApiKey = ""; // TODO: Set your Imgur API key
+    private String mImgurApiKey = ApiKeys.IMGUR_API_KEY;
 
     public ImgurParserTest() {
         mOkHttpClient = new OkHttpClient();
