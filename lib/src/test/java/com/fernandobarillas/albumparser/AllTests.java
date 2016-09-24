@@ -26,6 +26,7 @@ import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.IParserResponse;
 import com.fernandobarillas.albumparser.parser.ImgurParserTest;
 import com.fernandobarillas.albumparser.parser.TumblrParserTest;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -47,13 +48,28 @@ public class AllTests {
     public static final int API_CALL_TIMEOUT_MS = 10000; // Wait time for HTTP call to finish
 
     public static void validateCanParseAndHashes(final AbstractApiParser parser,
-            final Map<String, String> validHashes) {
+            final Map<String, String> validHashes, final boolean skipHash) {
         for (Map.Entry<String, String> entry : validHashes.entrySet()) {
             String expectedHash = entry.getKey();
             String url = entry.getValue();
             assertTrue(url + " canParse", parser.canParse(url));
+            if (skipHash) continue;
             assertEquals(url + " hash equals", expectedHash, parser.getHash(url));
         }
+    }
+
+    public static void apiDomainValid(final AbstractApiParser apiParser, final String baseDomain,
+            final boolean skipApiUrlsTests) {
+        assertNotNull("Base domain null", baseDomain);
+        assertNotNull(baseDomain + " Parser instance null", apiParser);
+
+        assertEquals(baseDomain + " base domain equal", baseDomain, apiParser.getBaseDomain());
+
+        if (skipApiUrlsTests) return; // Skipping URL tests for Parsers which don't use API calls
+        URL apiUrl = ParseUtils.getUrlObject(apiParser.getApiUrl());
+        assertNotNull(baseDomain + " Parser Domain", apiUrl);
+        assertNotNull(baseDomain + " Parser API", apiUrl);
+        assertEquals(baseDomain + " API uses HTTPS", "https", apiUrl.getProtocol());
     }
 
     public static void compareAlbum(final URL originalUrl, final IMediaAlbum expectedAlbum,

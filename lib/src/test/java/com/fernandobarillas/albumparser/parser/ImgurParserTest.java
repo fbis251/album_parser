@@ -93,7 +93,7 @@ public class ImgurParserTest {
         validHashes.put("SWSteYm", "http://imgur.com/r/google/SWSteYm"); // /r/ prefix
 
 
-        AllTests.validateCanParseAndHashes(mImgurParser, validHashes);
+        AllTests.validateCanParseAndHashes(mImgurParser, validHashes, false);
     }
 
     // Tests a direct GIF URL with no API call
