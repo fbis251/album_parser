@@ -24,6 +24,7 @@ import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.IParserResponse;
+import com.fernandobarillas.albumparser.parser.ImgurParserTest;
 import com.fernandobarillas.albumparser.parser.TumblrParserTest;
 
 import org.junit.runner.RunWith;
@@ -50,7 +51,6 @@ public class AllTests {
         for (Map.Entry<String, String> entry : validHashes.entrySet()) {
             String expectedHash = entry.getKey();
             String url = entry.getValue();
-            System.out.println("url = [" + url + ']');
             assertTrue(url + " canParse", parser.canParse(url));
             assertEquals(url + " hash equals", expectedHash, parser.getHash(url));
         }
