@@ -63,8 +63,23 @@ public class ImgurParser extends AbstractApiParser {
 
     @Override
     public String getHash(URL mediaUrl) throws InvalidMediaUrlException {
-        if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
-        String hash = ImgurUtils.getHash(mediaUrl.toString()); // TODO: Implement me in this method
+        if (!isValidDomain(mediaUrl)) {
+            throw new InvalidMediaUrlException(
+                    mediaUrl); // TODO: Add this instead of media == null check to other parsers
+        }
+        String path = mediaUrl.getPath();
+        String hash;
+        if (path.startsWith("/gallery/")) {
+            // /gallery/{hash} URLs can contain both album and image hashes
+            hash = ParseUtils.hashRegex(path, "/gallery/(\\w{5,7})");
+        } else if (path.startsWith("/a/")) {
+            hash = ParseUtils.hashRegex(path, "/a/(\\w{5})");
+        } else if (path.startsWith("/r/")) {
+            hash = ParseUtils.hashRegex(path, "/r/\\w+/(\\w{5,7})");
+        } else {
+            // Probably a gallery URL with no prefix
+            hash = ParseUtils.hashRegex(path, "/(\\w{7})");
+        }
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
         return hash;
     }
