@@ -36,6 +36,10 @@ import retrofit2.Response;
  * Parser for the Gfycat API
  */
 public class GfycatParser extends AbstractApiParser {
+
+    public GfycatParser() {
+    }
+
     public GfycatParser(OkHttpClient client) {
         super(client);
     }

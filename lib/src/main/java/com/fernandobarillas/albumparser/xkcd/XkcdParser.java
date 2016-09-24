@@ -37,6 +37,10 @@ import retrofit2.Response;
  * Parser for the XKCD API
  */
 public class XkcdParser extends AbstractApiParser {
+
+    public XkcdParser() {
+    }
+
     public XkcdParser(OkHttpClient client) {
         super(client);
     }

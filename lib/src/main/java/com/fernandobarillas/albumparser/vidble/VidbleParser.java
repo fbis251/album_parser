@@ -37,6 +37,10 @@ import retrofit2.Response;
  * Parser for the Vidble API
  */
 public class VidbleParser extends AbstractApiParser {
+
+    public VidbleParser() {
+    }
+
     public VidbleParser(OkHttpClient client) {
         super(client);
     }

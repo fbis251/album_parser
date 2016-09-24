@@ -41,6 +41,9 @@ import retrofit2.Response;
 public class TumblrParser extends AbstractApiParser {
     private String mTumblrApiKey = null;
 
+    public TumblrParser() {
+    }
+
     public TumblrParser(OkHttpClient client, String tumblrApiKey) {
         super(client);
         mTumblrApiKey = tumblrApiKey;

@@ -36,6 +36,10 @@ import retrofit2.Response;
  * Parser for the vid.me API
  */
 public class VidmeParser extends AbstractApiParser {
+
+    public VidmeParser() {
+    }
+
     public VidmeParser(OkHttpClient client) {
         super(client);
     }

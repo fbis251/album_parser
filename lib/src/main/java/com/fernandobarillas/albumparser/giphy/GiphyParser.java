@@ -41,6 +41,9 @@ import retrofit2.Response;
 public class GiphyParser extends AbstractApiParser {
     private String mGiphyApiKey = null;
 
+    public GiphyParser() {
+    }
+
     public GiphyParser(OkHttpClient client) {
         super(client);
     }

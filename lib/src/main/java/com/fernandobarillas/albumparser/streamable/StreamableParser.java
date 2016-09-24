@@ -40,6 +40,9 @@ public class StreamableParser extends AbstractApiParser {
         super(client);
     }
 
+    public StreamableParser() {
+    }
+
     @Override
     public String getApiUrl() {
         return StreamableApi.API_URL;

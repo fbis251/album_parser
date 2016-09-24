@@ -42,6 +42,9 @@ public class DeviantartParser extends AbstractApiParser {
         super(client);
     }
 
+    public DeviantartParser() {
+    }
+
     @Override
     public String getApiUrl() {
         return DeviantartApi.API_URL;

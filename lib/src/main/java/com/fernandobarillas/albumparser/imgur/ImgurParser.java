@@ -43,13 +43,17 @@ import retrofit2.Response;
 public class ImgurParser extends AbstractApiParser {
     private String mImgurClientId = null;
 
-    public ImgurParser(OkHttpClient client, String imgurClientId) {
-        this(client);
-        mImgurClientId = imgurClientId;
+
+    public ImgurParser() {
     }
 
     public ImgurParser(OkHttpClient client) {
         super(client);
+    }
+
+    public ImgurParser(OkHttpClient client, String imgurClientId) {
+        this(client);
+        mImgurClientId = imgurClientId;
     }
 
     @Override
