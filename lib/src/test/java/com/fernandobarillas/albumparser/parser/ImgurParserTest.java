@@ -68,14 +68,6 @@ public class ImgurParserTest {
         mImgurParser.parse(albumUrl);
     }
 
-    // Image URL returns 404 by API
-    @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
-    public void testImageWith404Error() throws IOException, RuntimeException {
-        URL albumUrl = ParseUtils.getUrlObject("http://i.imgur.com/P3Z2Wfx.jpg");
-        assertNotNull(albumUrl);
-        mImgurParser.parse(albumUrl);
-    }
-
     @Test
     public void testCanParseAndGetHash() throws Exception {
         Map<String, String> validHashes = new HashMap<>();
@@ -140,6 +132,14 @@ public class ImgurParserTest {
 
         ParserResponse parserResponse = mImgurParserNoApiKey.parse(imgurUrl);
         compareParserResponse(imgurUrl, expectedParserResponse, parserResponse);
+    }
+
+    // Image URL returns 404 by API
+    @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
+    public void testImageWith404Error() throws IOException, RuntimeException {
+        URL albumUrl = ParseUtils.getUrlObject("http://i.imgur.com/P3Z2Wfx.jpg");
+        assertNotNull(albumUrl);
+        mImgurParser.parse(albumUrl);
     }
 
     // Tests a direct JPG thumbnail URL with no API call
