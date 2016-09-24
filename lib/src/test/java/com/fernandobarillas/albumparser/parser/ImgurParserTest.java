@@ -42,13 +42,14 @@ import java.util.Map;
 import okhttp3.OkHttpClient;
 
 import static com.fernandobarillas.albumparser.AllTests.API_CALL_TIMEOUT_MS;
+import static com.fernandobarillas.albumparser.AllTests.apiDomainValid;
 import static com.fernandobarillas.albumparser.AllTests.compareParserResponse;
 import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests for the Imgur API parser
  */
-public class ImgurParserTest {
+public class ImgurParserTest implements IParserTest {
     private OkHttpClient mOkHttpClient;
     private ImgurParser  mImgurParser;
     private ImgurParser  mImgurParserNoApiKey;
@@ -60,16 +61,15 @@ public class ImgurParserTest {
         mImgurParserNoApiKey = new ImgurParser(mOkHttpClient, null);
     }
 
-    // Album URL returns 404 by API
-    @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
-    public void testAlbumWith404Error() throws IOException, RuntimeException {
-        URL albumUrl = ParseUtils.getUrlObject("https://imgur.com/a/a8sxH");
-        assertNotNull(albumUrl);
-        mImgurParser.parse(albumUrl);
+    @Test
+    @Override
+    public void testApiUsesHttps() {
+        apiDomainValid(mImgurParser, "imgur.com", false);
     }
 
     @Test
-    public void testCanParseAndGetHash() throws Exception {
+    @Override
+    public void testCanParseAndGetHash() {
         Map<String, String> validHashes = new HashMap<>();
 
         // Albums
@@ -86,6 +86,14 @@ public class ImgurParserTest {
 
 
         AllTests.validateCanParseAndHashes(mImgurParser, validHashes, false);
+    }
+
+    // Album URL returns 404 by API
+    @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
+    public void testAlbumWith404Error() throws IOException, RuntimeException {
+        URL albumUrl = ParseUtils.getUrlObject("https://imgur.com/a/a8sxH");
+        assertNotNull(albumUrl);
+        mImgurParser.parse(albumUrl);
     }
 
     // Tests a direct GIF URL with no API call

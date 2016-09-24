@@ -47,17 +47,6 @@ import static org.junit.Assert.assertTrue;
 public class AllTests {
     public static final int API_CALL_TIMEOUT_MS = 10000; // Wait time for HTTP call to finish
 
-    public static void validateCanParseAndHashes(final AbstractApiParser parser,
-            final Map<String, String> validHashes, final boolean skipHash) {
-        for (Map.Entry<String, String> entry : validHashes.entrySet()) {
-            String expectedHash = entry.getKey();
-            String url = entry.getValue();
-            assertTrue(url + " canParse", parser.canParse(url));
-            if (skipHash) continue;
-            assertEquals(url + " hash equals", expectedHash, parser.getHash(url));
-        }
-    }
-
     public static void apiDomainValid(final AbstractApiParser apiParser, final String baseDomain,
             final boolean skipApiUrlsTests) {
         assertNotNull("Base domain null", baseDomain);
@@ -152,6 +141,17 @@ public class AllTests {
 
         if (expectedParserResponse.isSingleMedia()) {
             compareMedia(originalUrl, expectedParserResponse.getMedia(), parserResponse.getMedia());
+        }
+    }
+
+    public static void validateCanParseAndHashes(final AbstractApiParser parser,
+            final Map<String, String> validHashes, final boolean skipHash) {
+        for (Map.Entry<String, String> entry : validHashes.entrySet()) {
+            String expectedHash = entry.getKey();
+            String url = entry.getValue();
+            assertTrue(url + " canParse", parser.canParse(url));
+            if (skipHash) continue;
+            assertEquals(url + " hash equals", expectedHash, parser.getHash(url));
         }
     }
 }
