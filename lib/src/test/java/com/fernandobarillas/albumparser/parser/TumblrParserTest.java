@@ -20,6 +20,7 @@
 
 package com.fernandobarillas.albumparser.parser;
 
+import com.fernandobarillas.albumparser.AllTests;
 import com.fernandobarillas.albumparser.ApiKeys;
 import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
 import com.fernandobarillas.albumparser.media.IMedia;
@@ -35,13 +36,14 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.OkHttpClient;
 
 import static com.fernandobarillas.albumparser.AllTests.API_CALL_TIMEOUT_MS;
 import static com.fernandobarillas.albumparser.AllTests.compareParserResponse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the Imgur API parser
@@ -52,19 +54,6 @@ public class TumblrParserTest {
 
     public TumblrParserTest() {
         mTumblrParser = new TumblrParser(new OkHttpClient(), mTumblrApiKey);
-    }
-
-    @Test
-    public void testCanParseUrls() {
-        String[] validTumblrUrls = {
-                "http://aatkaw.tumblr.com/post/150140358556/hana",
-                "http://fbis251.tumblr.com/post/150135750508/",
-                "https://67.media.tumblr.com/dbd5c1852e25468bd2e715cb88085178/tumblr_od7ef98S291r8k7mao1_540.jpg",
-                "https://vt.tumblr.com/tumblr_odxrj1AuHO1r8k7ma.mp4"
-        };
-        for (String tumblrUrl : validTumblrUrls) {
-            assertTrue(tumblrUrl + " can parse", mTumblrParser.canParse(tumblrUrl));
-        }
     }
 
     // Tests a standard album URL, contains 2 photos
@@ -111,6 +100,26 @@ public class TumblrParserTest {
                 .build();
         ParserResponse parserResponse = mTumblrParser.parse(albumUrl);
         compareParserResponse(albumUrl, expectedParserResponse, parserResponse);
+    }
+
+    @Test
+    public void testCanParseAndGetHash() throws Exception {
+        Map<String, String> validHashes = new HashMap<>();
+
+        // /image/ prefix
+        validHashes.put("150175958904", "http://bossrushstudio.tumblr.com/image/150175958904");
+        // /post/ prefix with suffix
+        validHashes.put("150140358556", "http://aatkaw.tumblr.com/post/150140358556/hana");
+        // /post/ prefix
+        validHashes.put("150135750508", "http://fbis251.tumblr.com/post/150135750508/");
+
+        AllTests.validateCanParseAndHashes(mTumblrParser, validHashes, false);
+
+        Map<String, String> validDirectUrls = new HashMap<>();
+        // Direct media URL
+        validDirectUrls.put(null,
+                "https://67.media.tumblr.com/dbd5c1852e25468bd2e715cb88085178/tumblr_od7ef98S291r8k7mao1_540.jpg");
+        AllTests.validateCanParseAndHashes(mTumblrParser, validDirectUrls, true);
     }
 
     @Test(expected = InvalidApiKeyException.class)
