@@ -34,12 +34,10 @@ import com.fernandobarillas.albumparser.imgur.ImgurParser;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.media.DirectMedia;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
-import com.fernandobarillas.albumparser.redditmedia.api.RedditMediaApi;
 import com.fernandobarillas.albumparser.streamable.StreamableParser;
 import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
 import com.fernandobarillas.albumparser.tumblr.TumblrParser;
 import com.fernandobarillas.albumparser.tumblr.api.TumblrApi;
-import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.vidble.VidbleParser;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.fernandobarillas.albumparser.vidme.VidmeParser;
@@ -52,7 +50,10 @@ import java.net.URL;
 
 import okhttp3.OkHttpClient;
 
-import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
+import static com.fernandobarillas.albumparser.util.ParseUtils.getUrlObject;
+import static com.fernandobarillas.albumparser.util.ParseUtils.isDomainMatch;
+import static com.fernandobarillas.albumparser.util.ParseUtils.isImageExtension;
+import static com.fernandobarillas.albumparser.util.ParseUtils.isVideoExtension;
 
 /**
  * Class that facilitates parsing API responses from various image/video hosting services. This
@@ -110,7 +111,7 @@ public class AlbumParser {
      * @return True if the URL can be parsed by this library, false if the URL is unsupported
      */
     public static boolean isSupported(String url) {
-        return isSupported(ParseUtils.getUrlObject(url));
+        return isSupported(getUrlObject(url));
     }
 
     /**
@@ -198,42 +199,49 @@ public class AlbumParser {
     public ParserResponse parseUrl(String urlString)
             throws IOException, InvalidApiKeyException, InvalidApiResponseException,
             InvalidMediaUrlException {
-        URL mediaUrl = new URL(urlString);
+        return parseUrl(getUrlObject(urlString));
+    }
 
-        try {
-            switch (getMediaProvider(mediaUrl)) {
-                case DEVIANTART:
-                    return new DeviantartParser(mClient).parse(mediaUrl);
-                case GFYCAT:
-                    return new GfycatParser(mClient).parse(mediaUrl);
-                case GIPHY:
-                    return new GiphyParser(mClient, mGiphyApiKey).parse(mediaUrl);
-                case IMGUR:
-                    return new ImgurParser(mClient, mImgurClientId).parse(mediaUrl);
-                case STREAMABLE:
-                    return new StreamableParser(mClient).parse(mediaUrl);
-                case VIDBLE:
-                    return new VidbleParser(mClient).parse(mediaUrl);
-                case VIDME:
-                    return new VidmeParser(mClient).parse(mediaUrl);
-                case TUMBLR:
-                    return new TumblrParser(mClient, mTumblrApiKey).parse(mediaUrl);
-                case XKCD:
-                    return new XkcdParser(mClient).parse(mediaUrl);
-                case DIRECT:
-                    return new ParserResponse(new DirectMedia(mediaUrl));
-                case UNKNOWN:
-                default:
-                    // Media is not supported or a URL that doesn't point to any media passed in
-                    throw new InvalidMediaUrlException(mediaUrl);
-            }
-        } catch (InvalidMediaUrlException e) {
-            // The API parsers could not get a response, try to return a DirectMedia if possible
-            if (isDirectUrl(mediaUrl)) {
+    /**
+     * @param mediaUrl The URL to parse and receive data for
+     * @return The API response for the passed-in URL.
+     * @throws IOException                 When there are any network issues such as a host not
+     *                                     being reached.
+     * @throws InvalidApiKeyException      When you attempt to use an API that requires a key
+     *                                     without first setting the key
+     * @throws InvalidApiResponseException When the API returns a null response or a response which
+     *                                     the library could not parse.
+     * @throws InvalidMediaUrlException    When the passed-in URL is not supported by this library
+     *                                     and cannot be parsed
+     */
+    public ParserResponse parseUrl(URL mediaUrl)
+            throws IOException, InvalidApiKeyException, InvalidApiResponseException,
+            InvalidMediaUrlException {
+        switch (getMediaProvider(mediaUrl)) {
+            case DEVIANTART:
+                return new DeviantartParser(mClient).parse(mediaUrl);
+            case GFYCAT:
+                return new GfycatParser(mClient).parse(mediaUrl);
+            case GIPHY:
+                return new GiphyParser(mClient, mGiphyApiKey).parse(mediaUrl);
+            case IMGUR:
+                return new ImgurParser(mClient, mImgurClientId).parse(mediaUrl);
+            case STREAMABLE:
+                return new StreamableParser(mClient).parse(mediaUrl);
+            case VIDBLE:
+                return new VidbleParser(mClient).parse(mediaUrl);
+            case VIDME:
+                return new VidmeParser(mClient).parse(mediaUrl);
+            case TUMBLR:
+                return new TumblrParser(mClient, mTumblrApiKey).parse(mediaUrl);
+            case XKCD:
+                return new XkcdParser(mClient).parse(mediaUrl);
+            case DIRECT:
                 return new ParserResponse(new DirectMedia(mediaUrl));
-            } else {
-                throw e;
-            }
+            case UNKNOWN:
+            default:
+                // Media is not supported or a URL that doesn't point to any media passed in
+                throw new InvalidMediaUrlException(mediaUrl);
         }
     }
 
@@ -241,46 +249,40 @@ public class AlbumParser {
         if (url == null || url.getHost() == null) return UNKNOWN;
         String domain = url.getHost().toLowerCase();
 
-        if (isDomainMatch(domain, DeviantartApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, DeviantartApi.BASE_DOMAIN) && new DeviantartParser().canParse(
+                url)) {
             return DEVIANTART;
         }
-        if (isDomainMatch(domain, GfycatApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, GfycatApi.BASE_DOMAIN) && new GfycatParser().canParse(url)) {
             return GFYCAT;
         }
-        if (isDomainMatch(domain, GiphyApi.BASE_DOMAIN) && new GiphyParser(null).canParse(url)) {
+        if (isDomainMatch(domain, GiphyApi.BASE_DOMAIN) && new GiphyParser().canParse(url)) {
             return GIPHY;
         }
-        if (isDomainMatch(domain, ImgurApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, ImgurApi.BASE_DOMAIN) && new ImgurParser().canParse(url)) {
             return IMGUR;
         }
-        if (isDomainMatch(domain, StreamableApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, StreamableApi.BASE_DOMAIN) && new StreamableParser().canParse(
+                url)) {
             return STREAMABLE;
         }
-        if (isDomainMatch(domain, VidbleApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, VidbleApi.BASE_DOMAIN) && new VidbleParser().canParse(url)) {
             return VIDBLE;
         }
-        if (isDomainMatch(domain, VidmeApi.BASE_DOMAIN)) {
+        if (isDomainMatch(domain, VidmeApi.BASE_DOMAIN) && new VidmeParser().canParse(url)) {
             return VIDME;
         }
-        if (isDomainMatch(domain, TumblrApi.BASE_DOMAIN)) {
-            TumblrParser parser = new TumblrParser(null, null);
-            if (parser.canParse(url)) {
-                return TUMBLR;
-            }
+        if (isDomainMatch(domain, TumblrApi.BASE_DOMAIN) && new TumblrParser().canParse(url)) {
+            return TUMBLR;
         }
-        if (isDomainMatch(domain, XkcdApi.BASE_DOMAIN)) {
-            if (new XkcdParser(null).canParse(url)) {
-                return XKCD;
-            }
+        if (isDomainMatch(domain, XkcdApi.BASE_DOMAIN) && new XkcdParser().canParse(url)) {
+            return XKCD;
         }
-        if (ParseUtils.isDirectUrl(url)) {
+        if (isImageExtension(url) || isVideoExtension(url)) {
             return DIRECT;
         }
 
-        return UNKNOWN;
-    }
 
-    private static boolean isDomainMatch(String domain, String providerDomain) {
-        return domain.endsWith("." + providerDomain) || domain.equals(providerDomain);
+        return UNKNOWN;
     }
 }
