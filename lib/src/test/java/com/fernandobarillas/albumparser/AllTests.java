@@ -88,30 +88,29 @@ public class AllTests {
         assertNotNull(originalUrl + " Media null", media);
 
         // Media Fields
-        assertEquals(originalUrl + " High quality byte size", expectedMedia.getByteSize(true),
-                media.getByteSize(true));
-        assertEquals(originalUrl + " Low quality byte size", expectedMedia.getByteSize(false),
-                media.getByteSize(false));
-        assertEquals(originalUrl + " Description", expectedMedia.getDescription(),
-                media.getDescription());
-        assertEquals(originalUrl + " Duration", expectedMedia.getDuration(), media.getDuration(),
-                0.0);
-        assertEquals(originalUrl + " High quality height", expectedMedia.getHeight(true),
-                media.getHeight(true));
-        assertEquals(originalUrl + " Low quality height", expectedMedia.getHeight(false),
-                media.getHeight(false));
-        assertEquals(originalUrl + " Preview URL", expectedMedia.getPreviewUrl(),
-                media.getPreviewUrl());
-        assertEquals(originalUrl + " Title", expectedMedia.getTitle(), media.getTitle());
         assertEquals(originalUrl + " High quality URL", expectedMedia.getUrl(true),
                 media.getUrl(true));
         assertEquals(originalUrl + " Low quality URL", expectedMedia.getUrl(false),
                 media.getUrl(false));
-        assertEquals(originalUrl + " High quality width", expectedMedia.getWidth(true),
+        String prefix = String.format("%s %s ", originalUrl, media.getUrl(true));
+        assertEquals(prefix + " High quality byte size", expectedMedia.getByteSize(true),
+                media.getByteSize(true));
+        assertEquals(prefix + " Low quality byte size", expectedMedia.getByteSize(false),
+                media.getByteSize(false));
+        assertEquals(prefix + " Description", expectedMedia.getDescription(),
+                media.getDescription());
+        assertEquals(prefix + " Duration", expectedMedia.getDuration(), media.getDuration(), 0.0);
+        assertEquals(prefix + " High quality height", expectedMedia.getHeight(true),
+                media.getHeight(true));
+        assertEquals(prefix + " Low quality height", expectedMedia.getHeight(false),
+                media.getHeight(false));
+        assertEquals(prefix + " Preview URL", expectedMedia.getPreviewUrl(), media.getPreviewUrl());
+        assertEquals(prefix + " Title", expectedMedia.getTitle(), media.getTitle());
+        assertEquals(prefix + " High quality width", expectedMedia.getWidth(true),
                 media.getWidth(true));
-        assertEquals(originalUrl + " Low quality width", expectedMedia.getWidth(false),
+        assertEquals(prefix + " Low quality width", expectedMedia.getWidth(false),
                 media.getWidth(false));
-        assertEquals(originalUrl + " Is video", expectedMedia.isVideo(), media.isVideo());
+        assertEquals(prefix + " Is video", expectedMedia.isVideo(), media.isVideo());
     }
 
     public static void compareParserResponse(final URL originalUrl,
