@@ -26,7 +26,7 @@ package com.fernandobarillas.albumparser;
 public class ApiKeys {
 
     /** The API key for the Giphy API */
-    private static final String GIPHY_API_KEY = "";
+    public static final String GIPHY_API_KEY = "";
 
     /** The Client ID for the v3 Imgur API */
     public static final String IMGUR_API_KEY = "";
