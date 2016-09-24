@@ -136,7 +136,7 @@ public abstract class AbstractApiParser {
         if (mediaUrl == null) return false;
         String domain = mediaUrl.getHost();
         String baseDomain = getBaseDomain();
-        return domain.equals(baseDomain) || domain.endsWith("." + baseDomain);
+        return ParseUtils.isDomainMatch(domain, baseDomain);
     }
 
     /**

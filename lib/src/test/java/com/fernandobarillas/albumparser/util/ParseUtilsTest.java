@@ -32,6 +32,7 @@ import static com.fernandobarillas.albumparser.util.ParseUtils.getSizeInMbString
 import static com.fernandobarillas.albumparser.util.ParseUtils.getUrlObject;
 import static com.fernandobarillas.albumparser.util.ParseUtils.hashRegex;
 import static com.fernandobarillas.albumparser.util.ParseUtils.isDirectUrl;
+import static com.fernandobarillas.albumparser.util.ParseUtils.isDomainMatch;
 import static com.fernandobarillas.albumparser.util.ParseUtils.isGifExtension;
 import static com.fernandobarillas.albumparser.util.ParseUtils.isImageExtension;
 import static com.fernandobarillas.albumparser.util.ParseUtils.isVideoExtension;
@@ -280,6 +281,20 @@ public class ParseUtilsTest {
         for (String url : INVALID_MEDIA_URLs) {
             assertFalse("url = [" + url + ']', isDirectUrl(url));
         }
+    }
+
+    @Test
+    public void testIsDomainMatch() {
+        // Invalid inputs
+        assertFalse(isDomainMatch(null, null));
+        assertFalse(isDomainMatch("example.com", null));
+        assertFalse(isDomainMatch("example", "example.com"));
+        assertFalse(isDomainMatch("test-example.com", "example.com"));
+
+        // Valid inputs
+        assertTrue(isDomainMatch("example.com", "example.com"));
+        assertTrue(isDomainMatch("www.example.com", "example.com"));
+        assertTrue(isDomainMatch("sub.domain.example.com", "example.com"));
     }
 
     @Test

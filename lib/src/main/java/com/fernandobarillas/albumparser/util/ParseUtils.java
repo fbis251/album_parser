@@ -200,6 +200,18 @@ public class ParseUtils {
     }
 
     /**
+     * @param domain         The domain name to check
+     * @param providerDomain The base domain name for the API provider. Examples: "imgur.com" or
+     *                       "gfycat.com"
+     * @return True if the passed-in domain name matches the domain or subdomain of the provider,
+     * false otherwise
+     */
+    public static boolean isDomainMatch(String domain, String providerDomain) {
+        return !(domain == null || providerDomain == null) && (domain.endsWith("." + providerDomain)
+                || domain.equals(providerDomain));
+    }
+
+    /**
      * @param url The URL to check for a GIF extension
      * @return True if the extension of the file in the URL appears to be for a GIF, false otherwise
      */
