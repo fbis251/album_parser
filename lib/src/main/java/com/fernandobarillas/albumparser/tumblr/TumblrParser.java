@@ -77,6 +77,11 @@ public class TumblrParser extends AbstractApiParser {
             throw new InvalidApiKeyException(mediaUrl, mTumblrApiKey, "Tumblr API key is not set");
         }
 
+        String apiKey = mTumblrApiKey.trim();
+        if (apiKey.isEmpty()) {
+            throw new InvalidApiKeyException(mediaUrl, apiKey, "Tumblr API key cannot be blank");
+        }
+
         if (ParseUtils.isDirectUrl(mediaUrl)) {
             ParserResponse parserResponse = new ParserResponse(new DirectMedia(mediaUrl));
             parserResponse.setOriginalUrl(mediaUrl);

@@ -20,6 +20,7 @@
 
 package com.fernandobarillas.albumparser.imgur;
 
+import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.imgur.model.Image;
@@ -89,6 +90,11 @@ public class ImgurParser extends AbstractApiParser {
         String hash = getHash(mediaUrl);
         String clientIdHeader = null;
         if (mImgurClientId != null) {
+            String apiKey = mImgurClientId.trim();
+            if (apiKey.isEmpty()) {
+                throw new InvalidApiKeyException(mediaUrl, apiKey,
+                        "Imgur API key cannot be blank. Please set the key to null to not use the v3 API");
+            }
             clientIdHeader = ImgurApi.CLIENT_ID_HEADER_PREFIX + " " + mImgurClientId;
         }
 
