@@ -61,13 +61,13 @@ public class ImageResponseV3 extends BaseApiResponse {
                 + '}';
     }
 
-    public void setLowQuality(String lowQuality) {
+    public void setLowQuality(String lowQualitySize) {
         if (data == null) return;
-        data.setLowQuality(lowQuality);
+        data.setLowQuality(lowQualitySize);
     }
 
-    public void setPreviewQuality(String previewQuality) {
+    public void setPreviewQuality(String previewSize) {
         if (data == null) return;
-        data.setPreviewQuality(previewQuality);
+        data.setPreviewQuality(previewSize);
     }
 }

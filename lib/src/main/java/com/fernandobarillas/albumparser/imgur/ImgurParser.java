@@ -42,8 +42,8 @@ import retrofit2.Response;
  */
 public class ImgurParser extends AbstractApiParser {
     private String mImgurClientId = null;
-    private String mDefaultPreviewSize;
-    private String mDefaultLowQualitySize;
+    private String mPreviewSize;
+    private String mLowQualitySize;
 
     public ImgurParser() {
     }
@@ -111,8 +111,8 @@ public class ImgurParser extends AbstractApiParser {
                         service.getV3Album(clientIdHeader, hash).execute();
                 AlbumResponseV3 apiResponse = serviceResponse.body();
                 if (apiResponse != null) {
-                    apiResponse.setLowQuality(mDefaultLowQualitySize);
-                    apiResponse.setPreviewQuality(mDefaultPreviewSize);
+                    apiResponse.setLowQuality(mLowQualitySize);
+                    apiResponse.setPreviewQuality(mPreviewSize);
                 }
                 return getParserResponse(mediaUrl, apiResponse);
             }
@@ -121,8 +121,8 @@ public class ImgurParser extends AbstractApiParser {
             Response<AlbumResponse> serviceResponse = service.getAlbumData(hash).execute();
             AlbumResponse apiResponse = serviceResponse.body();
             if (apiResponse != null) {
-                apiResponse.setLowQuality(mDefaultLowQualitySize);
-                apiResponse.setPreviewQuality(mDefaultPreviewSize);
+                apiResponse.setLowQuality(mLowQualitySize);
+                apiResponse.setPreviewQuality(mPreviewSize);
             }
             return getParserResponse(mediaUrl, apiResponse);
         } else {
@@ -132,8 +132,8 @@ public class ImgurParser extends AbstractApiParser {
                         service.getV3Image(clientIdHeader, hash).execute();
                 ImageResponseV3 apiResponse = serviceResponse.body();
                 if (apiResponse != null) {
-                    apiResponse.setLowQuality(mDefaultLowQualitySize);
-                    apiResponse.setPreviewQuality(mDefaultPreviewSize);
+                    apiResponse.setLowQuality(mLowQualitySize);
+                    apiResponse.setPreviewQuality(mPreviewSize);
                 }
                 return getParserResponse(mediaUrl, apiResponse);
             }
@@ -150,8 +150,8 @@ public class ImgurParser extends AbstractApiParser {
             image.hash = hash;
             image.animated =
                     ParseUtils.isVideoExtension(mediaUrl) || ParseUtils.isGifExtension(mediaUrl);
-            image.setLowQuality(mDefaultLowQualitySize);
-            image.setPreviewQuality(mDefaultPreviewSize);
+            image.setLowQuality(mLowQualitySize);
+            image.setPreviewQuality(mPreviewSize);
             ParserResponse parserResponse = new ParserResponse(image);
             parserResponse.setOriginalUrl(mediaUrl);
             return parserResponse;
@@ -167,8 +167,8 @@ public class ImgurParser extends AbstractApiParser {
      *                       Image#ORIGINAL} can return URLs that weren't intended, for example, an
      *                       mp4 instead of a .jpg
      */
-    public void setDefaultLowQualitySize(String lowQualitySize) {
-        mDefaultLowQualitySize = lowQualitySize;
+    public void setLowQualitySize(String lowQualitySize) {
+        mLowQualitySize = lowQualitySize;
     }
 
 
@@ -181,7 +181,7 @@ public class ImgurParser extends AbstractApiParser {
      *                    can return URLs that weren't intended, for example, an mp4 instead of a
      *                    .jpg
      */
-    public void setDefaultPreviewSize(String previewSize) {
-        mDefaultPreviewSize = previewSize;
+    public void setPreviewSize(String previewSize) {
+        mPreviewSize = previewSize;
     }
 }

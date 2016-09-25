@@ -89,8 +89,8 @@ public class AlbumParser {
     private String mTumblrApiKey;
 
     // Default preview and low quality URL dimensions/sizes
-    private String mDefaultImgurPreviewSize;
-    private String mDefaultImgurLowQualitySize;
+    private String mImgurPreviewSize;
+    private String mImgurLowQualitySize;
 
     /**
      * Instantiates an AlbumParser instance. The library will use its own OkHttpClient instance to
@@ -233,11 +233,11 @@ public class AlbumParser {
                 return new GiphyParser(mClient, mGiphyApiKey).parse(mediaUrl);
             case IMGUR:
                 ImgurParser imgurParser = new ImgurParser(mClient, mImgurClientId);
-                if (mDefaultImgurLowQualitySize != null) {
-                    imgurParser.setDefaultLowQualitySize(mDefaultImgurLowQualitySize);
+                if (mImgurLowQualitySize != null) {
+                    imgurParser.setLowQualitySize(mImgurLowQualitySize);
                 }
-                if (mDefaultImgurPreviewSize != null) {
-                    imgurParser.setDefaultPreviewSize(mDefaultImgurPreviewSize);
+                if (mImgurPreviewSize != null) {
+                    imgurParser.setPreviewSize(mImgurPreviewSize);
                 }
                 return imgurParser.parse(mediaUrl);
             case STREAMABLE:
@@ -266,8 +266,8 @@ public class AlbumParser {
      *                       Image} for available sizes. Examples: {@link Image#ORIGINAL}, {@link
      *                       Image#GIANT_THUMBNAIL}
      */
-    public void setDefaultImgurLowQualitySize(String lowQualitySize) {
-        mDefaultImgurLowQualitySize = lowQualitySize;
+    public void setImgurLowQualitySize(String lowQualitySize) {
+        mImgurLowQualitySize = lowQualitySize;
     }
 
     /**
@@ -277,8 +277,8 @@ public class AlbumParser {
      *                    for available sizes. Examples: {@link Image#BIG_SQUARE}, {@link
      *                    Image#MEDIUM_THUMBNAIL}
      */
-    public void setDefaultImgurPreviewSize(String previewSize) {
-        mDefaultImgurPreviewSize = previewSize;
+    public void setImgurPreviewSize(String previewSize) {
+        mImgurPreviewSize = previewSize;
     }
 
     private static int getMediaProvider(URL url) {

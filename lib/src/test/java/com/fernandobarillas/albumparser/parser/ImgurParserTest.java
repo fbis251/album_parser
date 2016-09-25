@@ -24,6 +24,7 @@ import com.fernandobarillas.albumparser.AllTests;
 import com.fernandobarillas.albumparser.ApiKeys;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.imgur.ImgurParser;
+import com.fernandobarillas.albumparser.imgur.model.Image;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.model.ExpectedAlbum;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
@@ -53,12 +54,19 @@ public class ImgurParserTest implements IParserTest {
     private OkHttpClient mOkHttpClient;
     private ImgurParser  mImgurParser;
     private ImgurParser  mImgurParserNoApiKey;
-    private String mImgurApiKey = ApiKeys.IMGUR_API_KEY;
+
+    private String mImgurApiKey    = ApiKeys.IMGUR_API_KEY;
+    private String mPreviewQuality = Image.SMALL_SQUARE;
+    private String mLowQuality     = Image.MEDIUM_THUMBNAIL;
 
     public ImgurParserTest() {
         mOkHttpClient = new OkHttpClient();
         mImgurParser = new ImgurParser(mOkHttpClient, mImgurApiKey);
+        mImgurParser.setLowQualitySize(mLowQuality);
+        mImgurParser.setPreviewSize(mPreviewQuality);
         mImgurParserNoApiKey = new ImgurParser(mOkHttpClient, null);
+        mImgurParserNoApiKey.setLowQualitySize(mLowQuality);
+        mImgurParserNoApiKey.setPreviewSize(mPreviewQuality);
     }
 
     @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
@@ -222,10 +230,12 @@ public class ImgurParserTest implements IParserTest {
     private ExpectedMedia.Builder getExpectedMediaBuilder(final String hash,
             final boolean isAnimated) {
         String expectedExtension = isAnimated ? ".mp4" : ".jpg";
-        return new ExpectedMedia.Builder().setPreviewUrl("https://i.imgur.com/" + hash + "m.jpg")
+        return new ExpectedMedia.Builder().setPreviewUrl(
+                "https://i.imgur.com/" + hash + mPreviewQuality + ".jpg")
                 .setHighQualityUrl("https://i.imgur.com/" + hash + expectedExtension)
                 // No low quality URLs for animated results
-                .setLowQualityUrl(!isAnimated ? "https://i.imgur.com/" + hash + "h.jpg" : null)
+                .setLowQualityUrl(
+                        !isAnimated ? "https://i.imgur.com/" + hash + mLowQuality + ".jpg" : null)
                 .setIsVideo(isAnimated);
     }
 
@@ -255,7 +265,7 @@ public class ImgurParserTest implements IParserTest {
 
     private ExpectedParserResponse getV3AlbumExpectedParserResponse(final URL albumUrl,
             final boolean isV3ApiCall) {
-        String albumPreviewUrl = "https://i.imgur.com/P3Z2WfXm.jpg";
+        String albumPreviewUrl = "https://i.imgur.com/P3Z2WfX" + mPreviewQuality + ".jpg";
         List<IMedia> expectedMediaList = new ArrayList<>();
         expectedMediaList.add(getFbLogoExpectedMedia());
         expectedMediaList.add(getSpiralAnimationExpectedMedia(isV3ApiCall));

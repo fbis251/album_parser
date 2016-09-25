@@ -224,12 +224,12 @@ public class ImageDataV3 extends BaseMedia implements IMedia {
                 + '}';
     }
 
-    public void setLowQuality(String lowQuality) {
-        if (lowQuality != null) mLowQuality = lowQuality;
+    protected void setLowQuality(String lowQualitySize) {
+        if (lowQualitySize != null) mLowQuality = lowQualitySize;
     }
 
-    public void setPreviewQuality(String previewQuality) {
-        if (previewQuality != null) mPreviewQuality = previewQuality;
+    protected void setPreviewQuality(String previewSize) {
+        if (previewSize != null) mPreviewQuality = previewSize;
     }
 
     private URL getImageUrl(String quality) {
