@@ -34,7 +34,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class AlbumData extends BaseMediaAlbum {
+public class AlbumDataV3 extends BaseMediaAlbum {
 
     @SerializedName("id")
     @Expose
@@ -95,15 +95,21 @@ public class AlbumData extends BaseMediaAlbum {
     public boolean isAd;
     @SerializedName("images")
     @Expose
-    public List<ImageData> images = new ArrayList<>();
+    public List<ImageDataV3> images = new ArrayList<>();
 
+    private String       mLowQuality;
+    private String       mPreviewQuality;
     private List<IMedia> mMediaList;
 
     @Override
     public List<IMedia> getAlbumMedia() {
         if (mMediaList == null) {
             mMediaList = new ArrayList<>();
-            mMediaList.addAll(images);
+            for (ImageDataV3 image : images) {
+                if (mLowQuality != null) image.setLowQuality(mLowQuality);
+                if (mPreviewQuality != null) image.setPreviewQuality(mPreviewQuality);
+                mMediaList.add(image);
+            }
         }
         return mMediaList;
     }
@@ -175,5 +181,13 @@ public class AlbumData extends BaseMediaAlbum {
                 + ", images="
                 + images
                 + '}';
+    }
+
+    protected void setLowQualitySize(String lowQualitySize) {
+        mLowQuality = lowQualitySize;
+    }
+
+    protected void setPreviewSize(String previewSize) {
+        mPreviewQuality = previewSize;
     }
 }

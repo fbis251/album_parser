@@ -23,10 +23,10 @@ package com.fernandobarillas.albumparser.imgur;
 import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
+import com.fernandobarillas.albumparser.imgur.model.AlbumResponse;
 import com.fernandobarillas.albumparser.imgur.model.Image;
-import com.fernandobarillas.albumparser.imgur.model.ImgurResponse;
-import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponse;
-import com.fernandobarillas.albumparser.imgur.model.v3.ImageResponse;
+import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponseV3;
+import com.fernandobarillas.albumparser.imgur.model.v3.ImageResponseV3;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
@@ -42,7 +42,8 @@ import retrofit2.Response;
  */
 public class ImgurParser extends AbstractApiParser {
     private String mImgurClientId = null;
-
+    private String mDefaultPreviewSize;
+    private String mDefaultLowQualitySize;
 
     public ImgurParser() {
     }
@@ -106,22 +107,22 @@ public class ImgurParser extends AbstractApiParser {
         if (ImgurUtils.isAlbum(hash)) {
             if (clientIdHeader != null) {
                 // Use API v3 if the client ID is set
-                Response<AlbumResponse> serviceResponse =
+                Response<AlbumResponseV3> serviceResponse =
                         service.getV3Album(clientIdHeader, hash).execute();
-                AlbumResponse apiResponse = serviceResponse.body();
+                AlbumResponseV3 apiResponse = serviceResponse.body();
                 return getParserResponse(mediaUrl, apiResponse);
             }
 
             // Make an API call to get the album images via the old API
-            Response<ImgurResponse> serviceResponse = service.getAlbumData(hash).execute();
-            ImgurResponse apiResponse = serviceResponse.body();
+            Response<AlbumResponse> serviceResponse = service.getAlbumData(hash).execute();
+            AlbumResponse apiResponse = serviceResponse.body();
             return getParserResponse(mediaUrl, apiResponse);
         } else {
             if (clientIdHeader != null) {
                 // Use API v3 if the client ID is set
-                Response<ImageResponse> serviceResponse =
+                Response<ImageResponseV3> serviceResponse =
                         service.getV3Image(clientIdHeader, hash).execute();
-                ImageResponse apiResponse = serviceResponse.body();
+                ImageResponseV3 apiResponse = serviceResponse.body();
                 return getParserResponse(mediaUrl, apiResponse);
             }
 
@@ -137,9 +138,34 @@ public class ImgurParser extends AbstractApiParser {
             image.hash = hash;
             image.animated =
                     ParseUtils.isVideoExtension(mediaUrl) || ParseUtils.isGifExtension(mediaUrl);
+            image.setLowQuality(mDefaultLowQualitySize);
+            image.setPreviewQuality(mDefaultPreviewSize);
             ParserResponse parserResponse = new ParserResponse(image);
             parserResponse.setOriginalUrl(mediaUrl);
             return parserResponse;
         }
+    }
+
+    /**
+     * Sets the default size of the low quality URL imgur returns
+     *
+     * @param lowQualitySize The default size of the low quality URL Imgur returns. Look at {@link
+     *                       Image} for available sizes. Examples: {@link Image#ORIGINAL}, {@link
+     *                       Image#GIANT_THUMBNAIL}
+     */
+    public void setDefaultLowQualitySize(String lowQualitySize) {
+        mDefaultLowQualitySize = lowQualitySize;
+    }
+
+
+    /**
+     * Sets the default size of the preview URL imgur returns
+     *
+     * @param previewSize The default size of the preview URL Imgur returns. Look at {@link Image}
+     *                    for available sizes. Examples: {@link Image#BIG_SQUARE}, {@link
+     *                    Image#MEDIUM_THUMBNAIL}
+     */
+    public void setDefaultPreviewSize(String previewSize) {
+        mDefaultPreviewSize = previewSize;
     }
 }

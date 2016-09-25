@@ -20,12 +20,14 @@
 
 package com.fernandobarillas.albumparser.imgur.model;
 
-import com.fernandobarillas.albumparser.media.BaseApiResponse;
-import com.fernandobarillas.albumparser.media.IMediaAlbum;
+import com.fernandobarillas.albumparser.media.BaseMediaAlbum;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Generated;
 
@@ -34,36 +36,53 @@ import javax.annotation.Generated;
  */
 
 @Generated("org.jsonschema2pojo")
-public class ImgurResponse extends BaseApiResponse {
-    @SerializedName("data")
+public class AlbumData extends BaseMediaAlbum {
+
+    @SerializedName("count")
     @Expose
-    public Data    data;
-    @SerializedName("success")
+    public int count;
+    @SerializedName("images")
     @Expose
-    public boolean success;
-    @SerializedName("status")
-    @Expose
-    public int     status;
+    public List<Image> images = new ArrayList<>();
+
+    private List<IMedia> mMediaList;
+
+    private String mLowQuality;
+    private String mPreviewQuality;
 
     @Override
-    public IMediaAlbum getAlbum() {
-        return data;
+    public List<IMedia> getAlbumMedia() {
+        if (mMediaList == null) {
+            mMediaList = new ArrayList<>();
+            for (Image image : images) {
+                if (mLowQuality != null) image.setLowQuality(mLowQuality);
+                if (mPreviewQuality != null) image.setPreviewQuality(mPreviewQuality);
+                mMediaList.add(image);
+            }
+        }
+        return mMediaList;
+    }
+
+    @Override
+    public int getCount() {
+        return count;
     }
 
     @Override
     public URL getPreviewUrl() {
-        return (data != null) ? data.getPreviewUrl() : null;
+        if (images != null && images.size() > 0) {
+            // Return the first image as the preview
+            return getAlbumMedia().get(0).getPreviewUrl();
+        }
+
+        return null;
     }
 
-    @Override
-    public boolean isAlbum() {
-        // This API call is for albums only
-        return true;
+    protected void setLowQualitySize(String lowQualitySize) {
+        mLowQuality = lowQualitySize;
     }
 
-    @Override
-    public boolean isSuccessful() {
-        // This API always returns true in the response, determine succes from non-empty album instead
-        return (data != null && !data.isEmpty());
+    protected void setPreviewSize(String previewSize) {
+        mPreviewQuality = previewSize;
     }
 }

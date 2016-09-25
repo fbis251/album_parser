@@ -18,56 +18,70 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.imgur.model;
+package com.fernandobarillas.albumparser.imgur.model.v3;
 
-import com.fernandobarillas.albumparser.media.BaseMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMedia;
+import com.fernandobarillas.albumparser.media.BaseApiResponse;
+import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.Generated;
 
-/**
- * Created by fb on 5/3/16.
- */
-
 @Generated("org.jsonschema2pojo")
-public class Data extends BaseMediaAlbum {
+public class AlbumResponseV3 extends BaseApiResponse {
 
-    @SerializedName("count")
+    @SerializedName("data")
     @Expose
-    public int count;
-    @SerializedName("images")
+    public AlbumDataV3 data;
+    @SerializedName("success")
     @Expose
-    public List<Image> images = new ArrayList<>();
-
-    private List<IMedia> mMediaList;
+    public boolean     success;
+    @SerializedName("status")
+    @Expose
+    public int         status;
 
     @Override
-    public List<IMedia> getAlbumMedia() {
-        if (mMediaList == null) {
-            mMediaList = new ArrayList<>();
-            mMediaList.addAll(images);
-        }
-        return mMediaList;
-    }
-
-    @Override
-    public int getCount() {
-        return count;
+    public IMediaAlbum getAlbum() {
+        return data;
     }
 
     @Override
     public URL getPreviewUrl() {
-        if (images != null && images.size() > 0) {
-            // Return the first image as the preview
-            return getAlbumMedia().get(0).getPreviewUrl();
-        }
+        return (data != null) ? data.getPreviewUrl() : null;
+    }
 
-        return null;
+    @Override
+    public boolean isAlbum() {
+        // This API call is for albums only
+        return true;
+    }
+
+    @Override
+    public boolean isSuccessful() {
+        return success && data != null;
+    }
+
+    @Override
+    public String toString() {
+        return "AlbumResponse{"
+                + "data="
+                + data
+                + ", success="
+                + success
+                + ", status="
+                + status
+                + '}';
+    }
+
+    protected void setLowQualitySize(String lowQualitySize) {
+        if (data == null) return;
+        data.setLowQualitySize(lowQualitySize);
+    }
+
+    protected void setPreviewSize(String previewSize) {
+        if (data == null) return;
+        data.setPreviewSize(previewSize);
     }
 }

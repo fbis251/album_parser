@@ -36,7 +36,7 @@ import static com.fernandobarillas.albumparser.imgur.model.Image.MEDIUM_THUMBNAI
 import static com.fernandobarillas.albumparser.imgur.model.Image.ORIGINAL;
 
 @Generated("org.jsonschema2pojo")
-public class ImageData extends BaseMedia implements IMedia {
+public class ImageDataV3 extends BaseMedia implements IMedia {
 
     @SerializedName("id")
     @Expose
@@ -111,6 +111,9 @@ public class ImageData extends BaseMedia implements IMedia {
     @Expose
     public boolean isAd;
 
+    private String mPreviewQuality = MEDIUM_THUMBNAIL;
+    private String mLowQuality     = HUGE_THUMBNAIL;
+
     @Override
     public int getByteSize(boolean highQuality) {
         if (highQuality) {
@@ -134,7 +137,7 @@ public class ImageData extends BaseMedia implements IMedia {
 
     @Override
     public URL getPreviewUrl() {
-        return getImageUrl(MEDIUM_THUMBNAIL);
+        return getImageUrl(mPreviewQuality);
     }
 
     @Override
@@ -146,7 +149,7 @@ public class ImageData extends BaseMedia implements IMedia {
     public URL getUrl(boolean highQuality) {
         // Imgur doesn't support low quality animations/video
         if (animated) return highQuality ? getImageUrl(ORIGINAL) : null;
-        return (highQuality) ? getImageUrl(ORIGINAL) : getImageUrl(HUGE_THUMBNAIL);
+        return (highQuality) ? getImageUrl(ORIGINAL) : getImageUrl(mLowQuality);
     }
 
     @Override
@@ -219,6 +222,14 @@ public class ImageData extends BaseMedia implements IMedia {
                 + ", isAd="
                 + isAd
                 + '}';
+    }
+
+    public void setLowQuality(String lowQuality) {
+        if (lowQuality != null) mLowQuality = lowQuality;
+    }
+
+    public void setPreviewQuality(String previewQuality) {
+        if (previewQuality != null) mPreviewQuality = previewQuality;
     }
 
     private URL getImageUrl(String quality) {

@@ -28,16 +28,16 @@ import com.google.gson.annotations.SerializedName;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class ImageResponse extends BaseApiResponse {
+public class ImageResponseV3 extends BaseApiResponse {
     @SerializedName("data")
     @Expose
-    public ImageData data;
+    public ImageDataV3 data;
     @SerializedName("success")
     @Expose
-    public boolean   success;
+    public boolean     success;
     @SerializedName("status")
     @Expose
-    public int       status;
+    public int         status;
 
     @Override
     public IMedia getMedia() {

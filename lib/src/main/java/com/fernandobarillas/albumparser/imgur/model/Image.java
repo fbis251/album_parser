@@ -81,6 +81,9 @@ public class Image extends BaseMedia {
     @Expose
     public String  datetime;
 
+    private String mLowQuality     = HUGE_THUMBNAIL;
+    private String mPreviewQuality = MEDIUM_THUMBNAIL;
+
     @Override
     public int getByteSize(boolean highQuality) {
         // Imgur only returns size for original quality images
@@ -100,7 +103,7 @@ public class Image extends BaseMedia {
 
     @Override
     public URL getPreviewUrl() {
-        return getImageUrl(MEDIUM_THUMBNAIL);
+        return getImageUrl(mPreviewQuality);
     }
 
     @Override
@@ -112,7 +115,7 @@ public class Image extends BaseMedia {
     public URL getUrl(boolean highQuality) {
         // Imgur doesn't support low quality animations/video
         if (animated) return highQuality ? getImageUrl(ORIGINAL) : null;
-        return (highQuality) ? getImageUrl(ORIGINAL) : getImageUrl(HUGE_THUMBNAIL);
+        return (highQuality) ? getImageUrl(ORIGINAL) : getImageUrl(mLowQuality);
     }
 
     @Override
@@ -163,5 +166,13 @@ public class Image extends BaseMedia {
 
         String resultUrl = ImgurApi.IMAGE_URL + "/" + hash + quality + newExt;
         return ParseUtils.getUrlObject(resultUrl);
+    }
+
+    public void setLowQuality(String lowQuality) {
+        if (lowQuality != null) mLowQuality = lowQuality;
+    }
+
+    public void setPreviewQuality(String previewQuality) {
+        if (previewQuality != null) mPreviewQuality = previewQuality;
     }
 }

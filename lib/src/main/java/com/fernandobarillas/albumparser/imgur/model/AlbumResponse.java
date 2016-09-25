@@ -18,7 +18,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.imgur.model.v3;
+package com.fernandobarillas.albumparser.imgur.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
@@ -29,9 +29,12 @@ import java.net.URL;
 
 import javax.annotation.Generated;
 
+/**
+ * Created by fb on 5/3/16.
+ */
+
 @Generated("org.jsonschema2pojo")
 public class AlbumResponse extends BaseApiResponse {
-
     @SerializedName("data")
     @Expose
     public AlbumData data;
@@ -60,18 +63,17 @@ public class AlbumResponse extends BaseApiResponse {
 
     @Override
     public boolean isSuccessful() {
-        return success && data != null;
+        // This API always returns true in the response, determine succes from non-empty album instead
+        return (data != null && !data.isEmpty());
     }
 
-    @Override
-    public String toString() {
-        return "AlbumResponse{"
-                + "data="
-                + data
-                + ", success="
-                + success
-                + ", status="
-                + status
-                + '}';
+    protected void setLowQualitySize(String lowQualitySize) {
+        if (data == null) return;
+        data.setLowQualitySize(lowQualitySize);
+    }
+
+    protected void setPreviewSize(String previewSize) {
+        if (data == null) return;
+        data.setPreviewSize(previewSize);
     }
 }

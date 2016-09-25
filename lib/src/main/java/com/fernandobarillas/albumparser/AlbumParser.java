@@ -32,6 +32,7 @@ import com.fernandobarillas.albumparser.giphy.GiphyParser;
 import com.fernandobarillas.albumparser.giphy.api.GiphyApi;
 import com.fernandobarillas.albumparser.imgur.ImgurParser;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
+import com.fernandobarillas.albumparser.imgur.model.Image;
 import com.fernandobarillas.albumparser.media.DirectMedia;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.streamable.StreamableParser;
@@ -81,9 +82,15 @@ public class AlbumParser {
 
     /** The OkHttpClient instance to use when making all the API calls */
     private OkHttpClient mClient;
-    private String       mGiphyApiKey;
-    private String       mImgurClientId;
-    private String       mTumblrApiKey;
+
+    // API Keys
+    private String mGiphyApiKey;
+    private String mImgurClientId;
+    private String mTumblrApiKey;
+
+    // Default preview and low quality URL dimensions/sizes
+    private String mDefaultImgurPreviewSize;
+    private String mDefaultImgurLowQualitySize;
 
     /**
      * Instantiates an AlbumParser instance. The library will use its own OkHttpClient instance to
@@ -225,7 +232,14 @@ public class AlbumParser {
             case GIPHY:
                 return new GiphyParser(mClient, mGiphyApiKey).parse(mediaUrl);
             case IMGUR:
-                return new ImgurParser(mClient, mImgurClientId).parse(mediaUrl);
+                ImgurParser imgurParser = new ImgurParser(mClient, mImgurClientId);
+                if (mDefaultImgurLowQualitySize != null) {
+                    imgurParser.setDefaultLowQualitySize(mDefaultImgurLowQualitySize);
+                }
+                if (mDefaultImgurPreviewSize != null) {
+                    imgurParser.setDefaultPreviewSize(mDefaultImgurPreviewSize);
+                }
+                return imgurParser.parse(mediaUrl);
             case STREAMABLE:
                 return new StreamableParser(mClient).parse(mediaUrl);
             case VIDBLE:
@@ -243,6 +257,28 @@ public class AlbumParser {
                 // Media is not supported or a URL that doesn't point to any media passed in
                 throw new InvalidMediaUrlException(mediaUrl);
         }
+    }
+
+    /**
+     * Sets the default size of the low quality URL imgur returns
+     *
+     * @param lowQualitySize The default size of the low quality URL Imgur returns. Look at {@link
+     *                       Image} for available sizes. Examples: {@link Image#ORIGINAL}, {@link
+     *                       Image#GIANT_THUMBNAIL}
+     */
+    public void setDefaultImgurLowQualitySize(String lowQualitySize) {
+        mDefaultImgurLowQualitySize = lowQualitySize;
+    }
+
+    /**
+     * Sets the default size of the preview URL imgur returns
+     *
+     * @param previewSize The default size of the preview URL Imgur returns. Look at {@link Image}
+     *                    for available sizes. Examples: {@link Image#BIG_SQUARE}, {@link
+     *                    Image#MEDIUM_THUMBNAIL}
+     */
+    public void setDefaultImgurPreviewSize(String previewSize) {
+        mDefaultImgurPreviewSize = previewSize;
     }
 
     private static int getMediaProvider(URL url) {

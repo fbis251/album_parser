@@ -20,9 +20,9 @@
 
 package com.fernandobarillas.albumparser.imgur.api;
 
-import com.fernandobarillas.albumparser.imgur.model.ImgurResponse;
-import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponse;
-import com.fernandobarillas.albumparser.imgur.model.v3.ImageResponse;
+import com.fernandobarillas.albumparser.imgur.model.AlbumResponse;
+import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponseV3;
+import com.fernandobarillas.albumparser.imgur.model.v3.ImageResponseV3;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -41,15 +41,15 @@ public interface ImgurApi {
     String CLIENT_ID_HEADER_PREFIX = "Client-ID";
 
     @GET("/ajaxalbums/getimages/{hash}/hit.json?all=true")
-    Call<ImgurResponse> getAlbumData(@Path("hash") String hash);
+    Call<AlbumResponse> getAlbumData(@Path("hash") String hash);
 
     // https://api.imgur.com/3/album/{id}
     @GET(API_URL_V3 + "/album/{hash}")
-    Call<AlbumResponse> getV3Album(@Header("Authorization") String authHeader,
+    Call<AlbumResponseV3> getV3Album(@Header("Authorization") String authHeader,
             @Path("hash") String hash);
 
     // https://api.imgur.com/3/image/{id}
     @GET(API_URL_V3 + "/image/{hash}")
-    Call<ImageResponse> getV3Image(@Header("Authorization") String authHeader,
+    Call<ImageResponseV3> getV3Image(@Header("Authorization") String authHeader,
             @Path("hash") String hash);
 }
