@@ -36,11 +36,12 @@ import retrofit2.Response;
  * Parser for the Streamable API
  */
 public class StreamableParser extends AbstractApiParser {
-    public StreamableParser(OkHttpClient client) {
-        super(client);
-    }
 
     public StreamableParser() {
+    }
+
+    public StreamableParser(OkHttpClient client) {
+        super(client);
     }
 
     @Override
