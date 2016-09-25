@@ -183,11 +183,11 @@ public class AlbumDataV3 extends BaseMediaAlbum {
                 + '}';
     }
 
-    protected void setLowQualitySize(String lowQualitySize) {
+    protected void setLowQuality(String lowQualitySize) {
         mLowQuality = lowQualitySize;
     }
 
-    protected void setPreviewSize(String previewSize) {
+    protected void setPreviewQuality(String previewSize) {
         mPreviewQuality = previewSize;
     }
 }

@@ -110,12 +110,20 @@ public class ImgurParser extends AbstractApiParser {
                 Response<AlbumResponseV3> serviceResponse =
                         service.getV3Album(clientIdHeader, hash).execute();
                 AlbumResponseV3 apiResponse = serviceResponse.body();
+                if (apiResponse != null) {
+                    apiResponse.setLowQuality(mDefaultLowQualitySize);
+                    apiResponse.setPreviewQuality(mDefaultPreviewSize);
+                }
                 return getParserResponse(mediaUrl, apiResponse);
             }
 
             // Make an API call to get the album images via the old API
             Response<AlbumResponse> serviceResponse = service.getAlbumData(hash).execute();
             AlbumResponse apiResponse = serviceResponse.body();
+            if (apiResponse != null) {
+                apiResponse.setLowQuality(mDefaultLowQualitySize);
+                apiResponse.setPreviewQuality(mDefaultPreviewSize);
+            }
             return getParserResponse(mediaUrl, apiResponse);
         } else {
             if (clientIdHeader != null) {
@@ -123,6 +131,10 @@ public class ImgurParser extends AbstractApiParser {
                 Response<ImageResponseV3> serviceResponse =
                         service.getV3Image(clientIdHeader, hash).execute();
                 ImageResponseV3 apiResponse = serviceResponse.body();
+                if (apiResponse != null) {
+                    apiResponse.setLowQuality(mDefaultLowQualitySize);
+                    apiResponse.setPreviewQuality(mDefaultPreviewSize);
+                }
                 return getParserResponse(mediaUrl, apiResponse);
             }
 
@@ -150,8 +162,10 @@ public class ImgurParser extends AbstractApiParser {
      * Sets the default size of the low quality URL imgur returns
      *
      * @param lowQualitySize The default size of the low quality URL Imgur returns. Look at {@link
-     *                       Image} for available sizes. Examples: {@link Image#ORIGINAL}, {@link
-     *                       Image#GIANT_THUMBNAIL}
+     *                       Image} for available sizes. Examples: {@link Image#HUGE_THUMBNAIL},
+     *                       {@link Image#GIANT_THUMBNAIL}. Notice, setting this to {@link
+     *                       Image#ORIGINAL} can return URLs that weren't intended, for example, an
+     *                       mp4 instead of a .jpg
      */
     public void setDefaultLowQualitySize(String lowQualitySize) {
         mDefaultLowQualitySize = lowQualitySize;
@@ -163,7 +177,9 @@ public class ImgurParser extends AbstractApiParser {
      *
      * @param previewSize The default size of the preview URL Imgur returns. Look at {@link Image}
      *                    for available sizes. Examples: {@link Image#BIG_SQUARE}, {@link
-     *                    Image#MEDIUM_THUMBNAIL}
+     *                    Image#MEDIUM_THUMBNAIL}. Notice, setting this to {@link Image#ORIGINAL}
+     *                    can return URLs that weren't intended, for example, an mp4 instead of a
+     *                    .jpg
      */
     public void setDefaultPreviewSize(String previewSize) {
         mDefaultPreviewSize = previewSize;

@@ -60,4 +60,14 @@ public class ImageResponseV3 extends BaseApiResponse {
                 + status
                 + '}';
     }
+
+    public void setLowQuality(String lowQuality) {
+        if (data == null) return;
+        data.setLowQuality(lowQuality);
+    }
+
+    public void setPreviewQuality(String previewQuality) {
+        if (data == null) return;
+        data.setPreviewQuality(previewQuality);
+    }
 }

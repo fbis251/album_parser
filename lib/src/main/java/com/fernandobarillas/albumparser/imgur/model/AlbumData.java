@@ -78,11 +78,11 @@ public class AlbumData extends BaseMediaAlbum {
         return null;
     }
 
-    protected void setLowQualitySize(String lowQualitySize) {
+    protected void setLowQuality(String lowQualitySize) {
         mLowQuality = lowQualitySize;
     }
 
-    protected void setPreviewSize(String previewSize) {
+    protected void setPreviewQuality(String previewSize) {
         mPreviewQuality = previewSize;
     }
 }

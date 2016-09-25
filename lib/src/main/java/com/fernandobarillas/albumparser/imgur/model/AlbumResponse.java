@@ -67,13 +67,13 @@ public class AlbumResponse extends BaseApiResponse {
         return (data != null && !data.isEmpty());
     }
 
-    protected void setLowQualitySize(String lowQualitySize) {
+    public void setLowQuality(String lowQualitySize) {
         if (data == null) return;
-        data.setLowQualitySize(lowQualitySize);
+        data.setLowQuality(lowQualitySize);
     }
 
-    protected void setPreviewSize(String previewSize) {
+    public void setPreviewQuality(String previewSize) {
         if (data == null) return;
-        data.setPreviewSize(previewSize);
+        data.setPreviewQuality(previewSize);
     }
 }
