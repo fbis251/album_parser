@@ -20,20 +20,19 @@
 
 package com.fernandobarillas.albumparser.xkcd.model;
 
-import com.fernandobarillas.albumparser.media.BaseMedia;
-import com.fernandobarillas.albumparser.util.ParseUtils;
+import com.fernandobarillas.albumparser.media.BaseApiResponse;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.net.URL;
 
 import javax.annotation.Generated;
 
 /**
- * XKCD API Response Java Object Model
+ * XKCD API Response
  */
 @Generated("org.jsonschema2pojo")
-public class XkcdResponse extends BaseMedia {
+//public class XkcdResponse extends BaseMedia {
+public class XkcdResponse extends BaseApiResponse {
     @SerializedName("month")
     @Expose
     public String month;
@@ -68,21 +67,19 @@ public class XkcdResponse extends BaseMedia {
     @Expose
     public String day;
 
+    private XkcdImage mImage;
+
     @Override
-    public String getDescription() {
-        return alt;
+    public IMedia getMedia() {
+        if (mImage == null) {
+            mImage = new XkcdImage(title, alt, img);
+        }
+
+        return mImage;
     }
 
     @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public URL getUrl(boolean highQuality) {
-        if (img == null) return null;
-        // XKCD doesn't support high/low quality URLs
-        String imageUrl = img.replace("http://", "https://"); // Always return https URLs
-        return ParseUtils.getUrlObject(imageUrl);
+    public boolean isSuccessful() {
+        return img != null;
     }
 }

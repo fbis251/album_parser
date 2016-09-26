@@ -18,21 +18,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.xkcd.api;
+package com.fernandobarillas.albumparser.xkcd.model;
 
-import com.fernandobarillas.albumparser.xkcd.model.XkcdResponse;
+import com.fernandobarillas.albumparser.media.BaseMedia;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
+import java.net.URL;
 
 /**
- * Retrofit Interface for the XKCD API
+ * XKCD API Response Image
  */
-public interface XkcdApi {
-    String BASE_DOMAIN = "xkcd.com"; // No trailing slash!
-    String API_URL     = "https://" + BASE_DOMAIN;
+public class XkcdImage extends BaseMedia {
+    private String mTitle;
+    private String mDescription;
+    private URL    mHighQualityUrl;
 
-    @GET("/{number}/info.0.json")
-    Call<XkcdResponse> getComic(@Path("number") long number);
+    public XkcdImage(String title, String description, String url) {
+        mTitle = title;
+        mDescription = description;
+
+        if (url != null) {
+            String imageUrl = url.replace("http://", "https://"); // Always return https URLs
+            mHighQualityUrl = ParseUtils.getUrlObject(imageUrl);
+        }
+    }
+
+    @Override
+    public String getDescription() {
+        return mDescription;
+    }
+
+    @Override
+    public String getTitle() {
+        return mTitle;
+    }
+
+    @Override
+    public URL getUrl(boolean highQuality) {
+        // XKCD doesn't support low quality URLs
+        if (!highQuality) return null;
+        return mHighQualityUrl;
+    }
 }

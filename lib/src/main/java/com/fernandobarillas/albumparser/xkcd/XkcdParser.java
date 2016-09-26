@@ -25,6 +25,7 @@ import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.xkcd.api.XkcdApi;
+import com.fernandobarillas.albumparser.xkcd.model.XkcdImage;
 import com.fernandobarillas.albumparser.xkcd.model.XkcdResponse;
 
 import java.io.IOException;
@@ -57,31 +58,64 @@ public class XkcdParser extends AbstractApiParser {
 
     @Override
     public String getHash(URL mediaUrl) {
-        if (mediaUrl == null) return null; // Passed in String wasn't a valid URL
+        if (!isValidDomain(mediaUrl)) throw new InvalidMediaUrlException(mediaUrl);
+        String path = mediaUrl.getPath();
+        String hash;
+        if (path.startsWith("/comics/")) {
+            // Direct comic URL
+            hash = ParseUtils.hashRegex(path, "(/comics/\\w+)");
+        } else {
+            hash = ParseUtils.hashRegex(mediaUrl.getPath(), "^/(\\d+)/?$");
+            getComicNumber(mediaUrl, hash);
+        }
+        if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
+        return hash;
+    }
+
+    @Override
+    protected boolean isValidDomain(URL mediaUrl) {
+        if (mediaUrl == null) return false;
         String domain = mediaUrl.getHost();
-        if (domain.equalsIgnoreCase("what-if.xkcd.com")) return null;
-        return ParseUtils.hashRegex(mediaUrl.getPath(), "/(\\d+)");
+        String baseDomain = getBaseDomain();
+        return baseDomain.equalsIgnoreCase(domain) || ("imgs." + baseDomain).equalsIgnoreCase(
+                domain);
     }
 
     @Override
     public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
-        String comicNumberString = getHash(mediaUrl);
-        if (comicNumberString == null) {
+        String hash = getHash(mediaUrl);
+        if (hash == null) {
             throw new InvalidMediaUrlException(mediaUrl);
         }
 
-        int comicNumber;
+        if (hash.startsWith("/comics/") && ParseUtils.isImageExtension(mediaUrl)) {
+            // Direct link to an xkcd comic image
+            XkcdImage image = new XkcdImage(null, null, mediaUrl.toString());
+            ParserResponse parserResponse = new ParserResponse(image);
+            parserResponse.setOriginalUrl(mediaUrl);
+            return parserResponse;
+        }
+
+        long comicNumber = getComicNumber(mediaUrl, hash);
+        XkcdApi service = getRetrofit().create(XkcdApi.class);
+        Response<XkcdResponse> serviceResponse = service.getComic(comicNumber).execute();
+        XkcdResponse apiResponse = serviceResponse.body();
+        return getParserResponse(mediaUrl, apiResponse);
+    }
+
+    private long getComicNumber(final URL mediaUrl, final String hash)
+            throws InvalidMediaUrlException {
+        long comicNumber;
         try {
-            comicNumber = Integer.parseInt(comicNumberString);
+            comicNumber = Long.parseLong(hash);
+            if (comicNumber < 1) {
+                // XKCD comic numbers 1 or higher
+                throw new InvalidMediaUrlException(mediaUrl);
+            }
         } catch (NumberFormatException e) {
             // XKCD API only supports getting info via an integer, the URL isn't valid
             throw new InvalidMediaUrlException(mediaUrl);
         }
-
-        XkcdApi service = getRetrofit().create(XkcdApi.class);
-        Response<XkcdResponse> apiResponse = service.getComic(comicNumber).execute();
-        XkcdResponse xkcdResponse = apiResponse.body();
-
-        return new ParserResponse(xkcdResponse);
+        return comicNumber;
     }
 }

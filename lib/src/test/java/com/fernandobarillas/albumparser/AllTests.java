@@ -20,6 +20,7 @@
 
 package com.fernandobarillas.albumparser;
 
+import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
@@ -29,6 +30,7 @@ import com.fernandobarillas.albumparser.parser.ImgurParserTest;
 import com.fernandobarillas.albumparser.parser.TumblrParserTest;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 
+import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -60,6 +62,22 @@ public class AllTests {
         assertNotNull(baseDomain + " Parser Domain", apiUrl);
         assertNotNull(baseDomain + " Parser API", apiUrl);
         assertEquals(baseDomain + " API uses HTTPS", "https", apiUrl.getProtocol());
+    }
+
+    public static void assertInvalidHashesThrowException(final AbstractApiParser parser,
+            final Map<String, String> invalidHashes) {
+        for (Map.Entry<String, String> entry : invalidHashes.entrySet()) {
+            String exceptionUrl = entry.getKey();
+            String url = entry.getValue();
+            String expectedMessage =
+                    "URL not a media URL or not supported by library: url = [" + exceptionUrl + "]";
+            try {
+                parser.getHash(url);
+                Assert.fail(url + " should have thrown InvalidMediaUrlException");
+            } catch (InvalidMediaUrlException e) {
+                assertEquals(url + " Exception message", expectedMessage, e.getMessage());
+            }
+        }
     }
 
     public static void compareAlbum(final URL originalUrl, final IMediaAlbum expectedAlbum,
