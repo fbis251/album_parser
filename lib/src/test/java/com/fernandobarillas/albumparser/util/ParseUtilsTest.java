@@ -23,6 +23,7 @@ package com.fernandobarillas.albumparser.util;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -136,17 +137,10 @@ public class ParseUtilsTest {
         String urlWithoutParams = "http://example.com/";
         assertEquals("URL without params", null, ParseUtils.getQueryMap(urlWithoutParams));
 
-        Map<String, String> expectedQueryMap = new HashMap<>();
-        expectedQueryMap.put("key1", "value1");
-        expectedQueryMap.put("key2", "value2");
         String urlWithParams = "http://example.com/?key1=value1&key2=value2";
-        Map<String, String> queryMap = ParseUtils.getQueryMap(urlWithParams);
-        for (Map.Entry<String, String> queryParam : expectedQueryMap.entrySet()) {
-            String queryKey = queryParam.getKey();
-            String queryValue = queryParam.getValue();
-            assertTrue(queryKey + " contains key", queryMap.containsKey(queryKey));
-            assertEquals(queryKey + " value equal", queryValue, queryMap.get(queryKey));
-        }
+        testQueryMapResult(ParseUtils.getQueryMap(urlWithParams));
+        URI UriWithParams = URI.create("http://example.com/?key1=value1&key2=value2");
+        testQueryMapResult(ParseUtils.getQueryMap(UriWithParams));
     }
 
     @Test
@@ -363,6 +357,18 @@ public class ParseUtilsTest {
 
         for (String url : INVALID_MEDIA_URLs) {
             assertFalse("url = [" + url + ']', isVideoExtension(url));
+        }
+    }
+
+    private void testQueryMapResult(final Map<String, String> queryMap) {
+        Map<String, String> expectedQueryMap = new HashMap<>();
+        expectedQueryMap.put("key1", "value1");
+        expectedQueryMap.put("key2", "value2");
+        for (Map.Entry<String, String> queryParam : expectedQueryMap.entrySet()) {
+            String queryKey = queryParam.getKey();
+            String queryValue = queryParam.getValue();
+            assertTrue(queryKey + " contains key", queryMap.containsKey(queryKey));
+            assertEquals(queryKey + " value equal", queryValue, queryMap.get(queryKey));
         }
     }
 }

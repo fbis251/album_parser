@@ -23,6 +23,7 @@ package com.fernandobarillas.albumparser.util;
 import com.fernandobarillas.albumparser.media.IMedia;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -88,19 +89,24 @@ public class ParseUtils {
      */
     public static Map<String, String> getQueryMap(URL url) {
         if (url == null) return null;
-        String query = url.getQuery();
-        if (query == null) return null;
+        return buildQueryMap(url.getQuery());
+    }
 
-        String[] params = query.split("&");
-        Map<String, String> map = new HashMap<>();
-        for (String param : params) {
-            String[] currentParam = param.split("=");
-            if (currentParam.length != 2) continue;
-            String name = currentParam[0];
-            String value = currentParam[1];
-            map.put(name, value);
-        }
-        return map;
+
+    /**
+     * Parses a URLs query parameters into a Map for easier parsing of options.
+     * For example, a URL http://example.com?one=1&two=true
+     * would return the map:
+     * K: "one", V: "1"
+     * K: "two", V: "true"
+     *
+     * @param uri The URI to attempt to map the query parameters for
+     * @return Null if an invalid URI is passed in, otherwise a Map containing all the keys and
+     * values contained in the URI query parameters
+     */
+    public static Map<String, String> getQueryMap(URI uri) {
+        if (uri == null) return null;
+        return buildQueryMap(uri.getQuery());
     }
 
     /**
@@ -284,6 +290,21 @@ public class ParseUtils {
         }
 
         return false;
+    }
+
+    private static Map<String, String> buildQueryMap(String query) {
+        if (query == null) return null;
+
+        String[] params = query.split("&");
+        Map<String, String> map = new HashMap<>();
+        for (String param : params) {
+            String[] currentParam = param.split("=");
+            if (currentParam.length != 2) continue;
+            String name = currentParam[0];
+            String value = currentParam[1];
+            map.put(name, value);
+        }
+        return map;
     }
 
     /**
