@@ -77,8 +77,9 @@ public class XkcdParser extends AbstractApiParser {
         if (mediaUrl == null) return false;
         String domain = mediaUrl.getHost();
         String baseDomain = getBaseDomain();
-        return baseDomain.equalsIgnoreCase(domain) || ("imgs." + baseDomain).equalsIgnoreCase(
-                domain);
+        return baseDomain.equalsIgnoreCase(domain)
+                || ("m." + baseDomain).equalsIgnoreCase(domain)
+                || ("imgs." + baseDomain).equalsIgnoreCase(domain);
     }
 
     @Override
