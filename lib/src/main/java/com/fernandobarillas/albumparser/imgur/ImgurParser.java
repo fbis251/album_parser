@@ -27,6 +27,7 @@ import com.fernandobarillas.albumparser.imgur.model.AlbumResponse;
 import com.fernandobarillas.albumparser.imgur.model.Image;
 import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponseV3;
 import com.fernandobarillas.albumparser.imgur.model.v3.ImageResponseV3;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
@@ -37,10 +38,16 @@ import java.net.URL;
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
 
+import static com.fernandobarillas.albumparser.vidble.VidbleUtils.isAlbum;
+
 /**
  * Parser for the Imgur API
  */
 public class ImgurParser extends AbstractApiParser {
+
+    private static final int ALBUM_HASH_LENGTH = 5; // Most recent album hashes are exactly 5 chars
+    private static final int IMAGE_HASH_LENGTH = 7; // Most recent image hashes are exactly 7 chars
+
     private String mImgurClientId = null;
     private String mPreviewSize;
     private String mLowQualitySize;
@@ -123,9 +130,34 @@ public class ImgurParser extends AbstractApiParser {
             clientIdHeader = ImgurApi.CLIENT_ID_HEADER_PREFIX + " " + mImgurClientId;
         }
 
+        boolean hasApiKey = clientIdHeader != null;
+        boolean isAlbum = hash.length() == ALBUM_HASH_LENGTH;
+        boolean isOldUrl = isAlbum && ParseUtils.isDirectUrl(mediaUrl); // Direct URL, 5 char hash
+
+        // Not an album, no API key set or this is a pre-API direct URL
+        if (!(isAlbum || hasApiKey) || isOldUrl) {
+            // Generate a new image object for the hash we got without making an API call at all.
+            // The extension is only guessed at if the original extension was null, so even though
+            // you might make a request for {hash}.jpg the Imgur servers might still return a GIF
+            // in the response
+            Image image = new Image();
+            String ext = ParseUtils.getExtension(mediaUrl);
+            if (ext != null) {
+                image.ext = "." + ext;
+            }
+            image.hash = hash;
+            image.animated =
+                    ParseUtils.isVideoExtension(mediaUrl) || ParseUtils.isGifExtension(mediaUrl);
+            image.setLowQuality(mLowQualitySize);
+            image.setPreviewQuality(mPreviewSize);
+            ParserResponse parserResponse = new ParserResponse(image);
+            parserResponse.setOriginalUrl(mediaUrl);
+            return parserResponse;
+        }
+
         ImgurApi service = getRetrofit().create(ImgurApi.class);
-        if (ImgurUtils.isAlbum(hash)) {
-            if (clientIdHeader != null) {
+        if (isAlbum) {
+            if (hasApiKey) {
                 // Use API v3 if the client ID is set
                 Response<AlbumResponseV3> serviceResponse =
                         service.getV3Album(clientIdHeader, hash).execute();
@@ -146,36 +178,47 @@ public class ImgurParser extends AbstractApiParser {
             }
             return getParserResponse(mediaUrl, apiResponse);
         } else {
-            if (clientIdHeader != null) {
-                // Use API v3 if the client ID is set
-                Response<ImageResponseV3> serviceResponse =
-                        service.getV3Image(clientIdHeader, hash).execute();
-                ImageResponseV3 apiResponse = serviceResponse.body();
-                if (apiResponse != null) {
-                    apiResponse.setLowQuality(mLowQualitySize);
-                    apiResponse.setPreviewQuality(mPreviewSize);
-                }
-                return getParserResponse(mediaUrl, apiResponse);
+            // Use API v3 if the client ID is set
+            Response<ImageResponseV3> serviceResponse =
+                    service.getV3Image(clientIdHeader, hash).execute();
+            ImageResponseV3 apiResponse = serviceResponse.body();
+            if (apiResponse != null) {
+                apiResponse.setLowQuality(mLowQualitySize);
+                apiResponse.setPreviewQuality(mPreviewSize);
             }
-
-            // Last ditch effort, generate a new image object for the hash we got without making
-            // an API call at all. The extension is only guessed at if the original extension was
-            // null, so even though you might make a request for {hash}.jpg the Imgur servers might
-            // still return a GIF in the response
-            Image image = new Image();
-            String ext = ParseUtils.getExtension(mediaUrl);
-            if (ext != null) {
-                image.ext = "." + ext;
-            }
-            image.hash = hash;
-            image.animated =
-                    ParseUtils.isVideoExtension(mediaUrl) || ParseUtils.isGifExtension(mediaUrl);
-            image.setLowQuality(mLowQualitySize);
-            image.setPreviewQuality(mPreviewSize);
-            ParserResponse parserResponse = new ParserResponse(image);
-            parserResponse.setOriginalUrl(mediaUrl);
-            return parserResponse;
+            return getParserResponse(mediaUrl, apiResponse);
         }
+    }
+
+    /**
+     * Attempts to return a direct link to an image based on a hash alone, without doing an HTTP
+     * call to the Imgur API. This method might return an invalid URL since it attempts to make an
+     * educated guess at a URL. Some problematic hashes are for URLs that predate the Imgur API
+     *
+     * @param hash      The hash to get an image URL for
+     * @param extension The extension to use for the URL. This should not have a prefixed period,
+     *                  Example: jpg not .jpg
+     * @return A URL to an image if the passed in hash was a valid non-album hash, null otherwise;
+     */
+    public static String getImageUrl(String hash, String quality, String extension) {
+        String newExt = (extension == null) ? IMedia.EXT_JPG : extension;
+        if (hash == null) return null;
+        if (hash.length() <= ALBUM_HASH_LENGTH) return null;
+        if (isAlbum(hash)) return null;
+        return String.format("%s/%s%s.%s", ImgurApi.IMAGE_URL, hash, quality, newExt);
+    }
+
+
+    /**
+     * Attempts to return a direct link to an image based on a hash alone, without doing an HTTP
+     * call to the Imgur API. This method might return an invalid URL since it attempts to make an
+     * educated guess at a URL. Some problematic hashes are for URLs that predate the Imgur API
+     *
+     * @param hash The hash to get an image URL for
+     * @return A URL to an image if the passed in hash was a valid non-album hash, null otherwise;
+     */
+    public static String getImageUrl(String hash) {
+        return getImageUrl(hash, Image.ORIGINAL, null);
     }
 
     /**
@@ -190,7 +233,6 @@ public class ImgurParser extends AbstractApiParser {
     public void setLowQualitySize(String lowQualitySize) {
         mLowQualitySize = lowQualitySize;
     }
-
 
     /**
      * Sets the default size of the preview URL imgur returns

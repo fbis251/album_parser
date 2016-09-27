@@ -20,7 +20,7 @@
 
 package com.fernandobarillas.albumparser.imgur.model.v3;
 
-import com.fernandobarillas.albumparser.imgur.ImgurUtils;
+import com.fernandobarillas.albumparser.imgur.ImgurParser;
 import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
@@ -241,7 +241,7 @@ public class ImageDataV3 extends BaseMedia implements IMedia {
                 extension = EXT_MP4;
             }
         }
-        String resultUrl = ImgurUtils.getImageUrl(id, quality, extension);
+        String resultUrl = ImgurParser.getImageUrl(id, quality, extension);
         return ParseUtils.getUrlObject(resultUrl);
     }
 }

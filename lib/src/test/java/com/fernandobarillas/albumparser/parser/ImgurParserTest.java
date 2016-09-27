@@ -106,6 +106,7 @@ public class ImgurParserTest implements IParserTest {
         validHashes.put("zis2t", "http://imgur.com/r/diy/zis2t"); // /r/ prefix album
 
         // Images
+        validHashes.put("0MlEZ", "http://i.imgur.com/0MlEZ.jpg"); // Pre-API direct URL
         validHashes.put("awsGf9p", "http://imgur.com/awsGf9p"); // No prefix image URL
         validHashes.put("sCjRLQG", "http://i.imgur.com/sCjRLQG.jpg?1"); // Direct url with param
         validHashes.put("PBTrqAA", "https://imgur.com/gallery/PBTrqAA"); // gallery prefix
@@ -124,6 +125,7 @@ public class ImgurParserTest implements IParserTest {
         validHashes.put("1234567", "http://i.imgur.com/1234567.gif");
         validHashes.put("abcdefg", "http://i.imgur.com/abcdefg.jpg");
 
+        // Valid image variation suffixes
         validHashes.put("1234567", "http://i.imgur.com/1234567s.jpg");
         validHashes.put("1234567", "http://i.imgur.com/1234567b.jpg");
         validHashes.put("1234567", "http://i.imgur.com/1234567t.jpg");
@@ -304,6 +306,22 @@ public class ImgurParserTest implements IParserTest {
                 getV3AlbumExpectedParserResponse(albumUrl, false);
         ParserResponse parserResponse = mImgurParserNoApiKey.parse(albumUrl);
         compareParserResponse(albumUrl, expectedParserResponse, parserResponse);
+    }
+
+    // Tests a direct JPG URL with 5 char hash with no API call
+    @Test
+    public void testOldFormatJpgWithNoApiCall() throws IOException {
+        URL imgurUrl = ParseUtils.getUrlObject("http://i.imgur.com/0MlEZ.jpg");
+        String hash = "0MlEZ";
+        ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, false).build();
+        ExpectedParserResponse expectedParserResponse = new ExpectedParserResponse.Builder(imgurUrl)
+                .setIsSingleMedia(true)
+                .setMedia(expectedMedia)
+                .build();
+
+        ParserResponse parserResponse = mImgurParser.parse(imgurUrl);
+        System.out.println("parserResponse = [" + parserResponse + ']');
+        compareParserResponse(imgurUrl, expectedParserResponse, parserResponse);
     }
 
     // Tests a standard album URL using the v3 API
