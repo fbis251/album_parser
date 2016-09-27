@@ -37,8 +37,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 
@@ -88,10 +90,19 @@ public class ImgurParserTest implements IParserTest {
     public void testCanParseAndGetHash() {
         Map<String, String> validHashes = new HashMap<>();
 
+        // Valid sub-domains
+        validHashes.put("Htlsv6N", "http://m.imgur.com/r/aww/Htlsv6N"); // subreddit mobile URL
+        validHashes.put("Htlsv6N", "http://m.imgur.com/Htlsv6N"); // mobile url
+        validHashes.put("Htlsv6N", "http://i.imgur.com/Htlsv6N.jpg"); // i subdomain
+        validHashes.put("1w2MFRq", "http://b.Bildgur.de/1w2MFRq.png"); // bildgur domain
+
         // Albums
+        validHashes.put("rROMo", "http://imgur.com/rROMo"); // Album with no prefix
         validHashes.put("VhGBD", "http://imgur.com/r/motivation/VhGBD"); // Album with /r/ prefix
         validHashes.put("WKauF", "https://imgur.com/gallery/WKauF"); // Album with gallery URL
         validHashes.put("cvehZ", "http://imgur.com/a/cvehZ"); // /a/ prefix album
+        validHashes.put("rROMo", "https://bildgur.de/a/rROMo"); // /a/ prefix album, bildgur domain
+        validHashes.put("zis2t", "http://imgur.com/r/diy/zis2t"); // /r/ prefix album
 
         // Images
         validHashes.put("awsGf9p", "http://imgur.com/awsGf9p"); // No prefix image URL
@@ -100,8 +111,104 @@ public class ImgurParserTest implements IParserTest {
         validHashes.put("mhcWa37", "http://imgur.com/gallery/mhcWa37/new"); // Extra path after hash
         validHashes.put("SWSteYm", "http://imgur.com/r/google/SWSteYm"); // /r/ prefix
 
+        validHashes.put("FGfBEqu", "https://bildgur.de/FGfBEqu.png"); // Direct bildgur url
+        validHashes.put("xvn42E1", "http://b.bildgur.de/xvn42E1.jpg"); // Direct bildgur url
+        validHashes.put("FGfBEqu", "https://bildgur.de/FGfBEqu"); // bildgur url
+
+        // Synthetic URLs
+        validHashes.put("12345", "http://imgur.com/12345.jpg");
+        validHashes.put("12345", "http://i.imgur.com/12345.gifv");
+        validHashes.put("abcde", "http://i.imgur.com/abcde.png");
+        validHashes.put("1234567", "http://imgur.com/1234567.bmp");
+        validHashes.put("1234567", "http://i.imgur.com/1234567.gif");
+        validHashes.put("abcdefg", "http://i.imgur.com/abcdefg.jpg");
+
+        validHashes.put("1234567", "http://i.imgur.com/1234567s.jpg");
+        validHashes.put("1234567", "http://i.imgur.com/1234567b.jpg");
+        validHashes.put("1234567", "http://i.imgur.com/1234567t.jpg");
+        validHashes.put("1234567", "http://i.imgur.com/1234567m.jpg");
+        validHashes.put("1234567", "http://i.imgur.com/1234567l.jpg");
+        validHashes.put("1234567", "http://i.imgur.com/1234567g.jpg");
+        validHashes.put("1234567", "http://i.imgur.com/1234567h.jpg");
+        validHashes.put("1234567", "http://i.imgur.com/1234567r.jpg");
+
+        validHashes.put("12345", "http://imgur.com/12345");
+        validHashes.put("abcde", "http://imgur.com/abcde");
+        validHashes.put("1234567", "http://imgur.com/1234567");
+        validHashes.put("abcdefg", "http://imgur.com/abcdefg");
+
+        validHashes.put("12345", "http://imgur.com/gallery/12345");
+        validHashes.put("abcde", "http://imgur.com/gallery/abcde");
+        validHashes.put("1234567", "http://imgur.com/gallery/1234567");
+        validHashes.put("abcdefg", "http://imgur.com/gallery/abcdefg");
+
+        validHashes.put("12345", "http://imgur.com/a/test/12345");
+        validHashes.put("abcde", "http://imgur.com/a/test/abcde");
+
+        validHashes.put("12345", "http://imgur.com/r/test/12345");
+        validHashes.put("abcde", "http://imgur.com/r/test/abcde");
+        validHashes.put("1234567", "http://imgur.com/r/test/1234567");
+        validHashes.put("abcdefg", "http://imgur.com/r/test/abcdefg");
 
         AllTests.validateCanParseAndHashes(mImgurParser, validHashes, false);
+    }
+
+    @Test
+    @Override
+    public void testInvalidUrls() {
+        Set<String> invalidUrls = new HashSet<>();
+
+        // Invalid domains
+        invalidUrls.add("https://username.imgur.com");
+
+        invalidUrls.add("https://imgur.com/a/1234");
+        invalidUrls.add("https://imgur.com/a/1234_");
+        invalidUrls.add("https://imgur.com/a/123456");
+        invalidUrls.add("https://imgur.com/a/1234567");
+        invalidUrls.add("https://imgur.com/a/12345678");
+
+        invalidUrls.add("https://imgur.com/gallery/1234");
+        invalidUrls.add("https://imgur.com/gallery/1234_");
+        invalidUrls.add("https://imgur.com/gallery/123456");
+        invalidUrls.add("https://imgur.com/gallery/123456_");
+        invalidUrls.add("https://imgur.com/gallery/12345678");
+
+        invalidUrls.add("https://imgur.com/");
+        invalidUrls.add("https://imgur.com/1234");
+        invalidUrls.add("https://imgur.com/1234_");
+        invalidUrls.add("https://imgur.com/123456");
+        invalidUrls.add("https://imgur.com/123456_");
+        invalidUrls.add("https://imgur.com/12345678");
+        invalidUrls.add("https://imgur.com/signin");
+        invalidUrls.add("https://imgur.com/register");
+
+        invalidUrls.add("https://imgur.com/r/gifs");
+        invalidUrls.add("https://imgur.com/r/gifs/1234");
+        invalidUrls.add("https://imgur.com/r/gifs/1234_");
+        invalidUrls.add("https://imgur.com/r/gifs/123456");
+        invalidUrls.add("https://imgur.com/r/gifs/123456_");
+        invalidUrls.add("https://imgur.com/r/gifs/12345678");
+
+        invalidUrls.add("http://i.imgur.com/1234.gifv");
+        invalidUrls.add("http://i.imgur.com/1234_.gifv");
+        invalidUrls.add("http://i.imgur.com/123456.gifv");
+        invalidUrls.add("http://i.imgur.com/123456_.gifv");
+        invalidUrls.add("http://i.imgur.com/1234567_.gifv");
+        invalidUrls.add("http://i.imgur.com/12345678.gifv");
+        invalidUrls.add("http://i.imgur.com/1234567a.gifv");
+        invalidUrls.add("http://i.imgur.com/12345678_.gifv");
+
+        invalidUrls.add("http://store.imgur.com/1234567");
+        invalidUrls.add("http://help.imgur.com/12345");
+
+        invalidUrls.add("http://bildgur.de");
+        invalidUrls.add("http://bildgur.de/");
+        invalidUrls.add("http://b.bildgur.de");
+        invalidUrls.add("http://b.bildgur.de/");
+        invalidUrls.add("http://i.bildgur.de");
+        invalidUrls.add("http://i.bildgur.de/");
+
+        AllTests.assertInvalidUrlsThrowException(mImgurParser, invalidUrls);
     }
 
     // Tests a direct GIF URL with no API call

@@ -77,17 +77,37 @@ public class ImgurParser extends AbstractApiParser {
         String hash;
         if (path.startsWith("/gallery/")) {
             // /gallery/{hash} URLs can contain both album and image hashes
-            hash = ParseUtils.hashRegex(path, "/gallery/(\\w{5,7})");
+            hash = ParseUtils.hashRegex(path, "^/gallery/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
         } else if (path.startsWith("/a/")) {
-            hash = ParseUtils.hashRegex(path, "/a/(\\w{5})");
+            hash = ParseUtils.hashRegex(path, "^/a/([^\\W_]{5})(?:/.*?|)$");
         } else if (path.startsWith("/r/")) {
-            hash = ParseUtils.hashRegex(path, "/r/\\w+/(\\w{5,7})");
+            hash = ParseUtils.hashRegex(path, "^/r/\\w+/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
         } else {
             // Probably a gallery URL with no prefix
-            hash = ParseUtils.hashRegex(path, "/(\\w{7})");
+            hash = ParseUtils.hashRegex(path, "^/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
         }
+
+        // Check if this is a direct media URL
+        if (hash == null && ParseUtils.isDirectUrl(mediaUrl)) {
+            hash = ParseUtils.hashRegex(path,
+                    "^/([^\\W_]{5}|[^\\W_]{7})[sbtmlghr]?\\.[^\\W_]{3,4}$");
+        }
+
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
         return hash;
+    }
+
+    @Override
+    protected boolean isValidDomain(URL mediaUrl) {
+        if (mediaUrl == null) return false;
+        String domain = mediaUrl.getHost();
+        String baseDomain = getBaseDomain();
+        return baseDomain.equalsIgnoreCase(domain)
+                || ("i." + baseDomain).equalsIgnoreCase(domain)
+                || ("m." + baseDomain).equalsIgnoreCase(domain)
+                || ("bildgur.de").equalsIgnoreCase(domain)
+                || ("b.bildgur.de").equalsIgnoreCase(domain)
+                || ("i.bildgur.de").equalsIgnoreCase(domain);
     }
 
     @Override
