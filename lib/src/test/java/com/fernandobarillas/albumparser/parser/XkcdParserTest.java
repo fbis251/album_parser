@@ -39,11 +39,11 @@ import java.util.Set;
 
 import okhttp3.OkHttpClient;
 
-import static com.fernandobarillas.albumparser.AllTests.API_CALL_TIMEOUT_MS;
-import static com.fernandobarillas.albumparser.AllTests.apiDomainValid;
-import static com.fernandobarillas.albumparser.AllTests.assertInvalidUrlsThrowException;
-import static com.fernandobarillas.albumparser.AllTests.compareParserResponse;
-import static com.fernandobarillas.albumparser.AllTests.validateCanParseAndHashes;
+import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
+import static com.fernandobarillas.albumparser.util.TestUtils.apiDomainValid;
+import static com.fernandobarillas.albumparser.util.TestUtils.assertInvalidUrlsThrowException;
+import static com.fernandobarillas.albumparser.util.TestUtils.compareParserResponse;
+import static com.fernandobarillas.albumparser.util.TestUtils.validateCanParseAndHashes;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -90,20 +90,6 @@ public class XkcdParserTest implements IParserTest {
         validateCanParseAndHashes(mXkcdParser, validHashes, false);
     }
 
-    // Tests a direct image link
-    @Test()
-    public void testDirectImage() throws IOException, RuntimeException {
-        URL xkcdUrl = ParseUtils.getUrlObject("http://imgs.xkcd.com/comics/spirit.png");
-        ExpectedMedia expectedMedia = new ExpectedMedia.Builder().setHighQualityUrl(
-                "https://imgs.xkcd.com/comics/spirit.png").build();
-        ExpectedParserResponse expectedParserResponse =
-                new ExpectedParserResponse.Builder(xkcdUrl).setMedia(expectedMedia)
-                        .setIsSingleMedia(true)
-                        .build();
-        ParserResponse parserResponse = mXkcdParser.parse(xkcdUrl);
-        compareParserResponse(xkcdUrl, expectedParserResponse, parserResponse);
-    }
-
     @Test
     @Override
     public void testInvalidUrls() {
@@ -119,6 +105,20 @@ public class XkcdParserTest implements IParserTest {
         invalidUrls.add("http://xkcd.com/comics");
         invalidUrls.add("http://xkcd.com/111aaa111");
         assertInvalidUrlsThrowException(mXkcdParser, invalidUrls);
+    }
+
+    // Tests a direct image link
+    @Test()
+    public void testDirectImage() throws IOException, RuntimeException {
+        URL xkcdUrl = ParseUtils.getUrlObject("http://imgs.xkcd.com/comics/spirit.png");
+        ExpectedMedia expectedMedia = new ExpectedMedia.Builder().setHighQualityUrl(
+                "https://imgs.xkcd.com/comics/spirit.png").build();
+        ExpectedParserResponse expectedParserResponse =
+                new ExpectedParserResponse.Builder(xkcdUrl).setMedia(expectedMedia)
+                        .setIsSingleMedia(true)
+                        .build();
+        ParserResponse parserResponse = mXkcdParser.parse(xkcdUrl);
+        compareParserResponse(xkcdUrl, expectedParserResponse, parserResponse);
     }
 
     // Tests an xkcd standard URL

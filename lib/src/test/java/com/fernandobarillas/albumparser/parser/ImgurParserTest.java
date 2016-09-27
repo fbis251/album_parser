@@ -20,7 +20,6 @@
 
 package com.fernandobarillas.albumparser.parser;
 
-import com.fernandobarillas.albumparser.AllTests;
 import com.fernandobarillas.albumparser.ApiKeys;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.imgur.ImgurParser;
@@ -44,9 +43,11 @@ import java.util.Set;
 
 import okhttp3.OkHttpClient;
 
-import static com.fernandobarillas.albumparser.AllTests.API_CALL_TIMEOUT_MS;
-import static com.fernandobarillas.albumparser.AllTests.apiDomainValid;
-import static com.fernandobarillas.albumparser.AllTests.compareParserResponse;
+import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
+import static com.fernandobarillas.albumparser.util.TestUtils.apiDomainValid;
+import static com.fernandobarillas.albumparser.util.TestUtils.assertInvalidUrlsThrowException;
+import static com.fernandobarillas.albumparser.util.TestUtils.compareParserResponse;
+import static com.fernandobarillas.albumparser.util.TestUtils.validateCanParseAndHashes;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -150,7 +151,7 @@ public class ImgurParserTest implements IParserTest {
         validHashes.put("1234567", "http://imgur.com/r/test/1234567");
         validHashes.put("abcdefg", "http://imgur.com/r/test/abcdefg");
 
-        AllTests.validateCanParseAndHashes(mImgurParser, validHashes, false);
+        validateCanParseAndHashes(mImgurParser, validHashes, false);
     }
 
     @Test
@@ -208,7 +209,7 @@ public class ImgurParserTest implements IParserTest {
         invalidUrls.add("http://i.bildgur.de");
         invalidUrls.add("http://i.bildgur.de/");
 
-        AllTests.assertInvalidUrlsThrowException(mImgurParser, invalidUrls);
+        assertInvalidUrlsThrowException(mImgurParser, invalidUrls);
     }
 
     // Tests a direct GIF URL with no API call

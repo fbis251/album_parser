@@ -20,7 +20,6 @@
 
 package com.fernandobarillas.albumparser.parser;
 
-import com.fernandobarillas.albumparser.AllTests;
 import com.fernandobarillas.albumparser.ApiKeys;
 import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
@@ -43,9 +42,10 @@ import java.util.Map;
 
 import okhttp3.OkHttpClient;
 
-import static com.fernandobarillas.albumparser.AllTests.API_CALL_TIMEOUT_MS;
-import static com.fernandobarillas.albumparser.AllTests.apiDomainValid;
-import static com.fernandobarillas.albumparser.AllTests.compareParserResponse;
+import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
+import static com.fernandobarillas.albumparser.util.TestUtils.apiDomainValid;
+import static com.fernandobarillas.albumparser.util.TestUtils.compareParserResponse;
+import static com.fernandobarillas.albumparser.util.TestUtils.validateCanParseAndHashes;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -85,13 +85,13 @@ public class TumblrParserTest implements IParserTest {
         // /post/ prefix
         validHashes.put("150135750508", "http://fbis251.tumblr.com/post/150135750508/");
 
-        AllTests.validateCanParseAndHashes(mTumblrParser, validHashes, false);
+        validateCanParseAndHashes(mTumblrParser, validHashes, false);
 
         Map<String, String> validDirectUrls = new HashMap<>();
         // Direct media URL
         validDirectUrls.put(null,
                 "https://67.media.tumblr.com/dbd5c1852e25468bd2e715cb88085178/tumblr_od7ef98S291r8k7mao1_540.jpg");
-        AllTests.validateCanParseAndHashes(mTumblrParser, validDirectUrls, true);
+        validateCanParseAndHashes(mTumblrParser, validDirectUrls, true);
     }
 
     @Override

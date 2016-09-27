@@ -20,7 +20,6 @@
 
 package com.fernandobarillas.albumparser.parser;
 
-import com.fernandobarillas.albumparser.AllTests;
 import com.fernandobarillas.albumparser.ApiKeys;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.giphy.GiphyParser;
@@ -37,9 +36,10 @@ import java.util.Map;
 
 import okhttp3.OkHttpClient;
 
-import static com.fernandobarillas.albumparser.AllTests.API_CALL_TIMEOUT_MS;
-import static com.fernandobarillas.albumparser.AllTests.apiDomainValid;
-import static com.fernandobarillas.albumparser.AllTests.compareParserResponse;
+import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
+import static com.fernandobarillas.albumparser.util.TestUtils.apiDomainValid;
+import static com.fernandobarillas.albumparser.util.TestUtils.compareParserResponse;
+import static com.fernandobarillas.albumparser.util.TestUtils.validateCanParseAndHashes;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -98,7 +98,7 @@ public class GiphyParserTest implements IParserTest {
         // /embed/{hash} url
         validHashes.put("l0HlD7sTICR75rDHy", "http://giphy.com/embed/l0HlD7sTICR75rDHy?html5=true");
 
-        AllTests.validateCanParseAndHashes(mGiphyParser, validHashes, false);
+        validateCanParseAndHashes(mGiphyParser, validHashes, false);
     }
 
     @Override

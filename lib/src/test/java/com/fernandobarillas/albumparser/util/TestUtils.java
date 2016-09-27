@@ -18,14 +18,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser;
+package com.fernandobarillas.albumparser.util;
 
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.IParserResponse;
-import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import org.junit.Assert;
 
@@ -39,9 +38,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Runs all the parser tests provided by the library
+ * Utilities for all tests
  */
-public class AllTests {
+public class TestUtils {
     public static final int API_CALL_TIMEOUT_MS = 10000; // Wait time for HTTP call to finish
 
     public static void apiDomainValid(final AbstractApiParser apiParser, final String baseDomain,
@@ -100,7 +99,7 @@ public class AllTests {
         int mediaSize = albumMedia.size();
 
         for (int i = 0; i < mediaSize; i++) {
-            AllTests.compareMedia(originalUrl, expectedAlbumMedia.get(i), albumMedia.get(i));
+            compareMedia(originalUrl, expectedAlbumMedia.get(i), albumMedia.get(i));
         }
     }
 
