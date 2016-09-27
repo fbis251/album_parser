@@ -61,7 +61,7 @@ public class XkcdParser extends AbstractApiParser {
         if (!isValidDomain(mediaUrl)) throw new InvalidMediaUrlException(mediaUrl);
         String path = mediaUrl.getPath();
         String hash;
-        if (path.startsWith("/comics/")) {
+        if (path.startsWith("/comics/") && ParseUtils.isImageExtension(mediaUrl)) {
             // Direct comic URL
             hash = ParseUtils.hashRegex(path, "(/comics/\\w+)");
         } else {

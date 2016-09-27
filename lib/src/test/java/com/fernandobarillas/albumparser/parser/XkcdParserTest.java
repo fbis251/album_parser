@@ -105,6 +105,7 @@ public class XkcdParserTest implements IParserTest {
     }
 
     @Test
+    @Override
     public void testInvalidUrls() {
         Set<String> invalidUrls = new HashSet<>();
         invalidUrls.add("http://imgs.xkcd.com/comics/spirit.mp4");
