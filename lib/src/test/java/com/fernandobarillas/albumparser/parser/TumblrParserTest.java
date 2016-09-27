@@ -94,6 +94,11 @@ public class TumblrParserTest implements IParserTest {
         AllTests.validateCanParseAndHashes(mTumblrParser, validDirectUrls, true);
     }
 
+    @Override
+    public void testInvalidUrls() {
+        // TODO: Implement me
+    }
+
     // Tests a standard album URL, contains 2 photos
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testAlbumWithTwoPhotos() throws IOException, RuntimeException {

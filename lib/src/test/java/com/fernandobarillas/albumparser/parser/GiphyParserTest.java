@@ -101,7 +101,12 @@ public class GiphyParserTest implements IParserTest {
         AllTests.validateCanParseAndHashes(mGiphyParser, validHashes, false);
     }
 
-    // Tests an image URL using
+    @Override
+    public void testInvalidUrls() {
+        // TODO: Implement me
+    }
+
+    // Tests a standard gifphy URL
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testParser() throws IOException, RuntimeException {
         URL giphyUrl = ParseUtils.getUrlObject(

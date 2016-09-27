@@ -11,4 +11,6 @@ public interface IParserTest {
     void testApiUsesHttps();
 
     void testCanParseAndGetHash();
+
+    void testInvalidUrls();
 }
