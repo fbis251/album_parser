@@ -24,21 +24,15 @@ import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
-import com.fernandobarillas.albumparser.parser.GiphyParserTest;
 import com.fernandobarillas.albumparser.parser.IParserResponse;
-import com.fernandobarillas.albumparser.parser.ImgurParserTest;
-import com.fernandobarillas.albumparser.parser.TumblrParserTest;
-import com.fernandobarillas.albumparser.parser.XkcdParserTest;
 import com.fernandobarillas.albumparser.util.ParseUtils;
-import com.fernandobarillas.albumparser.util.ParseUtilsTest;
 
 import org.junit.Assert;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -47,11 +41,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Runs all the parser tests provided by the library
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        GiphyParserTest.class, ImgurParserTest.class, ParseUtilsTest.class, TumblrParserTest.class,
-        XkcdParserTest.class
-})
 public class AllTests {
     public static final int API_CALL_TIMEOUT_MS = 10000; // Wait time for HTTP call to finish
 
@@ -69,18 +58,23 @@ public class AllTests {
         assertEquals(baseDomain + " API uses HTTPS", "https", apiUrl.getProtocol());
     }
 
-    public static void assertInvalidHashesThrowException(final AbstractApiParser parser,
-            final Map<String, String> invalidHashes) {
-        for (Map.Entry<String, String> entry : invalidHashes.entrySet()) {
-            String exceptionUrl = entry.getKey();
-            String url = entry.getValue();
-            String expectedMessage =
-                    "URL not a media URL or not supported by library: url = [" + exceptionUrl + "]";
+    public static void assertInvalidUrlsThrowException(final AbstractApiParser parser,
+            final Set<String> invalidUrls) {
+
+        assertNotNull("Parser instance null", parser);
+        assertNotNull("Invalid URLs", invalidUrls);
+
+        // Add URLs that should always throw an error
+        invalidUrls.add("http://not-a-media-api.com");
+        invalidUrls.add("test://invalid-scheme.com");
+        invalidUrls.add("");
+        invalidUrls.add(null);
+
+        for (String url : invalidUrls) {
             try {
                 parser.getHash(url);
                 Assert.fail(url + " should have thrown InvalidMediaUrlException");
-            } catch (InvalidMediaUrlException e) {
-                assertEquals(url + " Exception message", expectedMessage, e.getMessage());
+            } catch (InvalidMediaUrlException ignored) {
             }
         }
     }

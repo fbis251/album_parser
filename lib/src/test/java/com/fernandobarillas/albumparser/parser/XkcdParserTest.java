@@ -33,13 +33,15 @@ import org.junit.rules.ExpectedException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 
 import static com.fernandobarillas.albumparser.AllTests.API_CALL_TIMEOUT_MS;
 import static com.fernandobarillas.albumparser.AllTests.apiDomainValid;
-import static com.fernandobarillas.albumparser.AllTests.assertInvalidHashesThrowException;
+import static com.fernandobarillas.albumparser.AllTests.assertInvalidUrlsThrowException;
 import static com.fernandobarillas.albumparser.AllTests.compareParserResponse;
 import static com.fernandobarillas.albumparser.AllTests.validateCanParseAndHashes;
 import static org.junit.Assert.assertNotNull;
@@ -104,21 +106,18 @@ public class XkcdParserTest implements IParserTest {
 
     @Test
     public void testInvalidUrls() {
-        Map<String, String> invalidHashes = new HashMap<>();
-        invalidHashes.put("http://xkcd.com/9223372036854775808",
-                "http://xkcd.com/9223372036854775808");
-        invalidHashes.put("http://xkcd.com/", "http://xkcd.com/");
-        invalidHashes.put("http://xkcd.com/-1", "http://xkcd.com/-1");
-        invalidHashes.put("http://xkcd.com/0", "http://xkcd.com/0");
-        invalidHashes.put("https://xkcd.com/radiation/", "https://xkcd.com/radiation/");
-        invalidHashes.put("https://what-if.xkcd.com/151/", "https://what-if.xkcd.com/151/");
-        invalidHashes.put("https://blog.xkcd.com/", "https://blog.xkcd.com/");
-        invalidHashes.put("http://xkcd.com/comics", "http://xkcd.com/comics");
-        invalidHashes.put("http://xkcd.com/111aaa111", "http://xkcd.com/111aaa111");
-        invalidHashes.put(null, "");
-        invalidHashes.put(null, null);
-
-        assertInvalidHashesThrowException(mXkcdParser, invalidHashes);
+        Set<String> invalidUrls = new HashSet<>();
+        invalidUrls.add("http://imgs.xkcd.com/comics/spirit.mp4");
+        invalidUrls.add("http://xkcd.com/9223372036854775808");
+        invalidUrls.add("http://xkcd.com/");
+        invalidUrls.add("http://xkcd.com/-1");
+        invalidUrls.add("http://xkcd.com/0");
+        invalidUrls.add("https://xkcd.com/radiation/");
+        invalidUrls.add("https://what-if.xkcd.com/151/");
+        invalidUrls.add("https://blog.xkcd.com/");
+        invalidUrls.add("http://xkcd.com/comics");
+        invalidUrls.add("http://xkcd.com/111aaa111");
+        assertInvalidUrlsThrowException(mXkcdParser, invalidUrls);
     }
 
     // Tests an xkcd standard URL
