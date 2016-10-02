@@ -34,6 +34,7 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.regex.Pattern;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
@@ -47,6 +48,18 @@ public class ImgurParser extends AbstractApiParser {
 
     private static final int ALBUM_HASH_LENGTH = 5; // Most recent album hashes are exactly 5 chars
     private static final int IMAGE_HASH_LENGTH = 7; // Most recent image hashes are exactly 7 chars
+
+    // Regex patterns, pre-compiled for better performance
+    private static final Pattern GALLERY_PATTERN      =
+            Pattern.compile("^/gallery/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
+    private static final Pattern ALBUM_PATTERN        =
+            Pattern.compile("^/a/([^\\W_]{5})(?:/.*?|)$");
+    private static final Pattern SUBREDDIT_PATTERN    =
+            Pattern.compile("^/r/\\w+/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
+    private static final Pattern NO_PREFIX_PATTERN    =
+            Pattern.compile("^/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
+    private static final Pattern DIRECT_MEDIA_PATTERN =
+            Pattern.compile("^/([^\\W_]{5}|[^\\W_]{7})[sbtmlghr]?\\.[^\\W_]{3,4}/?$");
 
     private String mImgurClientId = null;
     private String mPreviewSize;
@@ -84,20 +97,19 @@ public class ImgurParser extends AbstractApiParser {
         String hash;
         if (path.startsWith("/gallery/")) {
             // /gallery/{hash} URLs can contain both album and image hashes
-            hash = ParseUtils.hashRegex(path, "^/gallery/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
+            hash = ParseUtils.hashRegex(path, GALLERY_PATTERN);
         } else if (path.startsWith("/a/")) {
-            hash = ParseUtils.hashRegex(path, "^/a/([^\\W_]{5})(?:/.*?|)$");
+            hash = ParseUtils.hashRegex(path, ALBUM_PATTERN);
         } else if (path.startsWith("/r/")) {
-            hash = ParseUtils.hashRegex(path, "^/r/\\w+/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
+            hash = ParseUtils.hashRegex(path, SUBREDDIT_PATTERN);
         } else {
             // Probably a gallery URL with no prefix
-            hash = ParseUtils.hashRegex(path, "^/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
-        }
+            hash = ParseUtils.hashRegex(path, NO_PREFIX_PATTERN);
 
-        // Check if this is a direct media URL
-        if (hash == null && ParseUtils.isDirectUrl(mediaUrl)) {
-            hash = ParseUtils.hashRegex(path,
-                    "^/([^\\W_]{5}|[^\\W_]{7})[sbtmlghr]?\\.[^\\W_]{3,4}$");
+            // Check if this is a direct media URL
+            if (hash == null) {
+                hash = ParseUtils.hashRegex(path, DIRECT_MEDIA_PATTERN);
+            }
         }
 
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
