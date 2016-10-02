@@ -234,7 +234,7 @@ public class ImageDataV3 extends BaseMedia implements IMedia {
 
     private URL getImageUrl(String quality) {
         String extension = ParseUtils.getExtension(link);
-        if (animated) {
+        if (animated || EXT_GIF.equalsIgnoreCase(extension)) {
             if (quality != ORIGINAL) {
                 extension = EXT_JPG;
             } else {
