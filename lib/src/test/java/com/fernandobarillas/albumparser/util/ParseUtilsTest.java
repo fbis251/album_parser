@@ -27,6 +27,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static com.fernandobarillas.albumparser.util.ParseUtils.getSizeInMb;
 import static com.fernandobarillas.albumparser.util.ParseUtils.getSizeInMbString;
@@ -238,8 +239,11 @@ public class ParseUtilsTest {
 
     @Test
     public void testHashRegex() {
+        String nullString = null;
+        Pattern nullPattern = null;
         // Null checks
-        assertEquals(null, hashRegex(null, null));
+        assertEquals(null, hashRegex(null, nullString));
+        assertEquals(null, hashRegex(null, nullPattern));
         assertEquals(null, hashRegex(null, "test"));
 
         // No capturing groups

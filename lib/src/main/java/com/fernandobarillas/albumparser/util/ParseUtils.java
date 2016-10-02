@@ -180,6 +180,19 @@ public class ParseUtils {
     public static String hashRegex(String haystack, String needleRegex) {
         if (haystack == null || needleRegex == null) return null;
         Pattern pattern = Pattern.compile(needleRegex);
+        return hashRegex(haystack, pattern);
+    }
+
+    /**
+     * Tries to find the regex in the haystack
+     *
+     * @param haystack A String target for the regex
+     * @param pattern  A regex pattern with exactly 1 capturing group
+     * @return The text captured by the needledRegex capturing group if the regex matched, null
+     * otherwise
+     */
+    public static String hashRegex(String haystack, Pattern pattern) {
+        if (haystack == null || pattern == null) return null;
         Matcher matcher = pattern.matcher(haystack);
         if (matcher.find() && matcher.groupCount() == 1) {
             return matcher.group(1);
