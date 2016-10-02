@@ -39,8 +39,6 @@ import java.util.regex.Pattern;
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
 
-import static com.fernandobarillas.albumparser.vidble.VidbleUtils.isAlbum;
-
 /**
  * Parser for the Imgur API
  */
@@ -215,8 +213,7 @@ public class ImgurParser extends AbstractApiParser {
     public static String getImageUrl(String hash, String quality, String extension) {
         String newExt = (extension == null) ? IMedia.EXT_JPG : extension;
         if (hash == null) return null;
-        if (hash.length() <= ALBUM_HASH_LENGTH) return null;
-        if (isAlbum(hash)) return null;
+        if (hash.length() < ALBUM_HASH_LENGTH || hash.length() > IMAGE_HASH_LENGTH) return null;
         return String.format("%s/%s%s.%s", ImgurApi.IMAGE_URL, hash, quality, newExt);
     }
 
