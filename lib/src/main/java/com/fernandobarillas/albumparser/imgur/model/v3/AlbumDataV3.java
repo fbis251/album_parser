@@ -131,7 +131,7 @@ public class AlbumDataV3 extends BaseMediaAlbum {
 
     @Override
     public String toString() {
-        return "AlbumData{"
+        return "AlbumDataV3{"
                 + "id='"
                 + id
                 + '\''

@@ -51,7 +51,7 @@ public class ImageResponseV3 extends BaseApiResponse {
 
     @Override
     public String toString() {
-        return "ImageResponse{"
+        return "ImageResponseV3{"
                 + "data="
                 + data
                 + ", success="

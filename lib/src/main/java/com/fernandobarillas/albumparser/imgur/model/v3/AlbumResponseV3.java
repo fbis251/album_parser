@@ -65,7 +65,7 @@ public class AlbumResponseV3 extends BaseApiResponse {
 
     @Override
     public String toString() {
-        return "AlbumResponse{"
+        return "AlbumResponseV3{"
                 + "data="
                 + data
                 + ", success="

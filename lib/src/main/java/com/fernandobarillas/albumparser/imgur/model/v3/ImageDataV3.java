@@ -165,7 +165,7 @@ public class ImageDataV3 extends BaseMedia implements IMedia {
 
     @Override
     public String toString() {
-        return "ImageData{"
+        return "ImageDataV3{"
                 + "id='"
                 + id
                 + '\''
