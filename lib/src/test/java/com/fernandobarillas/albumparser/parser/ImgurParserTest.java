@@ -28,7 +28,6 @@ import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.model.ExpectedAlbum;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
-import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import org.junit.Test;
 
@@ -43,6 +42,7 @@ import java.util.Set;
 
 import okhttp3.OkHttpClient;
 
+import static com.fernandobarillas.albumparser.util.ParseUtils.getUrlObject;
 import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
 import static com.fernandobarillas.albumparser.util.TestUtils.apiDomainValid;
 import static com.fernandobarillas.albumparser.util.TestUtils.assertInvalidUrlsThrowException;
@@ -75,9 +75,9 @@ public class ImgurParserTest implements IParserTest {
     @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
     @Override
     public void testApi404Error() throws IOException, RuntimeException {
-        URL invalid404Url = ParseUtils.getUrlObject("https://imgur.com/a/a8sxH");
-        assertNotNull(invalid404Url);
-        mImgurParser.parse(invalid404Url);
+        URL url = getUrlObject("https://imgur.com/a/a8sxH");
+        assertNotNull(url);
+        mImgurParser.parse(url);
     }
 
     @Test
@@ -124,6 +124,7 @@ public class ImgurParserTest implements IParserTest {
         validHashes.put("1234567", "http://imgur.com/1234567.bmp");
         validHashes.put("1234567", "http://i.imgur.com/1234567.gif");
         validHashes.put("abcdefg", "http://i.imgur.com/abcdefg.jpg");
+        validHashes.put("abcdefg", "http://i.imgur.com/abcdefg.jpg/");
 
         // Valid image variation suffixes
         validHashes.put("1234567", "http://i.imgur.com/1234567s.jpg");
@@ -217,140 +218,137 @@ public class ImgurParserTest implements IParserTest {
     // Tests a direct GIF URL with no API call
     @Test
     public void testGifWithNoApiCall() throws IOException {
-        URL imgurUrl = ParseUtils.getUrlObject("http://i.imgur.com/FJRVge0.gif");
+        URL url = getUrlObject("http://i.imgur.com/FJRVge0.gif");
         String hash = "FJRVge0";
 
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, true).build();
-        ExpectedParserResponse expectedParserResponse = new ExpectedParserResponse.Builder(imgurUrl)
-                .setIsSingleMedia(true)
-                .setMedia(expectedMedia)
-                .build();
+        ExpectedParserResponse expectedParserResponse =
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
+                        .setMedia(expectedMedia)
+                        .build();
 
-        ParserResponse parserResponse = mImgurParserNoApiKey.parse(imgurUrl);
-        compareParserResponse(imgurUrl, expectedParserResponse, parserResponse);
+        ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
     // Tests a direct GIF URL with an uppercase extension with no API call
     @Test
     public void testGifWithUppercaseExtension() throws IOException {
-        URL imgurUrl = ParseUtils.getUrlObject("https://i.imgur.com/M1ZXzzn.GIF");
+        URL url = getUrlObject("https://i.imgur.com/M1ZXzzn.GIF");
         String hash = "M1ZXzzn";
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, true).build();
-        ExpectedParserResponse expectedParserResponse = new ExpectedParserResponse.Builder(imgurUrl)
-                .setIsSingleMedia(true)
-                .setMedia(expectedMedia)
-                .build();
+        ExpectedParserResponse expectedParserResponse =
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
+                        .setMedia(expectedMedia)
+                        .build();
 
-        ParserResponse parserResponse = mImgurParserNoApiKey.parse(imgurUrl);
-        compareParserResponse(imgurUrl, expectedParserResponse, parserResponse);
+        ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
     // Tests a direct GIFV URL with no API call
     @Test
     public void testGifvWithNoApiCall() throws IOException {
-        URL imgurUrl = ParseUtils.getUrlObject("http://i.imgur.com/aRadjBe.gifv");
+        URL url = getUrlObject("http://i.imgur.com/aRadjBe.gifv");
         String hash = "aRadjBe";
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, true).build();
-        ExpectedParserResponse expectedParserResponse = new ExpectedParserResponse.Builder(imgurUrl)
-                .setIsSingleMedia(true)
-                .setMedia(expectedMedia)
-                .build();
+        ExpectedParserResponse expectedParserResponse =
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
+                        .setMedia(expectedMedia)
+                        .build();
 
-        ParserResponse parserResponse = mImgurParserNoApiKey.parse(imgurUrl);
-        compareParserResponse(imgurUrl, expectedParserResponse, parserResponse);
+        ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
     // Image URL returns 404 by API
     @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
     public void testImageWith404Error() throws IOException, RuntimeException {
-        URL albumUrl = ParseUtils.getUrlObject("http://i.imgur.com/P3Z2Wfx.jpg");
-        assertNotNull(albumUrl);
-        mImgurParser.parse(albumUrl);
+        URL url = getUrlObject("http://i.imgur.com/P3Z2Wfx.jpg");
+        assertNotNull(url);
+        mImgurParser.parse(url);
     }
 
     // Tests a direct JPG thumbnail URL with no API call
     @Test
     public void testJpgThumbnailWithNoApiCall() throws IOException {
-        URL imgurUrl = ParseUtils.getUrlObject("https://i.imgur.com/jIg2N6qb.jpg");
+        URL url = getUrlObject("https://i.imgur.com/jIg2N6qb.jpg");
         String hash = "jIg2N6q";
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, false).build();
-        ExpectedParserResponse expectedParserResponse = new ExpectedParserResponse.Builder(imgurUrl)
-                .setIsSingleMedia(true)
-                .setMedia(expectedMedia)
-                .build();
+        ExpectedParserResponse expectedParserResponse =
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
+                        .setMedia(expectedMedia)
+                        .build();
 
-        ParserResponse parserResponse = mImgurParserNoApiKey.parse(imgurUrl);
-        compareParserResponse(imgurUrl, expectedParserResponse, parserResponse);
+        ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
     // Tests a direct JPG URL with no API call
     @Test
     public void testJpgWithNoApiCall() throws IOException {
-        URL imgurUrl = ParseUtils.getUrlObject("https://i.imgur.com/zzaVA8m.jpg");
+        URL url = getUrlObject("https://i.imgur.com/zzaVA8m.jpg");
         String hash = "zzaVA8m";
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, false).build();
-        ExpectedParserResponse expectedParserResponse = new ExpectedParserResponse.Builder(imgurUrl)
-                .setIsSingleMedia(true)
-                .setMedia(expectedMedia)
-                .build();
+        ExpectedParserResponse expectedParserResponse =
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
+                        .setMedia(expectedMedia)
+                        .build();
 
-        ParserResponse parserResponse = mImgurParserNoApiKey.parse(imgurUrl);
-        compareParserResponse(imgurUrl, expectedParserResponse, parserResponse);
+        ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
     // Tests a standard album URL with the old API call
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testOldApiAlbum() throws IOException, RuntimeException {
-        URL albumUrl = ParseUtils.getUrlObject("http://imgur.com/a/NzCBe");
+        URL url = getUrlObject("http://imgur.com/a/NzCBe");
         ExpectedParserResponse expectedParserResponse =
-                getV3AlbumExpectedParserResponse(albumUrl, false);
-        ParserResponse parserResponse = mImgurParserNoApiKey.parse(albumUrl);
-        compareParserResponse(albumUrl, expectedParserResponse, parserResponse);
+                getV3AlbumExpectedParserResponse(url, false);
+        ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
     // Tests a direct JPG URL with 5 char hash with no API call
     @Test
     public void testOldFormatJpgWithNoApiCall() throws IOException {
-        URL imgurUrl = ParseUtils.getUrlObject("http://i.imgur.com/0MlEZ.jpg");
+        URL url = getUrlObject("http://i.imgur.com/0MlEZ.jpg");
         String hash = "0MlEZ";
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, false).build();
-        ExpectedParserResponse expectedParserResponse = new ExpectedParserResponse.Builder(imgurUrl)
-                .setIsSingleMedia(true)
-                .setMedia(expectedMedia)
-                .build();
+        ExpectedParserResponse expectedParserResponse =
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
+                        .setMedia(expectedMedia)
+                        .build();
 
-        ParserResponse parserResponse = mImgurParser.parse(imgurUrl);
-        System.out.println("parserResponse = [" + parserResponse + ']');
-        compareParserResponse(imgurUrl, expectedParserResponse, parserResponse);
+        ParserResponse parserResponse = mImgurParser.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
     // Tests a standard album URL using the v3 API
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testV3Album() throws IOException, RuntimeException {
-        URL albumUrl = ParseUtils.getUrlObject("http://imgur.com/a/NzCBe");
-        ExpectedParserResponse expectedParserResponse =
-                getV3AlbumExpectedParserResponse(albumUrl, true);
-        ParserResponse parserResponse = mImgurParser.parse(albumUrl);
-        compareParserResponse(albumUrl, expectedParserResponse, parserResponse);
+        URL url = getUrlObject("http://imgur.com/a/NzCBe");
+        ExpectedParserResponse expectedParserResponse = getV3AlbumExpectedParserResponse(url, true);
+        ParserResponse parserResponse = mImgurParser.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
     // Tests an album with a /gallery URL using the v3 API
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testV3AlbumWithGalleryUrl() throws IOException, RuntimeException {
-        URL albumUrl = ParseUtils.getUrlObject("https://imgur.com/gallery/NzCBe");
-        ExpectedParserResponse expectedParserResponse =
-                getV3AlbumExpectedParserResponse(albumUrl, true);
-        ParserResponse parserResponse = mImgurParser.parse(albumUrl);
-        compareParserResponse(albumUrl, expectedParserResponse, parserResponse);
+        URL url = getUrlObject("https://imgur.com/gallery/NzCBe");
+        ExpectedParserResponse expectedParserResponse = getV3AlbumExpectedParserResponse(url, true);
+        ParserResponse parserResponse = mImgurParser.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
     // Tests an image URL using the v3 API
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testV3Image() throws IOException, RuntimeException {
-        URL imageUrl = ParseUtils.getUrlObject("http://i.imgur.com/P3Z2WfX.jpg");
-        ExpectedParserResponse expectedParserResponse = getV3ImageExpectedParserResponse(imageUrl);
-        ParserResponse parserResponse = mImgurParser.parse(imageUrl);
-        compareParserResponse(imageUrl, expectedParserResponse, parserResponse);
+        URL url = getUrlObject("http://i.imgur.com/P3Z2WfX.jpg");
+        ExpectedParserResponse expectedParserResponse = getV3ImageExpectedParserResponse(url);
+        ParserResponse parserResponse = mImgurParser.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
     private ExpectedMedia.Builder getExpectedMediaBuilder(final String hash,
