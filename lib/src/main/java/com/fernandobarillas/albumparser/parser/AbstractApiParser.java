@@ -112,6 +112,8 @@ public abstract class AbstractApiParser {
         if (apiResponse == null) throw new InvalidApiResponseException(mediaUrl);
         ParserResponse parserResponse = new ParserResponse(apiResponse);
         parserResponse.setOriginalUrl(mediaUrl);
+        parserResponse.setApiProviderName(getBaseDomain());
+        parserResponse.setHash(getHash(mediaUrl));
         return parserResponse;
     }
 
