@@ -43,10 +43,8 @@ public class ParseUtils {
      * found, null otherwise
      */
     public static String getExtension(URL url) {
-        if (url == null) return null;
-        String path = url.getPath();
-        String filename = path.substring(path.lastIndexOf("/") + 1);
-        if (!filename.contains(".")) return null;
+        String filename = getFileName(url);
+        if (filename == null || !filename.contains(".")) return null;
         return filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
     }
 
@@ -59,6 +57,12 @@ public class ParseUtils {
      */
     public static String getExtension(String urlString) {
         return getExtension(ParseUtils.getUrlObject(urlString));
+    }
+
+    public static String getFileName(URL url) {
+        if (url == null) return null;
+        String path = url.getPath();
+        return path.substring(path.lastIndexOf("/") + 1);
     }
 
     /**
