@@ -32,8 +32,20 @@ public class ExpectedParserResponse implements IParserResponse {
     }
 
     @Override
+    public String getApiProviderName() {
+        // TODO: Add tests
+        return null;
+    }
+
+    @Override
     public IApiResponse getApiResponse() {
         // There is no parser response to return since this doesn't do an API call
+        return null;
+    }
+
+    @Override
+    public String getHash() {
+        // TODO: Add Tests
         return null;
     }
 
