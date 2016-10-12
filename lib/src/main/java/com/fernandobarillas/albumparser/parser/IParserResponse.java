@@ -39,9 +39,19 @@ public interface IParserResponse {
     IMediaAlbum getAlbum();
 
     /**
+     * @return The name of the API provider that was used to create this ParseResponse
+     */
+    String getApiProviderName();
+
+    /**
      * @return The IApiResponse returned by the parser
      */
     IApiResponse getApiResponse();
+
+    /**
+     * @return The hash that was used when making the API request that created this ParseResponse
+     */
+    String getHash();
 
     /**
      * @return The IMedia returned by the parser

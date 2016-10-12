@@ -33,7 +33,9 @@ import java.net.URL;
  */
 public class ParserResponse implements IParserResponse {
     private IApiResponse mApiResponse;
+    private String       mHash;
     private IMedia       mMedia;
+    private String       mProviderName;
     private URL          mOriginalUrl;
 
     /**
@@ -65,8 +67,22 @@ public class ParserResponse implements IParserResponse {
     }
 
     @Override
+    public String getApiProviderName() {
+        return mProviderName;
+    }
+
+    @Override
     public IApiResponse getApiResponse() {
         return mApiResponse;
+    }
+
+    @Override
+    public String getHash() {
+        return mHash;
+    }
+
+    public void setHash(String hash) {
+        mHash = hash;
     }
 
     @Override
@@ -108,5 +124,9 @@ public class ParserResponse implements IParserResponse {
                 + ", mOriginalUrl="
                 + mOriginalUrl
                 + '}';
+    }
+
+    public void setApiProviderName(String providerName) {
+        mProviderName = providerName;
     }
 }
