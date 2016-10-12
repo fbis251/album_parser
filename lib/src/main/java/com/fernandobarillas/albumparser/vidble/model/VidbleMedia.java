@@ -25,7 +25,6 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.vidble.VidbleUtils;
 import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -35,8 +34,10 @@ import java.net.URL;
  * URLs with an http/https prefix [http/https]://www.vidble.com/[HASH].[EXTENSION]
  */
 public class VidbleMedia extends BaseMedia {
-    private final static String MEDIUM_QUALITY   = "_med";
-    private final static String ORIGINAL_QUALITY = "";
+    private final static String ORIGINAL_QUALITY     = "";
+    private final static String MEDIUM_QUALITY       = "_med";
+    private final static String THUMBNAIL_QUALITY    = "_thumb";
+    private final static String SQUARE_THUMB_QUALITY = "_sqr";
     private String mExtension;
     private String mHash;
 
@@ -66,32 +67,25 @@ public class VidbleMedia extends BaseMedia {
 
     @Override
     public URL getPreviewUrl() {
-        // Get JPG preview if this is a GIF
-        String extension = (mExtension.equals(EXT_GIF)) ? EXT_JPG : mExtension;
-        try {
-            return new URL(VidbleApi.IMAGE_URL + "/" + mHash + MEDIUM_QUALITY + "." + extension);
-        } catch (MalformedURLException ignored) {
-        }
-        return null;
+        return getImageUrl(THUMBNAIL_QUALITY, EXT_JPG);
     }
 
     @Override
     public URL getUrl(boolean highQuality) {
-        String quality = ORIGINAL_QUALITY;
-        if (!highQuality && !mExtension.equals(EXT_GIF)) {
-            // Vidble doesn't provide lower quality GIFs, don't use medium quality at all for GIFs
-            quality = MEDIUM_QUALITY;
-        }
-
-        try {
-            return new URL(VidbleApi.IMAGE_URL + "/" + mHash + quality + "." + mExtension);
-        } catch (MalformedURLException ignored) {
-        }
-        return null;
+        // Vidble doesn't have medium quality GIFs that are animated
+        if (highQuality && mExtension.equals(EXT_GIF)) return null;
+        String quality = (highQuality) ? ORIGINAL_QUALITY : MEDIUM_QUALITY;
+        return getImageUrl(quality, mExtension);
     }
 
     @Override
     public boolean isVideo() {
         return mExtension.equals(EXT_GIF);
+    }
+
+    private URL getImageUrl(final String quality, final String extension) {
+        String resultUrl =
+                String.format("%s/%s%s.%s", VidbleApi.IMAGE_URL, mHash, quality, extension);
+        return ParseUtils.getUrlObject(resultUrl);
     }
 }
