@@ -65,20 +65,19 @@ import static com.fernandobarillas.albumparser.util.ParseUtils.isVideoExtension;
  */
 public class AlbumParser {
 
-    private static final int UNKNOWN       = -1;
-    private static final int DIRECT        = 0;
-    private static final int DIRECT_GIF    = 1;
-    private static final int DEVIANTART    = 2;
-    private static final int GFYCAT        = 3;
-    private static final int GIPHY         = 4;
-    private static final int IMGUR         = 5;
-    private static final int REDDITMEDIA   = 6;
-    private static final int REDDITUPLOADS = 7;
-    private static final int STREAMABLE    = 8;
-    private static final int VIDBLE        = 9;
-    private static final int VIDME         = 10;
-    private static final int TUMBLR        = 11;
-    private static final int XKCD          = 12;
+    private static final int UNKNOWN    = -1;
+    private static final int DIRECT     = 0;
+    private static final int DIRECT_GIF = 1;
+    private static final int DEVIANTART = 2;
+    private static final int GFYCAT     = 3;
+    private static final int GIPHY      = 4;
+    private static final int IMGUR      = 5;
+    private static final int REDDIT     = 6;
+    private static final int STREAMABLE = 7;
+    private static final int VIDBLE     = 8;
+    private static final int VIDME      = 9;
+    private static final int TUMBLR     = 10;
+    private static final int XKCD       = 11;
 
     /** The OkHttpClient instance to use when making all the API calls */
     private OkHttpClient mClient;
