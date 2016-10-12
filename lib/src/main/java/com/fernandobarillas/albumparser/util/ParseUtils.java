@@ -67,7 +67,7 @@ public class ParseUtils {
 
     /**
      * Parses a URLs query parameters into a Map for easier parsing of options.
-     * For example, a URL http://example.com?one=1&two=true
+     * For example, a URL http://example.com?one=1&amp;two=true
      * would return the map:
      * K: "one", V: "1"
      * K: "two", V: "true"
@@ -81,15 +81,10 @@ public class ParseUtils {
     }
 
     /**
-     * Parses a URLs query parameters into a Map for easier parsing of options.
-     * For example, a URL http://example.com?one=1&two=true
-     * would return the map:
-     * K: "one", V: "1"
-     * K: "two", V: "true"
-     *
      * @param url The URL to attempt to map the query parameters for
      * @return Null if an invalid URL is passed in, otherwise a Map containing all the keys and
      * values contained in the URL query parameters
+     * @see #getQueryMap(String)
      */
     public static Map<String, String> getQueryMap(URL url) {
         if (url == null) return null;
@@ -98,15 +93,10 @@ public class ParseUtils {
 
 
     /**
-     * Parses a URLs query parameters into a Map for easier parsing of options.
-     * For example, a URL http://example.com?one=1&two=true
-     * would return the map:
-     * K: "one", V: "1"
-     * K: "two", V: "true"
-     *
      * @param uri The URI to attempt to map the query parameters for
      * @return Null if an invalid URI is passed in, otherwise a Map containing all the keys and
      * values contained in the URI query parameters
+     * @see #getQueryMap(String)
      */
     public static Map<String, String> getQueryMap(URI uri) {
         if (uri == null) return null;

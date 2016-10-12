@@ -206,6 +206,8 @@ public class ImgurParser extends AbstractApiParser {
      * educated guess at a URL. Some problematic hashes are for URLs that predate the Imgur API
      *
      * @param hash      The hash to get an image URL for
+     * @param quality   The quality of the image you would like to use, for example {@link
+     *                  Image#HUGE_THUMBNAIL} or {@link Image#ORIGINAL}
      * @param extension The extension to use for the URL. This should not have a prefixed period,
      *                  Example: jpg not .jpg
      * @return A URL to an image if the passed in hash was a valid non-album hash, null otherwise;
@@ -216,7 +218,6 @@ public class ImgurParser extends AbstractApiParser {
         if (hash.length() < ALBUM_HASH_LENGTH || hash.length() > IMAGE_HASH_LENGTH) return null;
         return String.format("%s/%s%s.%s", ImgurApi.IMAGE_URL, hash, quality, newExt);
     }
-
 
     /**
      * Attempts to return a direct link to an image based on a hash alone, without doing an HTTP
