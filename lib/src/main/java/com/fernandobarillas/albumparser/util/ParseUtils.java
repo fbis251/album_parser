@@ -212,6 +212,14 @@ public class ParseUtils {
                 || isGifExtension(mediaUrl);
     }
 
+    public static boolean isDomainMatch(String domain, String[] providerDomains) {
+        if (providerDomains == null) return false;
+        for (String providerDomain : providerDomains) {
+            if (isDomainMatch(domain, providerDomain)) return true;
+        }
+        return false;
+    }
+
     /**
      * @param domain         The domain name to check
      * @param providerDomain The base domain name for the API provider. Examples: "imgur.com" or

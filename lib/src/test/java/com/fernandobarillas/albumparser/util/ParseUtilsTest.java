@@ -288,10 +288,11 @@ public class ParseUtilsTest {
     }
 
     @Test
-    public void testIsDomainMatch() {
+    public void testIsDomainStringMatch() {
         // Invalid inputs
-        assertFalse(isDomainMatch(null, null));
-        assertFalse(isDomainMatch("example.com", null));
+        String nullString = null;
+        assertFalse(isDomainMatch(null, nullString));
+        assertFalse(isDomainMatch("example.com", nullString));
         assertFalse(isDomainMatch("example", "example.com"));
         assertFalse(isDomainMatch("test-example.com", "example.com"));
 
