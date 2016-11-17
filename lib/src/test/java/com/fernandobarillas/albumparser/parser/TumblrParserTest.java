@@ -160,7 +160,7 @@ public class TumblrParserTest implements IParserTest {
         expectedMedia.add(new ExpectedMedia.Builder().setDescription("<p>Up and Atom!</p>")
                 .setPreviewUrl("https://31.media.tumblr.com/tumblr_odxrj1AuHO1r8k7ma_frame1.jpg")
                 .setDuration(11)
-                .setHighQualityUrl("https://vt.tumblr.com/tumblr_odxrj1AuHO1r8k7ma.mp4")
+                .setHighQualityUrl("https://vtt.tumblr.com/tumblr_odxrj1AuHO1r8k7ma.mp4")
                 .setIsVideo(true)
                 .build());
         IMediaAlbum expectedAlbum = new ExpectedAlbum.Builder().setPreviewUrl(
