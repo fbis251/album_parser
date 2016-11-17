@@ -327,6 +327,6 @@ public class ParseUtils {
         if (byteSize < 0) return 0;
         long coefficient = isForString ? 10 : 1;
         if (byteSize > Long.MAX_VALUE / coefficient) coefficient = 1; // Prevent overflow
-        return (byteSize * coefficient) / 1024 / 1024;
+        return (byteSize * coefficient) / 1000 / 1000;
     }
 }

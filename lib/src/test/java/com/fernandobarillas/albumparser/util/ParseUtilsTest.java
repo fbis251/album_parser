@@ -147,8 +147,8 @@ public class ParseUtilsTest {
     @Test
     public void testGetSizeInMb() {
         class SizeInput {
-            private long   inputValue;
-            private long   expectedValue;
+            private long inputValue;
+            private long expectedValue;
             private String expectedString;
 
             private SizeInput(long inputValue, long expectedValue, String expectedString) {
@@ -159,19 +159,23 @@ public class ParseUtilsTest {
         }
 
         SizeInput[] results = {
-                new SizeInput(0, 0, "0.0"), new SizeInput(-1, 0, "0.0"),
-                new SizeInput(1024 * 1024, 1, "1.0"),
-                new SizeInput((long) (10.5 * 1024 * 1024), 10, "10.5"),
-                new SizeInput((long) (10.99 * 1024 * 1024), 10, "10.9"),
+                new SizeInput(0, 0, "0.0"),
+                new SizeInput(-1, 0, "0.0"),
+                new SizeInput(1000 * 1000, 1, "1.0"),
+                new SizeInput((long) (10.5 * 1000 * 1000), 10, "10.5"),
+                new SizeInput((long) (10.99 * 1000 * 1000), 10, "10.9"),
+                new SizeInput(4227457, 4, "4.2"),
                 new SizeInput(Long.MIN_VALUE, 0, "0.0"),
-                new SizeInput(Long.MAX_VALUE, 8796093022207L, "8796093022207.0"),
+                new SizeInput(Long.MAX_VALUE, 9223372036854L, "9223372036854.0")
         };
 
         for (SizeInput test : results) {
-            assertEquals(String.format("getSizeInMb(%d)", test.inputValue), test.expectedValue,
+            assertEquals(String.format("getSizeInMb(%d)", test.inputValue),
+                    test.expectedValue,
                     getSizeInMb(test.inputValue));
             assertEquals(String.format("getSizeInMbString(%d)", test.inputValue),
-                    test.expectedString, getSizeInMbString(test.inputValue));
+                    test.expectedString,
+                    getSizeInMbString(test.inputValue));
         }
     }
 
@@ -199,7 +203,8 @@ public class ParseUtilsTest {
                 // @formatter:on
         };
         for (TestInput input : testInputs) {
-            assertEquals("input = [" + input.input + ']', input.expected,
+            assertEquals("input = [" + input.input + ']',
+                    input.expected,
                     getUrlObject(input.input));
         }
 
@@ -232,7 +237,8 @@ public class ParseUtilsTest {
         };
 
         for (TestInput2 input2 : testInput2s) {
-            assertEquals("input = [" + input2.input + ']', input2.expected,
+            assertEquals("input = [" + input2.input + ']',
+                    input2.expected,
                     getUrlObject(input2.input, input2.domain));
         }
     }
