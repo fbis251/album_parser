@@ -101,6 +101,7 @@ public class ImgurParserTest implements IParserTest {
         validHashes.put("rROMo", "http://imgur.com/rROMo"); // Album with no prefix
         validHashes.put("VhGBD", "http://imgur.com/r/motivation/VhGBD"); // Album with /r/ prefix
         validHashes.put("WKauF", "https://imgur.com/gallery/WKauF"); // Album with gallery URL
+        validHashes.put("cvehZ", "http://www.imgur.com/a/cvehZ"); // /a/ prefix album with www domain
         validHashes.put("cvehZ", "http://imgur.com/a/cvehZ"); // /a/ prefix album
         validHashes.put("rROMo", "https://bildgur.de/a/rROMo"); // /a/ prefix album, bildgur domain
         validHashes.put("zis2t", "http://imgur.com/r/diy/zis2t"); // /r/ prefix album
