@@ -158,5 +158,5 @@ public abstract class AbstractApiParser {
      *                          API returns a null response or a response which the library could
      *                          not parse.
      */
-    protected abstract ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException;
+    public abstract ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException;
 }
