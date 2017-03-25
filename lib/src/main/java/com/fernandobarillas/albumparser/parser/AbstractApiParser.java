@@ -89,6 +89,10 @@ public abstract class AbstractApiParser {
      */
     public abstract String getBaseDomain();
 
+    public String[] getValidDomains() {
+        return null;
+    }
+
     /**
      * Gets the hash for the passed-in media URL
      *
@@ -137,8 +141,11 @@ public abstract class AbstractApiParser {
     protected boolean isValidDomain(final URL mediaUrl) {
         if (mediaUrl == null) return false;
         String domain = mediaUrl.getHost();
-        String baseDomain = getBaseDomain();
-        return ParseUtils.isDomainMatch(domain, baseDomain);
+
+        // @formatter:off
+        return ParseUtils.isDomainMatch(domain, getBaseDomain())
+                || ParseUtils.isDomainMatch(domain, getValidDomains());
+        // @formatter:on
     }
 
     /**
