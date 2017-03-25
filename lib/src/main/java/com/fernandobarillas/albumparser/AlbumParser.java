@@ -22,29 +22,22 @@
 package com.fernandobarillas.albumparser;
 
 import com.fernandobarillas.albumparser.deviantart.DeviantartParser;
-import com.fernandobarillas.albumparser.deviantart.api.DeviantartApi;
+import com.fernandobarillas.albumparser.eroshare.EroshareParser;
 import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.gfycat.GfycatParser;
-import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
 import com.fernandobarillas.albumparser.giphy.GiphyParser;
-import com.fernandobarillas.albumparser.giphy.api.GiphyApi;
 import com.fernandobarillas.albumparser.imgur.ImgurParser;
-import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.imgur.model.Image;
 import com.fernandobarillas.albumparser.media.DirectMedia;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
+import com.fernandobarillas.albumparser.reddit.RedditParser;
 import com.fernandobarillas.albumparser.streamable.StreamableParser;
-import com.fernandobarillas.albumparser.streamable.api.StreamableApi;
 import com.fernandobarillas.albumparser.tumblr.TumblrParser;
-import com.fernandobarillas.albumparser.tumblr.api.TumblrApi;
 import com.fernandobarillas.albumparser.vidble.VidbleParser;
-import com.fernandobarillas.albumparser.vidble.api.VidbleApi;
 import com.fernandobarillas.albumparser.vidme.VidmeParser;
-import com.fernandobarillas.albumparser.vidme.api.VidmeApi;
 import com.fernandobarillas.albumparser.xkcd.XkcdParser;
-import com.fernandobarillas.albumparser.xkcd.api.XkcdApi;
 
 import java.io.IOException;
 import java.net.URL;
@@ -52,7 +45,6 @@ import java.net.URL;
 import okhttp3.OkHttpClient;
 
 import static com.fernandobarillas.albumparser.util.ParseUtils.getUrlObject;
-import static com.fernandobarillas.albumparser.util.ParseUtils.isDomainMatch;
 import static com.fernandobarillas.albumparser.util.ParseUtils.isImageExtension;
 import static com.fernandobarillas.albumparser.util.ParseUtils.isVideoExtension;
 
@@ -69,15 +61,16 @@ public class AlbumParser {
     private static final int DIRECT     = 0;
     private static final int DIRECT_GIF = 1;
     private static final int DEVIANTART = 2;
-    private static final int GFYCAT     = 3;
-    private static final int GIPHY      = 4;
-    private static final int IMGUR      = 5;
-    private static final int REDDIT     = 6;
-    private static final int STREAMABLE = 7;
-    private static final int VIDBLE     = 8;
-    private static final int VIDME      = 9;
-    private static final int TUMBLR     = 10;
-    private static final int XKCD       = 11;
+    private static final int EROSHARE   = 3;
+    private static final int GFYCAT     = 4;
+    private static final int GIPHY      = 5;
+    private static final int IMGUR      = 6;
+    private static final int REDDIT     = 7;
+    private static final int STREAMABLE = 8;
+    private static final int VIDBLE     = 9;
+    private static final int VIDME      = 10;
+    private static final int TUMBLR     = 11;
+    private static final int XKCD       = 12;
 
     /** The OkHttpClient instance to use when making all the API calls */
     private OkHttpClient mClient;
@@ -130,6 +123,50 @@ public class AlbumParser {
         return getMediaProvider(url) != UNKNOWN;
     }
 
+    private static int getMediaProvider(URL url) {
+        if (url == null || url.getHost() == null) return UNKNOWN;
+        String domain = url.getHost().toLowerCase();
+
+        if (new DeviantartParser().canParse(url)) {
+            return DEVIANTART;
+        }
+        if (new EroshareParser().canParse(url)) {
+            return EROSHARE;
+        }
+        if (new GfycatParser().canParse(url)) {
+            return GFYCAT;
+        }
+        if (new GiphyParser().canParse(url)) {
+            return GIPHY;
+        }
+        if (new ImgurParser().canParse(url)) {
+            return IMGUR;
+        }
+        if (new RedditParser().canParse(url)) {
+            return REDDIT;
+        }
+        if (new StreamableParser().canParse(url)) {
+            return STREAMABLE;
+        }
+        if (new VidbleParser().canParse(url)) {
+            return VIDBLE;
+        }
+        if (new VidmeParser().canParse(url)) {
+            return VIDME;
+        }
+        if (new TumblrParser().canParse(url)) {
+            return TUMBLR;
+        }
+        if (new XkcdParser().canParse(url)) {
+            return XKCD;
+        }
+        if (isImageExtension(url) || isVideoExtension(url)) {
+            return DIRECT;
+        }
+
+        return UNKNOWN;
+    }
+
     /**
      * @return The OkHttpClient instance that the library is using for its HTTP calls.
      */
@@ -145,15 +182,6 @@ public class AlbumParser {
     }
 
     /**
-     * Sets the API key to use when making requests to the Giphy API
-     *
-     * @param giphyApiKey The API key to use when making requests to the Giphy API
-     */
-    public void setGiphyApiKey(String giphyApiKey) {
-        mGiphyApiKey = giphyApiKey;
-    }
-
-    /**
      * Gets the client ID token that will be used when making requests to the Imgur API.
      *
      * @return The Imgur Client ID if one was set by {@link #setImgurClientId(String)}, null
@@ -164,30 +192,10 @@ public class AlbumParser {
     }
 
     /**
-     * Sets the client ID to use when making requests to the Imgur API
-     *
-     * @param imgurClientId The client ID to use when making requests to the Imgur API
-     */
-    public void setImgurClientId(String imgurClientId) {
-        mImgurClientId = imgurClientId;
-    }
-
-    /**
      * @return The API key used to make calls to the Tumblr API
      */
     public String getTumblrApiKey() {
         return mTumblrApiKey;
-    }
-
-    /**
-     * Sets the API key used to make calls to the Tumblr API. Notice, the Tumblr API will not send
-     * a response unless you have first set the key using this method. If you attempt to make calls
-     * to the Tumblr API with no key set, the parser will return an {@link InvalidApiKeyException}
-     *
-     * @param tumblrApiKey The key to use to make calls to the Tumblr API
-     */
-    public void setTumblrApiKey(String tumblrApiKey) {
-        mTumblrApiKey = tumblrApiKey;
     }
 
     /**
@@ -226,6 +234,8 @@ public class AlbumParser {
         switch (getMediaProvider(mediaUrl)) {
             case DEVIANTART:
                 return new DeviantartParser(mClient).parse(mediaUrl);
+            case EROSHARE:
+                return new EroshareParser(mClient).parse(mediaUrl);
             case GFYCAT:
                 return new GfycatParser(mClient).parse(mediaUrl);
             case GIPHY:
@@ -239,6 +249,8 @@ public class AlbumParser {
                     imgurParser.setPreviewSize(mImgurPreviewSize);
                 }
                 return imgurParser.parse(mediaUrl);
+            case REDDIT:
+                return new RedditParser().parse(mediaUrl);
             case STREAMABLE:
                 return new StreamableParser(mClient).parse(mediaUrl);
             case VIDBLE:
@@ -256,6 +268,24 @@ public class AlbumParser {
                 // Media is not supported or a URL that doesn't point to any media passed in
                 throw new InvalidMediaUrlException(mediaUrl);
         }
+    }
+
+    /**
+     * Sets the API key to use when making requests to the Giphy API
+     *
+     * @param giphyApiKey The API key to use when making requests to the Giphy API
+     */
+    public void setGiphyApiKey(String giphyApiKey) {
+        mGiphyApiKey = giphyApiKey;
+    }
+
+    /**
+     * Sets the client ID to use when making requests to the Imgur API
+     *
+     * @param imgurClientId The client ID to use when making requests to the Imgur API
+     */
+    public void setImgurClientId(String imgurClientId) {
+        mImgurClientId = imgurClientId;
     }
 
     /**
@@ -280,44 +310,14 @@ public class AlbumParser {
         mImgurPreviewSize = previewSize;
     }
 
-    private static int getMediaProvider(URL url) {
-        if (url == null || url.getHost() == null) return UNKNOWN;
-        String domain = url.getHost().toLowerCase();
-
-        if (isDomainMatch(domain, DeviantartApi.BASE_DOMAIN) && new DeviantartParser().canParse(
-                url)) {
-            return DEVIANTART;
-        }
-        if (isDomainMatch(domain, GfycatApi.BASE_DOMAIN) && new GfycatParser().canParse(url)) {
-            return GFYCAT;
-        }
-        if (isDomainMatch(domain, GiphyApi.BASE_DOMAIN) && new GiphyParser().canParse(url)) {
-            return GIPHY;
-        }
-        if (isDomainMatch(domain, ImgurApi.BASE_DOMAIN) && new ImgurParser().canParse(url)) {
-            return IMGUR;
-        }
-        if (isDomainMatch(domain, StreamableApi.BASE_DOMAIN) && new StreamableParser().canParse(
-                url)) {
-            return STREAMABLE;
-        }
-        if (isDomainMatch(domain, VidbleApi.BASE_DOMAIN) && new VidbleParser().canParse(url)) {
-            return VIDBLE;
-        }
-        if (isDomainMatch(domain, VidmeApi.BASE_DOMAIN) && new VidmeParser().canParse(url)) {
-            return VIDME;
-        }
-        if (isDomainMatch(domain, TumblrApi.BASE_DOMAIN) && new TumblrParser().canParse(url)) {
-            return TUMBLR;
-        }
-        if (isDomainMatch(domain, XkcdApi.BASE_DOMAIN) && new XkcdParser().canParse(url)) {
-            return XKCD;
-        }
-        if (isImageExtension(url) || isVideoExtension(url)) {
-            return DIRECT;
-        }
-
-
-        return UNKNOWN;
+    /**
+     * Sets the API key used to make calls to the Tumblr API. Notice, the Tumblr API will not send a
+     * response unless you have first set the key using this method. If you attempt to make calls to
+     * the Tumblr API with no key set, the parser will return an {@link InvalidApiKeyException}
+     *
+     * @param tumblrApiKey The key to use to make calls to the Tumblr API
+     */
+    public void setTumblrApiKey(String tumblrApiKey) {
+        mTumblrApiKey = tumblrApiKey;
     }
 }
