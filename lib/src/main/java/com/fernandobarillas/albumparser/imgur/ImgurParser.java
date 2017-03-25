@@ -86,10 +86,14 @@ public class ImgurParser extends AbstractApiParser {
     }
 
     @Override
+    public String[] getValidDomains() {
+        return ImgurApi.VALID_DOMAINS;
+    }
+
+    @Override
     public String getHash(URL mediaUrl) throws InvalidMediaUrlException {
         if (!isValidDomain(mediaUrl)) {
-            throw new InvalidMediaUrlException(
-                    mediaUrl); // TODO: Add this instead of media == null check to other parsers
+            throw new InvalidMediaUrlException(mediaUrl); // TODO: Add this instead of media == null check to other parsers
         }
         String path = mediaUrl.getPath();
         String hash;
@@ -115,12 +119,14 @@ public class ImgurParser extends AbstractApiParser {
     }
 
     @Override
-    protected boolean isValidDomain(URL mediaUrl) {
+    public boolean isValidDomain(URL mediaUrl) {
         if (mediaUrl == null) return false;
         String domain = mediaUrl.getHost();
         String baseDomain = getBaseDomain();
         return baseDomain.equalsIgnoreCase(domain)
+                || ("www." + baseDomain).equalsIgnoreCase(domain)
                 || ("i." + baseDomain).equalsIgnoreCase(domain)
+                || ("i.stack." + baseDomain).equalsIgnoreCase(domain)
                 || ("m." + baseDomain).equalsIgnoreCase(domain)
                 || ("bildgur.de").equalsIgnoreCase(domain)
                 || ("b.bildgur.de").equalsIgnoreCase(domain)
@@ -134,7 +140,9 @@ public class ImgurParser extends AbstractApiParser {
         if (mImgurClientId != null) {
             String apiKey = mImgurClientId.trim();
             if (apiKey.isEmpty()) {
-                throw new InvalidApiKeyException(mediaUrl, apiKey,
+                throw new InvalidApiKeyException(
+                        mediaUrl,
+                        apiKey,
                         "Imgur API key cannot be blank. Please set the key to null to not use the v3 API");
             }
             clientIdHeader = ImgurApi.CLIENT_ID_HEADER_PREFIX + " " + mImgurClientId;

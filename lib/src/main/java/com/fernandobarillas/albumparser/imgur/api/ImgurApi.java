@@ -34,7 +34,18 @@ import retrofit2.http.Path;
  */
 public interface ImgurApi {
     // No trailing slash!
-    String BASE_DOMAIN             = "imgur.com";
+    String BASE_DOMAIN = "imgur.com";
+
+    String[] VALID_DOMAINS = {
+            "www.imgur.com",
+            "i.stack.imgur.com",
+            "i.imgur.com",
+            "m.imgur.com",
+            "bildgur.de",
+            "b.bildgur.de",
+            "i.bildgur.de",
+    };
+
     String API_URL                 = "https://" + BASE_DOMAIN;
     String API_URL_V3              = "https://api." + BASE_DOMAIN + "/3";
     String IMAGE_URL               = "https://i." + BASE_DOMAIN;
