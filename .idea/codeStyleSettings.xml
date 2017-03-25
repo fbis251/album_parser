@@ -51,9 +51,7 @@
           <option name="ALIGN_MULTILINE_FOR" value="false" />
           <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
           <option name="CALL_PARAMETERS_WRAP" value="5" />
-          <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
           <option name="METHOD_PARAMETERS_WRAP" value="5" />
-          <option name="METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
           <option name="RESOURCE_LIST_WRAP" value="1" />
           <option name="EXTENDS_LIST_WRAP" value="1" />
           <option name="THROWS_LIST_WRAP" value="1" />
@@ -110,16 +108,7 @@
                 </rules>
               </token>
             </tokens>
-            <groups>
-              <group>
-                <type>GETTERS_AND_SETTERS</type>
-                <order>KEEP</order>
-              </group>
-              <group>
-                <type>OVERRIDDEN_METHODS</type>
-                <order>BY_NAME</order>
-              </group>
-            </groups>
+            <groups />
             <rules>
               <section>
                 <rule>
@@ -127,8 +116,8 @@
                     <AND>
                       <FIELD>true</FIELD>
                       <FINAL>true</FINAL>
+                      <PUBLIC>true</PUBLIC>
                       <STATIC>true</STATIC>
-                      <visibility />
                     </AND>
                   </match>
                 </rule>
@@ -138,8 +127,161 @@
                   <match>
                     <AND>
                       <FIELD>true</FIELD>
+                      <FINAL>true</FINAL>
+                      <PROTECTED>true</PROTECTED>
                       <STATIC>true</STATIC>
-                      <visibility />
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <FINAL>true</FINAL>
+                      <PACKAGE_PRIVATE>true</PACKAGE_PRIVATE>
+                      <STATIC>true</STATIC>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <FINAL>true</FINAL>
+                      <PRIVATE>true</PRIVATE>
+                      <STATIC>true</STATIC>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <PUBLIC>true</PUBLIC>
+                      <STATIC>true</STATIC>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <PROTECTED>true</PROTECTED>
+                      <STATIC>true</STATIC>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <PACKAGE_PRIVATE>true</PACKAGE_PRIVATE>
+                      <STATIC>true</STATIC>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <PRIVATE>true</PRIVATE>
+                      <STATIC>true</STATIC>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <FINAL>true</FINAL>
+                      <PUBLIC>true</PUBLIC>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <FINAL>true</FINAL>
+                      <PROTECTED>true</PROTECTED>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <FINAL>true</FINAL>
+                      <PACKAGE_PRIVATE>true</PACKAGE_PRIVATE>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <FINAL>true</FINAL>
+                      <PRIVATE>true</PRIVATE>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <PUBLIC>true</PUBLIC>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <PROTECTED>true</PROTECTED>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <PACKAGE_PRIVATE>true</PACKAGE_PRIVATE>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <FIELD>true</FIELD>
+                      <PRIVATE>true</PRIVATE>
                     </AND>
                   </match>
                 </rule>
@@ -157,29 +299,38 @@
               <section>
                 <rule>
                   <match>
-                    <AND>
-                      <FIELD>true</FIELD>
-                      <FINAL>true</FINAL>
-                      <visibility />
-                    </AND>
-                  </match>
-                </rule>
-              </section>
-              <section>
-                <rule>
-                  <match>
-                    <AND>
-                      <FIELD>true</FIELD>
-                      <visibility />
-                    </AND>
-                  </match>
-                </rule>
-              </section>
-              <section>
-                <rule>
-                  <match>
                     <INITIALIZER_BLOCK>true</INITIALIZER_BLOCK>
                   </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <ENUM>true</ENUM>
+                      <PUBLIC>true</PUBLIC>
+                    </AND>
+                  </match>
+                  <order>BY_NAME</order>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <INTERFACE>true</INTERFACE>
+                      <PUBLIC>true</PUBLIC>
+                    </AND>
+                  </match>
+                  <order>BY_NAME</order>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <CONSTRUCTOR>true</CONSTRUCTOR>
+                  </match>
+                  <order>BY_NAME</order>
                 </rule>
               </section>
               <section>
@@ -198,7 +349,52 @@
                   <match>
                     <AND>
                       <CONSTRUCTOR>true</CONSTRUCTOR>
+                      <PROTECTED>true</PROTECTED>
+                    </AND>
+                  </match>
+                  <order>BY_NAME</order>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <CONSTRUCTOR>true</CONSTRUCTOR>
+                      <PACKAGE_PRIVATE>true</PACKAGE_PRIVATE>
+                    </AND>
+                  </match>
+                  <order>BY_NAME</order>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <CONSTRUCTOR>true</CONSTRUCTOR>
                       <PRIVATE>true</PRIVATE>
+                    </AND>
+                  </match>
+                  <order>BY_NAME</order>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <METHOD>true</METHOD>
+                      <NAME>onCreate</NAME>
+                      <OVERRIDDEN />
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <METHOD>true</METHOD>
+                      <OVERRIDDEN />
+                      <PUBLIC>true</PUBLIC>
                     </AND>
                   </match>
                   <order>BY_NAME</order>
@@ -210,6 +406,7 @@
                     <AND>
                       <METHOD>true</METHOD>
                       <OVERRIDDEN />
+                      <PUBLIC>false</PUBLIC>
                     </AND>
                   </match>
                   <order>BY_NAME</order>
@@ -244,38 +441,9 @@
                   <match>
                     <AND>
                       <METHOD>true</METHOD>
+                      <PACKAGE_PRIVATE>true</PACKAGE_PRIVATE>
                       <STATIC>true</STATIC>
                     </AND>
-                  </match>
-                  <order>BY_NAME</order>
-                </rule>
-              </section>
-              <section>
-                <rule>
-                  <match>
-                    <AND>
-                      <METHOD>true</METHOD>
-                      <PUBLIC>true</PUBLIC>
-                    </AND>
-                  </match>
-                  <order>BY_NAME</order>
-                </rule>
-              </section>
-              <section>
-                <rule>
-                  <match>
-                    <AND>
-                      <METHOD>true</METHOD>
-                      <PROTECTED>true</PROTECTED>
-                    </AND>
-                  </match>
-                  <order>BY_NAME</order>
-                </rule>
-              </section>
-              <section>
-                <rule>
-                  <match>
-                    <METHOD>true</METHOD>
                   </match>
                   <order>BY_NAME</order>
                 </rule>
@@ -287,6 +455,39 @@
                       <METHOD>true</METHOD>
                       <PRIVATE>true</PRIVATE>
                       <STATIC>true</STATIC>
+                    </AND>
+                  </match>
+                  <order>BY_NAME</order>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <METHOD>true</METHOD>
+                      <PUBLIC>true</PUBLIC>
+                    </AND>
+                  </match>
+                  <order>BY_NAME</order>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <METHOD>true</METHOD>
+                      <PROTECTED>true</PROTECTED>
+                    </AND>
+                  </match>
+                  <order>BY_NAME</order>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <METHOD>true</METHOD>
+                      <PACKAGE_PRIVATE>true</PACKAGE_PRIVATE>
                     </AND>
                   </match>
                   <order>BY_NAME</order>
@@ -322,10 +523,7 @@
               <section>
                 <rule>
                   <match>
-                    <AND>
-                      <CLASS>true</CLASS>
-                      <PUBLIC>true</PUBLIC>
-                    </AND>
+                    <CLASS>true</CLASS>
                   </match>
                   <order>BY_NAME</order>
                 </rule>
@@ -333,7 +531,10 @@
               <section>
                 <rule>
                   <match>
-                    <CLASS>true</CLASS>
+                    <AND>
+                      <CLASS>true</CLASS>
+                      <PACKAGE_PRIVATE>true</PACKAGE_PRIVATE>
+                    </AND>
                   </match>
                   <order>BY_NAME</order>
                 </rule>
