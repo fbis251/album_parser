@@ -132,7 +132,12 @@ public class DeviantartResponse extends BaseMedia {
     }
 
     @Override
+    public boolean isGif() {
+        return ParseUtils.isGifExtension(getUrl(true));
+    }
+
+    @Override
     public boolean isVideo() {
-        return !ParseUtils.isImageExtension(getUrl(true));
+        return ParseUtils.isVideoExtension(getUrl(true));
     }
 }
