@@ -79,6 +79,7 @@ public class AlbumParserTest {
             "http://fbis251.tumblr.com/post/150135750508/",
             "http://fbis251.tumblr.com/post/150134742963/",
             "http://aatkaw.tumblr.com/post/150140358556/hana",
+            "https://eroshare.com/3fdr6v4a",
     };
     // @formatter:on
 
