@@ -215,7 +215,7 @@ public class ParseUtils {
     public static boolean isDomainMatch(String domain, String[] providerDomains) {
         if (providerDomains == null) return false;
         for (String providerDomain : providerDomains) {
-            if (isDomainMatch(domain, providerDomain)) return true;
+            if (providerDomain.equalsIgnoreCase(domain)) return true;
         }
         return false;
     }
