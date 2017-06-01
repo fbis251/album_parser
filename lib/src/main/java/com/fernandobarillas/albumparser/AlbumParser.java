@@ -86,7 +86,7 @@ public class AlbumParser {
      * make all the HTTP calls.
      */
     public AlbumParser() {
-        mClient = new OkHttpClient();
+        this(new OkHttpClient());
     }
 
     /**
