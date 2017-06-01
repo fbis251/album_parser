@@ -21,6 +21,7 @@
 package com.fernandobarillas.albumparser.eroshare.api;
 
 import com.fernandobarillas.albumparser.eroshare.model.EroshareAlbumResponse;
+import com.fernandobarillas.albumparser.eroshare.model.EroshareItemResponse;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,4 +48,7 @@ public interface EroshareApi {
 
     @GET("albums/{hash}")
     Call<EroshareAlbumResponse> getAlbum(@Path("hash") String hash);
+
+    @GET("items/{hash}.json")
+    Call<EroshareItemResponse> getItem(@Path("hash") String hash);
 }

@@ -22,8 +22,8 @@ package com.fernandobarillas.albumparser.eroshare;
 
 import com.fernandobarillas.albumparser.eroshare.api.EroshareApi;
 import com.fernandobarillas.albumparser.eroshare.model.EroshareAlbumResponse;
+import com.fernandobarillas.albumparser.eroshare.model.EroshareItemResponse;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
-import com.fernandobarillas.albumparser.media.DirectMedia;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
@@ -37,7 +37,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Response;
 
 /**
- * Created by fb on 12/27/16.
+ * A Parser for the Eroshare API
  */
 public class EroshareParser extends AbstractApiParser {
 
@@ -90,16 +90,15 @@ public class EroshareParser extends AbstractApiParser {
             throw new InvalidMediaUrlException(mediaUrl);
         }
 
-        if (ParseUtils.isDirectUrl(mediaUrl)) {
-            ParserResponse parserResponse = new ParserResponse(new DirectMedia(mediaUrl));
-            parserResponse.setOriginalUrl(mediaUrl);
-            return parserResponse;
-        }
-
         EroshareApi service = getRetrofit().create(EroshareApi.class);
-
-        Response<EroshareAlbumResponse> serviceResponse = service.getAlbum(hash).execute();
-        EroshareAlbumResponse apiResponse = serviceResponse.body();
-        return getParserResponse(mediaUrl, apiResponse);
+        if (ParseUtils.isDirectUrl(mediaUrl)) {
+            Response<EroshareItemResponse> serviceResponse = service.getItem(hash).execute();
+            EroshareItemResponse apiResponse = serviceResponse.body();
+            return getParserResponse(mediaUrl, apiResponse);
+        } else {
+            Response<EroshareAlbumResponse> serviceResponse = service.getAlbum(hash).execute();
+            EroshareAlbumResponse apiResponse = serviceResponse.body();
+            return getParserResponse(mediaUrl, apiResponse);
+        }
     }
 }

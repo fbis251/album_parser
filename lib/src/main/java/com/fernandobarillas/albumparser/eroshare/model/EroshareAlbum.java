@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by fb on 12/27/16.
+ * An Eroshare API Album
  */
 public class EroshareAlbum extends BaseMediaAlbum {
 

@@ -28,7 +28,7 @@ import com.google.gson.annotations.SerializedName;
 import java.net.URL;
 
 /**
- * Created by fb on 12/27/16.
+ * An Eroshare API media item
  */
 public class EroshareItem extends BaseMedia {
 

@@ -1,6 +1,6 @@
 /*
  * The MIT License (MIT)
- * Copyright (c) 2016 Fernando Barillas (FBis251)
+ * Copyright (c) 2017 Fernando Barillas (FBis251)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,72 +20,50 @@
 
 package com.fernandobarillas.albumparser.eroshare.model;
 
-import com.fernandobarillas.albumparser.media.BaseApiResponse;
+import com.fernandobarillas.albumparser.media.IApiResponse;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.net.URL;
-import java.util.List;
-
 /**
- * An album response from the Eroshare API
+ * A single media response from the Eroshare API
  */
-public class EroshareAlbumResponse extends BaseApiResponse {
-    @SerializedName("id")
-    @Expose
-    public String  id;
-    @SerializedName("title")
-    @Expose
-    public String  title;
-    @SerializedName("slug")
-    @Expose
-    public String  slug;
-    @SerializedName("created_at")
-    @Expose
-    public String  createdAt;
-    @SerializedName("views")
-    @Expose
-    public int     views;
-    @SerializedName("gender_male")
-    @Expose
-    public int     genderMale;
-    @SerializedName("gender_female")
-    @Expose
-    public int     genderFemale;
-    @SerializedName("secret")
-    @Expose
-    public boolean secret;
-    @SerializedName("url")
-    @Expose
-    public String  url;
-    @SerializedName("items")
-    @Expose
-    public List<EroshareItem> items = null;
+public class EroshareItemResponse extends EroshareItem implements IApiResponse {
 
-    private EroshareAlbum mAlbum;
+    @SerializedName("message")
+    @Expose
+    public String message;
 
     @Override
     public IMediaAlbum getAlbum() {
-        if (mAlbum == null) {
-            mAlbum = new EroshareAlbum(items);
-        }
-        return mAlbum;
+        // This is a single item, not an album
+        return null;
     }
 
     @Override
-    public URL getPreviewUrl() {
-        return getAlbum() != null ? getAlbum().getPreviewUrl() : null;
+    public String getErrorMessage() {
+        return message;
+    }
+
+    @Override
+    public String getJson() {
+        return new Gson().toJson(this);
+    }
+
+    @Override
+    public IMedia getMedia() {
+        return this;
     }
 
     @Override
     public boolean isAlbum() {
-        // This is an album only API response
-        return true;
+        return false;
     }
 
     @Override
     public boolean isSuccessful() {
-        return items != null && items.size() > 0;
+        return message == null;
     }
 }
