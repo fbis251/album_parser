@@ -147,8 +147,8 @@ public class ParseUtilsTest {
     @Test
     public void testGetSizeInMb() {
         class SizeInput {
-            private long inputValue;
-            private long expectedValue;
+            private long   inputValue;
+            private long   expectedValue;
             private String expectedString;
 
             private SizeInput(long inputValue, long expectedValue, String expectedString) {

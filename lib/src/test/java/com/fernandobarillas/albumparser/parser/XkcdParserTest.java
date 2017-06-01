@@ -24,6 +24,7 @@ import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
+import com.fernandobarillas.albumparser.util.TestUtils;
 import com.fernandobarillas.albumparser.xkcd.XkcdParser;
 
 import org.junit.Rule;
@@ -36,8 +37,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import okhttp3.OkHttpClient;
 
 import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
 import static com.fernandobarillas.albumparser.util.TestUtils.apiDomainValid;
@@ -52,12 +51,10 @@ import static org.junit.Assert.assertNotNull;
 public class XkcdParserTest implements IParserTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
-    private OkHttpClient mOkHttpClient;
-    private XkcdParser   mXkcdParser;
+    private XkcdParser mXkcdParser;
 
     public XkcdParserTest() {
-        mOkHttpClient = new OkHttpClient();
-        mXkcdParser = new XkcdParser(mOkHttpClient);
+        mXkcdParser = new XkcdParser(TestUtils.getOkHttpClient());
     }
 
     @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)

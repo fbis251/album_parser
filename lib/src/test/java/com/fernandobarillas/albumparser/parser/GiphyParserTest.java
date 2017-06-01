@@ -26,6 +26,7 @@ import com.fernandobarillas.albumparser.giphy.GiphyParser;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
+import com.fernandobarillas.albumparser.util.TestUtils;
 
 import org.junit.Test;
 
@@ -33,8 +34,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-import okhttp3.OkHttpClient;
 
 import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
 import static com.fernandobarillas.albumparser.util.TestUtils.apiDomainValid;
@@ -46,15 +45,12 @@ import static org.junit.Assert.assertNotNull;
  * Tests for the Giphy API parser
  */
 public class GiphyParserTest implements IParserTest {
-    private OkHttpClient mOkHttpClient;
-    private GiphyParser  mGiphyParser;
-    private GiphyParser  mGiphyParserNoApiKey;
-    private String mGiphyApiKey = ApiKeys.GIPHY_API_KEY;
+    private GiphyParser mGiphyParser;
+    private GiphyParser mGiphyParserNoApiKey;
 
     public GiphyParserTest() {
-        mOkHttpClient = new OkHttpClient();
-        mGiphyParser = new GiphyParser(mOkHttpClient, mGiphyApiKey);
-        mGiphyParserNoApiKey = new GiphyParser(mOkHttpClient);
+        mGiphyParser = new GiphyParser(TestUtils.getOkHttpClient(), ApiKeys.GIPHY_API_KEY);
+        mGiphyParserNoApiKey = new GiphyParser(TestUtils.getOkHttpClient());
     }
 
     @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)

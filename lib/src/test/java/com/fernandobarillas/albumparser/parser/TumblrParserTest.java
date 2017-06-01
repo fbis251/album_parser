@@ -30,6 +30,7 @@ import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
 import com.fernandobarillas.albumparser.tumblr.TumblrParser;
 import com.fernandobarillas.albumparser.util.ParseUtils;
+import com.fernandobarillas.albumparser.util.TestUtils;
 
 import org.junit.Test;
 
@@ -39,8 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.OkHttpClient;
 
 import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
 import static com.fernandobarillas.albumparser.util.TestUtils.apiDomainValid;
@@ -53,10 +52,9 @@ import static org.junit.Assert.assertNotNull;
  */
 public class TumblrParserTest implements IParserTest {
     private TumblrParser mTumblrParser;
-    private String mTumblrApiKey = ApiKeys.TUMBLR_API_KEY;
 
     public TumblrParserTest() {
-        mTumblrParser = new TumblrParser(new OkHttpClient(), mTumblrApiKey);
+        mTumblrParser = new TumblrParser(TestUtils.getOkHttpClient(), ApiKeys.TUMBLR_API_KEY);
     }
 
     @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)

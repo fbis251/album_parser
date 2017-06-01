@@ -28,10 +28,14 @@ import com.fernandobarillas.albumparser.parser.IParserResponse;
 
 import org.junit.Assert;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import okhttp3.OkHttpClient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -43,7 +47,8 @@ import static org.junit.Assert.assertTrue;
 public class TestUtils {
     public static final int API_CALL_TIMEOUT_MS = 10000; // Wait time for HTTP call to finish
 
-    public static void apiDomainValid(final AbstractApiParser apiParser, final String baseDomain,
+    public static void apiDomainValid(final AbstractApiParser apiParser,
+            final String baseDomain,
             final boolean skipApiUrlsTests) {
         assertNotNull("Base domain null", baseDomain);
         assertNotNull(baseDomain + " Parser instance null", apiParser);
@@ -78,14 +83,16 @@ public class TestUtils {
         }
     }
 
-    public static void compareAlbum(final URL originalUrl, final IMediaAlbum expectedAlbum,
+    public static void compareAlbum(final URL originalUrl,
+            final IMediaAlbum expectedAlbum,
             final IMediaAlbum mediaAlbum) {
         assertNotNull(originalUrl + " Original URL null", originalUrl);
         assertNotNull(originalUrl + " Expected Album null", expectedAlbum);
         assertNotNull(originalUrl + " Album null", mediaAlbum);
 
         // Album fields
-        assertEquals(originalUrl + " Preview URL", expectedAlbum.getPreviewUrl(),
+        assertEquals(originalUrl + " Preview URL",
+                expectedAlbum.getPreviewUrl(),
                 mediaAlbum.getPreviewUrl());
         assertEquals(originalUrl + " Count", expectedAlbum.getCount(), mediaAlbum.getCount());
         assertEquals(originalUrl + " Is empty", expectedAlbum.isEmpty(), mediaAlbum.isEmpty());
@@ -103,54 +110,70 @@ public class TestUtils {
         }
     }
 
-    public static void compareMedia(final URL originalUrl, final IMedia expectedMedia,
+    public static void compareMedia(final URL originalUrl,
+            final IMedia expectedMedia,
             final IMedia media) {
         assertNotNull(originalUrl + " Original URL null", originalUrl);
         assertNotNull(originalUrl + " Expected Media null", expectedMedia);
         assertNotNull(originalUrl + " Media null", media);
 
         // Media Fields
-        assertEquals(originalUrl + " High quality URL", expectedMedia.getUrl(true),
+        assertEquals(originalUrl + " High quality URL",
+                expectedMedia.getUrl(true),
                 media.getUrl(true));
-        assertEquals(originalUrl + " Low quality URL", expectedMedia.getUrl(false),
+        assertEquals(originalUrl + " Low quality URL",
+                expectedMedia.getUrl(false),
                 media.getUrl(false));
         String prefix = String.format("%s %s ", originalUrl, media.getUrl(true));
-        assertEquals(prefix + " High quality byte size", expectedMedia.getByteSize(true),
+        assertEquals(prefix + " High quality byte size",
+                expectedMedia.getByteSize(true),
                 media.getByteSize(true));
-        assertEquals(prefix + " Low quality byte size", expectedMedia.getByteSize(false),
+        assertEquals(prefix + " Low quality byte size",
+                expectedMedia.getByteSize(false),
                 media.getByteSize(false));
-        assertEquals(prefix + " Description", expectedMedia.getDescription(),
+        assertEquals(prefix + " Description",
+                expectedMedia.getDescription(),
                 media.getDescription());
         assertEquals(prefix + " Duration", expectedMedia.getDuration(), media.getDuration(), 0.0);
-        assertEquals(prefix + " High quality height", expectedMedia.getHeight(true),
+        assertEquals(prefix + " High quality height",
+                expectedMedia.getHeight(true),
                 media.getHeight(true));
-        assertEquals(prefix + " Low quality height", expectedMedia.getHeight(false),
+        assertEquals(prefix + " Low quality height",
+                expectedMedia.getHeight(false),
                 media.getHeight(false));
         assertEquals(prefix + " Preview URL", expectedMedia.getPreviewUrl(), media.getPreviewUrl());
         assertEquals(prefix + " Title", expectedMedia.getTitle(), media.getTitle());
-        assertEquals(prefix + " High quality width", expectedMedia.getWidth(true),
+        assertEquals(prefix + " High quality width",
+                expectedMedia.getWidth(true),
                 media.getWidth(true));
-        assertEquals(prefix + " Low quality width", expectedMedia.getWidth(false),
+        assertEquals(prefix + " Low quality width",
+                expectedMedia.getWidth(false),
                 media.getWidth(false));
         assertEquals(prefix + " Is video", expectedMedia.isVideo(), media.isVideo());
     }
 
     public static void compareParserResponse(final URL originalUrl,
-            final IParserResponse expectedParserResponse, final IParserResponse parserResponse) {
+            final IParserResponse expectedParserResponse,
+            final IParserResponse parserResponse) {
         assertNotNull(originalUrl + " Original URL null", originalUrl);
         assertNotNull(originalUrl + " Expected Parser Response null", expectedParserResponse);
         assertNotNull(originalUrl + " Parser Response null", parserResponse);
 
-        assertEquals(originalUrl + " Original URL", expectedParserResponse.getOriginalUrl(),
+        assertEquals(originalUrl + " Original URL",
+                expectedParserResponse.getOriginalUrl(),
                 parserResponse.getOriginalUrl());
-        assertEquals(originalUrl + " Is album", expectedParserResponse.isAlbum(),
+        assertEquals(originalUrl + " Is album",
+                expectedParserResponse.isAlbum(),
                 parserResponse.isAlbum());
-        assertEquals(originalUrl + " Is single media", expectedParserResponse.isSingleMedia(),
+        assertEquals(originalUrl + " Is single media",
+                expectedParserResponse.isSingleMedia(),
                 parserResponse.isSingleMedia());
-        assertEquals(originalUrl + " Media is null", expectedParserResponse.getMedia() == null,
+        assertEquals(originalUrl + " Media is null",
+                expectedParserResponse.getMedia() == null,
                 parserResponse.getMedia() == null);
         assertEquals(originalUrl + " Media Album is null",
-                expectedParserResponse.getAlbum() == null, parserResponse.getAlbum() == null);
+                expectedParserResponse.getAlbum() == null,
+                parserResponse.getAlbum() == null);
 
         if (expectedParserResponse.isAlbum()) {
             compareAlbum(originalUrl, expectedParserResponse.getAlbum(), parserResponse.getAlbum());
@@ -161,8 +184,20 @@ public class TestUtils {
         }
     }
 
+    public static OkHttpClient getOkHttpClient() {
+        // You can customize the OkHttpClient instance used by all the tests here
+        boolean useProxy = false;
+        if (useProxy) {
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy.lan", 8080));
+            return new OkHttpClient.Builder().proxy(proxy).build();
+        } else {
+            return new OkHttpClient();
+        }
+    }
+
     public static void validateCanParseAndHashes(final AbstractApiParser parser,
-            final Map<String, String> validHashes, final boolean skipHash) {
+            final Map<String, String> validHashes,
+            final boolean skipHash) {
         for (Map.Entry<String, String> entry : validHashes.entrySet()) {
             String expectedHash = entry.getKey();
             String url = entry.getValue();

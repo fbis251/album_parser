@@ -28,6 +28,7 @@ import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.model.ExpectedAlbum;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
+import com.fernandobarillas.albumparser.util.TestUtils;
 
 import org.junit.Test;
 
@@ -39,8 +40,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import okhttp3.OkHttpClient;
 
 import static com.fernandobarillas.albumparser.util.ParseUtils.getUrlObject;
 import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
@@ -54,20 +53,17 @@ import static org.junit.Assert.assertNotNull;
  * Tests for the Imgur API parser
  */
 public class ImgurParserTest implements IParserTest {
-    private OkHttpClient mOkHttpClient;
-    private ImgurParser  mImgurParser;
-    private ImgurParser  mImgurParserNoApiKey;
+    private ImgurParser mImgurParser;
+    private ImgurParser mImgurParserNoApiKey;
 
-    private String mImgurApiKey    = ApiKeys.IMGUR_API_KEY;
     private String mPreviewQuality = Image.SMALL_SQUARE;
     private String mLowQuality     = Image.MEDIUM_THUMBNAIL;
 
     public ImgurParserTest() {
-        mOkHttpClient = new OkHttpClient();
-        mImgurParser = new ImgurParser(mOkHttpClient, mImgurApiKey);
+        mImgurParser = new ImgurParser(TestUtils.getOkHttpClient(), ApiKeys.IMGUR_API_KEY);
         mImgurParser.setLowQualitySize(mLowQuality);
         mImgurParser.setPreviewSize(mPreviewQuality);
-        mImgurParserNoApiKey = new ImgurParser(mOkHttpClient, null);
+        mImgurParserNoApiKey = new ImgurParser(TestUtils.getOkHttpClient(), null);
         mImgurParserNoApiKey.setLowQualitySize(mLowQuality);
         mImgurParserNoApiKey.setPreviewSize(mPreviewQuality);
     }
