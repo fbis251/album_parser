@@ -25,8 +25,10 @@ import com.fernandobarillas.albumparser.media.IMedia;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,6 +68,21 @@ public class ParseUtils {
     }
 
     /**
+     * Gets the first path segment from a URL. For example, if a url is https://example.com/one/two
+     * this method will return the String "one"
+     * If the URL is https://foo.com, this method will return a blank String since there are
+     * no path segments
+     *
+     * @param url The URL to get the first path segment from
+     * @return The first path segment from a URL
+     */
+    public static String getFirstPathSegment(URL url) {
+        String[] splitPath = getSplitPath(url);
+        if (splitPath == null || splitPath.length == 0) return "";
+        return splitPath[0];
+    }
+
+    /**
      * Parses a URLs query parameters into a Map for easier parsing of options.
      * For example, a URL http://example.com?one=1&amp;two=true
      * would return the map:
@@ -90,7 +107,6 @@ public class ParseUtils {
         if (url == null) return null;
         return buildQueryMap(url.getQuery());
     }
-
 
     /**
      * @param uri The URI to attempt to map the query parameters for
@@ -126,6 +142,26 @@ public class ParseUtils {
         long quotient = sizeInMb / divisor;
         long remainder = sizeInMb % divisor;
         return String.format("%d.%d", quotient, remainder);
+    }
+
+    /**
+     * Splits a URL's path into segments. For example, if a url is https://example.com/foo/bar/baz,
+     * this method will return the array ["foo","bar","baz"]
+     *
+     * @param url The URL to get the segments from.
+     * @return The segments of a URL's path
+     */
+    public static String[] getSplitPath(URL url) {
+        if (url == null) return null;
+        String path = url.getPath();
+        // The first path segment will always be empty since all paths begin with a leading slash
+        // Return only the remaining path segments by removing the first entry from the result array
+        String[] splitPath = path.split("/");
+        if (splitPath.length > 0) {
+            return Arrays.copyOfRange(splitPath, 1, splitPath.length);
+        }
+
+        return null;
     }
 
     /**
