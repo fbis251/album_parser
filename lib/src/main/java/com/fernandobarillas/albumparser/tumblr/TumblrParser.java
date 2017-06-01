@@ -31,6 +31,7 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
@@ -71,6 +72,11 @@ public class TumblrParser extends AbstractApiParser {
 
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
         return hash;
+    }
+
+    @Override
+    public Set<String> getValidDomains() {
+        return TumblrApi.VALID_DOMAINS_SET;
     }
 
     @Override
