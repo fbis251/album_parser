@@ -35,6 +35,7 @@ import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.reddit.RedditParser;
 import com.fernandobarillas.albumparser.streamable.StreamableParser;
 import com.fernandobarillas.albumparser.tumblr.TumblrParser;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.vidble.VidbleParser;
 import com.fernandobarillas.albumparser.vidme.VidmeParser;
 import com.fernandobarillas.albumparser.xkcd.XkcdParser;
@@ -43,10 +44,6 @@ import java.io.IOException;
 import java.net.URL;
 
 import okhttp3.OkHttpClient;
-
-import static com.fernandobarillas.albumparser.util.ParseUtils.getUrlObject;
-import static com.fernandobarillas.albumparser.util.ParseUtils.isImageExtension;
-import static com.fernandobarillas.albumparser.util.ParseUtils.isVideoExtension;
 
 /**
  * Class that facilitates parsing API responses from various image/video hosting services. This
@@ -109,8 +106,8 @@ public class AlbumParser {
      * @param url The URL to check for support
      * @return True if the URL can be parsed by this library, false if the URL is unsupported
      */
-    public static boolean isSupported(String url) {
-        return isSupported(getUrlObject(url));
+    public static boolean isSupported(URL url) {
+        return getMediaProvider(url) != UNKNOWN;
     }
 
     /**
@@ -119,8 +116,8 @@ public class AlbumParser {
      * @param url The URL to check for support
      * @return True if the URL can be parsed by this library, false if the URL is unsupported
      */
-    public static boolean isSupported(URL url) {
-        return getMediaProvider(url) != UNKNOWN;
+    public static boolean isSupported(String url) {
+        return isSupported(ParseUtils.getUrlObject(url));
     }
 
     private static int getMediaProvider(URL url) {
@@ -160,7 +157,7 @@ public class AlbumParser {
         if (new XkcdParser().canParse(url)) {
             return XKCD;
         }
-        if (isImageExtension(url) || isVideoExtension(url)) {
+        if (ParseUtils.isImageExtension(url) || ParseUtils.isVideoExtension(url)) {
             return DIRECT;
         }
 
@@ -213,7 +210,7 @@ public class AlbumParser {
     public ParserResponse parseUrl(String urlString)
             throws IOException, InvalidApiKeyException, InvalidApiResponseException,
             InvalidMediaUrlException {
-        return parseUrl(getUrlObject(urlString));
+        return parseUrl(ParseUtils.getUrlObject(urlString));
     }
 
     /**
