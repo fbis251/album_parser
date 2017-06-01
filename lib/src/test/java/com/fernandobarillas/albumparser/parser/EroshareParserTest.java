@@ -105,7 +105,10 @@ public class EroshareParserTest {
         Map<String, String> validHashes = new HashMap<>();
 
         // Valid sub-domains
-        validHashes.put("3fdr6v4a", "https://eroshare.com/3fdr6v4a");
+        validHashes.put("3fdr6v4a", "https://eroshare.com/3fdr6v4a"); // album url
+        validHashes.put("3fdr6v4a", "https://eroshare.com/3fdr6v4a/"); // album url
+        validHashes.put("wja22gm7", "https://eroshare.com/i/wja22gm7"); // item url
+        validHashes.put("wja22gm7", "https://eroshare.com/i/wja22gm7/"); // item url
         validHashes.put("0mvd0dp7", "https://v.eroshare.com/0mvd0dp7.mp4"); // mobile url
         validHashes.put("wja22gm7", "https://i.eroshare.com/wja22gm7.jpg"); // i subdomain
 
@@ -115,6 +118,18 @@ public class EroshareParserTest {
     // Tests a single image URL
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testImageItem() throws IOException, RuntimeException {
+        URL imageUrl = getUrlObject("https://eroshare.com/i/wja22gm7/");
+        ExpectedParserResponse expectedParserResponse = new ExpectedParserResponse.Builder(imageUrl)
+                .setIsSingleMedia(true)
+                .setMedia(EXPECTED_IMAGE)
+                .build();
+        ParserResponse parserResponse = mEroshareParser.parse(imageUrl);
+        compareParserResponse(imageUrl, expectedParserResponse, parserResponse);
+    }
+
+    // Tests a single image URL
+    @Test(timeout = API_CALL_TIMEOUT_MS)
+    public void testImageItemDirectUrl() throws IOException, RuntimeException {
         URL imageUrl = getUrlObject("https://i.eroshare.com/wja22gm7.jpg");
         ExpectedParserResponse expectedParserResponse = new ExpectedParserResponse.Builder(imageUrl)
                 .setIsSingleMedia(true)

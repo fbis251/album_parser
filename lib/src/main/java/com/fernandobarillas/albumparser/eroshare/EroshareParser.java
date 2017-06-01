@@ -41,7 +41,10 @@ import retrofit2.Response;
  */
 public class EroshareParser extends AbstractApiParser {
 
+    private static final String ITEM_PATH = "i";
+
     private static final Pattern ALBUM_PATTERN        = Pattern.compile("^/([^\\W_]{8})(?:/.*?|)$");
+    private static final Pattern ITEM_PATTERN         = Pattern.compile("^/i/([^\\W_]{8})/?");
     private static final Pattern DIRECT_MEDIA_PATTERN =
             Pattern.compile("^/([^\\W_]{8})\\.[^\\W_]{3,4}/?$");
 
@@ -69,9 +72,15 @@ public class EroshareParser extends AbstractApiParser {
         }
         String path = mediaUrl.getPath();
         String hash = ParseUtils.hashRegex(path, ALBUM_PATTERN);
+
         // Check if this is a direct media URL
         if (hash == null) {
             hash = ParseUtils.hashRegex(path, DIRECT_MEDIA_PATTERN);
+        }
+
+        // Check if this is an item URL
+        if (hash == null) {
+            hash = ParseUtils.hashRegex(path, ITEM_PATTERN);
         }
 
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
@@ -91,7 +100,8 @@ public class EroshareParser extends AbstractApiParser {
         }
 
         EroshareApi service = getRetrofit().create(EroshareApi.class);
-        if (ParseUtils.isDirectUrl(mediaUrl)) {
+        if (ParseUtils.isDirectUrl(mediaUrl)
+                || ITEM_PATH.equalsIgnoreCase(ParseUtils.getFirstPathSegment(mediaUrl))) {
             Response<EroshareItemResponse> serviceResponse = service.getItem(hash).execute();
             EroshareItemResponse apiResponse = serviceResponse.body();
             return getParserResponse(mediaUrl, apiResponse);
