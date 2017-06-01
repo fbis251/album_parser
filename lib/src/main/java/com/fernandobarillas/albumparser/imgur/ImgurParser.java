@@ -58,7 +58,7 @@ public class ImgurParser extends AbstractApiParser {
     private static final Pattern NO_PREFIX_PATTERN    =
             Pattern.compile("^/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
     private static final Pattern DIRECT_MEDIA_PATTERN =
-            Pattern.compile("^/([^\\W_]{5}|[^\\W_]{7})[sbtmlghr]?\\.[^\\W_]{3,4}/?$");
+            Pattern.compile("^/([^\\W_]{5}|[^\\W_]{7})(?:[sbtmlghr]|_d)?\\.[^\\W_]{3,4}/?$");
 
     private String mImgurClientId = null;
     private String mPreviewSize;
