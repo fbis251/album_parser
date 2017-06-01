@@ -31,6 +31,7 @@ import com.fernandobarillas.albumparser.xkcd.model.XkcdResponse;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
@@ -39,6 +40,10 @@ import retrofit2.Response;
  * Parser for the XKCD API
  */
 public class XkcdParser extends AbstractApiParser {
+
+    private static final Pattern COMICS_REGEX = Pattern.compile("([\\w.]+)");
+    private static final Pattern NUMBER_REGEX = Pattern.compile("^(\\d+)$");
+    private static final String  PATH_COMICS  = "comics";
 
     public XkcdParser() {
     }
@@ -60,13 +65,23 @@ public class XkcdParser extends AbstractApiParser {
     @Override
     public String getHash(URL mediaUrl) {
         if (!isValidDomain(mediaUrl)) throw new InvalidMediaUrlException(mediaUrl);
-        String path = mediaUrl.getPath();
+        String[] splitPath = ParseUtils.getSplitPath(mediaUrl);
         String hash;
-        if (path.startsWith("/comics/") && ParseUtils.isImageExtension(mediaUrl)) {
-            // Direct comic URL
-            hash = ParseUtils.hashRegex(path, "(/comics/\\w+)");
+
+        // No path segments for the URL
+        if (splitPath == null || splitPath.length < 1) throw new InvalidMediaUrlException(mediaUrl);
+        String firstSegment = splitPath[0];
+        System.out.println("firstSegment = [" + firstSegment + ']');
+        if (splitPath.length >= 2
+                && PATH_COMICS.equalsIgnoreCase(firstSegment)
+                && ParseUtils.isImageExtension(mediaUrl)) {
+            String secondSegment = splitPath[1];
+            hash = ParseUtils.hashRegex(secondSegment, COMICS_REGEX);
+            hash = String.format("/%s/%s", PATH_COMICS, hash);
+            System.out.println("hash = [" + hash + ']');
         } else {
-            hash = ParseUtils.hashRegex(mediaUrl.getPath(), "^/(\\d+)/?$");
+            hash = ParseUtils.hashRegex(firstSegment, NUMBER_REGEX);
+            System.out.println("hash = [" + hash + ']');
             getComicNumber(mediaUrl, hash);
         }
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);

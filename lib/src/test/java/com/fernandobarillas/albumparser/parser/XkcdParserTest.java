@@ -78,10 +78,11 @@ public class XkcdParserTest implements IParserTest {
         // standard URL
         validHashes.put("1", "http://xkcd.com/1");
         validHashes.put("695", "http://m.xkcd.com/695/");
+        validHashes.put("1722", "http://www.xkcd.com/1722/#");
         validHashes.put("9223372036854775807", "http://xkcd.com/9223372036854775807");
-        validHashes.put("/comics/infinite_scrolling",
+        validHashes.put("/comics/infinite_scrolling.png",
                 "http://imgs.xkcd.com/comics/infinite_scrolling.png");
-        validHashes.put("/comics/goldbach_conjectures",
+        validHashes.put("/comics/goldbach_conjectures.png",
                 "http://imgs.xkcd.com/comics/goldbach_conjectures.png");
 
         validateCanParseAndHashes(mXkcdParser, validHashes, false);
