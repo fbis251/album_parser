@@ -71,7 +71,7 @@ public class ImgurParserTest implements IParserTest {
     @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
     @Override
     public void testApi404Error() throws IOException, RuntimeException {
-        URL url = getUrlObject("https://imgur.com/a/a8sxH");
+        URL url = getUrlObject("https://imgur.com/a/uuuuu");
         assertNotNull(url);
         mImgurParser.parse(url);
     }
@@ -97,7 +97,7 @@ public class ImgurParserTest implements IParserTest {
         validHashes.put("rROMo", "http://imgur.com/rROMo"); // Album with no prefix
         validHashes.put("VhGBD", "http://imgur.com/r/motivation/VhGBD"); // Album with /r/ prefix
         validHashes.put("WKauF", "https://imgur.com/gallery/WKauF"); // Album with gallery URL
-        validHashes.put("cvehZ", "http://www.imgur.com/a/cvehZ"); // /a/ prefix album with www domain
+        validHashes.put("cvehZ", "http://www.imgur.com/a/cvehZ"); // /a/ prefix album, www domain
         validHashes.put("cvehZ", "http://imgur.com/a/cvehZ"); // /a/ prefix album
         validHashes.put("rROMo", "https://bildgur.de/a/rROMo"); // /a/ prefix album, bildgur domain
         validHashes.put("zis2t", "http://imgur.com/r/diy/zis2t"); // /r/ prefix album
@@ -113,6 +113,7 @@ public class ImgurParserTest implements IParserTest {
         validHashes.put("FGfBEqu", "https://bildgur.de/FGfBEqu.png"); // Direct bildgur url
         validHashes.put("xvn42E1", "http://b.bildgur.de/xvn42E1.jpg"); // Direct bildgur url
         validHashes.put("FGfBEqu", "https://bildgur.de/FGfBEqu"); // bildgur url
+        validHashes.put("1234567", "http://i.imgur.com/1234567_d.jpg"); // _d suffix
 
         // Synthetic URLs
         validHashes.put("12345", "http://imgur.com/12345.jpg");
@@ -150,6 +151,7 @@ public class ImgurParserTest implements IParserTest {
         validHashes.put("abcde", "http://imgur.com/r/test/abcde");
         validHashes.put("1234567", "http://imgur.com/r/test/1234567");
         validHashes.put("abcdefg", "http://imgur.com/r/test/abcdefg");
+        validHashes.put("wi3Sl", "http://i.stack.imgur.com/wi3Sl.jpg");
 
         validateCanParseAndHashes(mImgurParser, validHashes, false);
     }
@@ -348,11 +350,32 @@ public class ImgurParserTest implements IParserTest {
         compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
+    // Tests an image URL (with a short album-length hash) using the v3 API
+    @Test(timeout = API_CALL_TIMEOUT_MS)
+    public void testV3ImageWithShortHash() throws IOException, RuntimeException {
+        URL url = getUrlObject("https://imgur.com/0MlEZ");
+        ExpectedMedia expectedImage =
+                getExpectedMediaBuilder("0MlEZ", false).setHighQualityByteSize(126099)
+                        .setHighQualityWidth(553)
+                        .setHighQualityHeight(833)
+                        .build();
+
+        ExpectedParserResponse expectedParserResponse =
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
+                        .setMedia(expectedImage)
+                        .build();
+
+        ParserResponse parserResponse = mImgurParser.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
+    }
+
     private ExpectedMedia.Builder getExpectedMediaBuilder(final String hash,
             final boolean isAnimated) {
         String expectedExtension = isAnimated ? ".mp4" : ".jpg";
-        return new ExpectedMedia.Builder().setPreviewUrl(
-                "https://i.imgur.com/" + hash + mPreviewQuality + ".jpg")
+        return new ExpectedMedia.Builder().setPreviewUrl("https://i.imgur.com/"
+                + hash
+                + mPreviewQuality
+                + ".jpg")
                 .setHighQualityUrl("https://i.imgur.com/" + hash + expectedExtension)
                 // No low quality URLs for animated results
                 .setLowQualityUrl(

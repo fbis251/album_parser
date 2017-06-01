@@ -21,6 +21,7 @@
 package com.fernandobarillas.albumparser.imgur;
 
 import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
+import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.imgur.model.AlbumResponse;
@@ -47,6 +48,8 @@ public class ImgurParser extends AbstractApiParser {
 
     private static final int ALBUM_HASH_LENGTH = 5; // Most recent album hashes are exactly 5 chars
     private static final int IMAGE_HASH_LENGTH = 7; // Most recent image hashes are exactly 7 chars
+
+    private static final String ALBUM_PATH = "a";
 
     // Regex patterns, pre-compiled for better performance
     private static final Pattern GALLERY_PATTERN      =
@@ -183,29 +186,37 @@ public class ImgurParser extends AbstractApiParser {
                 if (apiResponse != null) {
                     apiResponse.setLowQuality(mLowQualitySize);
                     apiResponse.setPreviewQuality(mPreviewSize);
+                    return getParserResponse(mediaUrl, apiResponse);
                 }
-                return getParserResponse(mediaUrl, apiResponse);
+            } else {
+                // Make an API call to get the album images via the old API
+                Response<AlbumResponse> serviceResponse = service.getAlbumData(hash).execute();
+                AlbumResponse apiResponse = serviceResponse.body();
+                if (apiResponse != null) {
+                    apiResponse.setLowQuality(mLowQualitySize);
+                    apiResponse.setPreviewQuality(mPreviewSize);
+                    return getParserResponse(mediaUrl, apiResponse);
+                }
             }
 
-            // Make an API call to get the album images via the old API
-            Response<AlbumResponse> serviceResponse = service.getAlbumData(hash).execute();
-            AlbumResponse apiResponse = serviceResponse.body();
-            if (apiResponse != null) {
-                apiResponse.setLowQuality(mLowQualitySize);
-                apiResponse.setPreviewQuality(mPreviewSize);
+            // Is this a /a/{hash} URL? If so, don't attempt to parse as image below
+            String[] splitPath = ParseUtils.getSplitPath(mediaUrl);
+            if (splitPath.length > 0) {
+                if (ALBUM_PATH.equalsIgnoreCase(splitPath[0])) {
+                    throw new InvalidApiResponseException(mediaUrl, "Could not parse album URL");
+                }
             }
-            return getParserResponse(mediaUrl, apiResponse);
-        } else {
-            // Use API v3 if the client ID is set
-            Response<ImageResponseV3> serviceResponse =
-                    service.getV3Image(clientIdHeader, hash).execute();
-            ImageResponseV3 apiResponse = serviceResponse.body();
-            if (apiResponse != null) {
-                apiResponse.setLowQuality(mLowQualitySize);
-                apiResponse.setPreviewQuality(mPreviewSize);
-            }
-            return getParserResponse(mediaUrl, apiResponse);
         }
+
+        // Album API call failed, this is probably an old API single image hash
+        Response<ImageResponseV3> serviceResponse =
+                service.getV3Image(clientIdHeader, hash).execute();
+        ImageResponseV3 apiResponse = serviceResponse.body();
+        if (apiResponse != null) {
+            apiResponse.setLowQuality(mLowQualitySize);
+            apiResponse.setPreviewQuality(mPreviewSize);
+        }
+        return getParserResponse(mediaUrl, apiResponse);
     }
 
     /**
