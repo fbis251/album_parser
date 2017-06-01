@@ -49,7 +49,9 @@ public class ImgurParser extends AbstractApiParser {
     private static final int ALBUM_HASH_LENGTH = 5; // Most recent album hashes are exactly 5 chars
     private static final int IMAGE_HASH_LENGTH = 7; // Most recent image hashes are exactly 7 chars
 
-    private static final String ALBUM_PATH = "a";
+    private static final String ALBUM_PATH     = "a";
+    private static final String GALLERY_PATH   = "gallery";
+    private static final String SUBREDDIT_PATH = "r";
 
     // Regex patterns, pre-compiled for better performance
     private static final Pattern GALLERY_PATTERN      =
@@ -95,13 +97,14 @@ public class ImgurParser extends AbstractApiParser {
             throw new InvalidMediaUrlException(mediaUrl); // TODO: Add this instead of media == null check to other parsers
         }
         String path = mediaUrl.getPath();
+        String firstSegment = ParseUtils.getFirstPathSegment(mediaUrl);
         String hash;
-        if (path.startsWith("/gallery/")) {
+        if (GALLERY_PATH.equalsIgnoreCase(firstSegment)) {
             // /gallery/{hash} URLs can contain both album and image hashes
             hash = ParseUtils.hashRegex(path, GALLERY_PATTERN);
-        } else if (path.startsWith("/a/")) {
+        } else if (ALBUM_PATH.equalsIgnoreCase(firstSegment)) {
             hash = ParseUtils.hashRegex(path, ALBUM_PATTERN);
-        } else if (path.startsWith("/r/")) {
+        } else if (SUBREDDIT_PATH.equalsIgnoreCase(firstSegment)) {
             hash = ParseUtils.hashRegex(path, SUBREDDIT_PATTERN);
         } else {
             // Probably a gallery URL with no prefix
@@ -127,14 +130,8 @@ public class ImgurParser extends AbstractApiParser {
         if (mediaUrl == null) return false;
         String domain = mediaUrl.getHost();
         String baseDomain = getBaseDomain();
-        return baseDomain.equalsIgnoreCase(domain)
-                || ("www." + baseDomain).equalsIgnoreCase(domain)
-                || ("i." + baseDomain).equalsIgnoreCase(domain)
-                || ("i.stack." + baseDomain).equalsIgnoreCase(domain)
-                || ("m." + baseDomain).equalsIgnoreCase(domain)
-                || ("bildgur.de").equalsIgnoreCase(domain)
-                || ("b.bildgur.de").equalsIgnoreCase(domain)
-                || ("i.bildgur.de").equalsIgnoreCase(domain);
+        return baseDomain.equalsIgnoreCase(domain) || ParseUtils.isDomainMatch(domain,
+                getValidDomains());
     }
 
     @Override

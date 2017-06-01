@@ -260,8 +260,9 @@ public class ParseUtils {
      * false otherwise
      */
     public static boolean isDomainMatch(String domain, String providerDomain) {
-        return !(domain == null || providerDomain == null) && (domain.endsWith("." + providerDomain)
-                || domain.equals(providerDomain));
+        if (domain == null || providerDomain == null) return false;
+        domain = domain.toLowerCase();
+        return domain.endsWith("." + providerDomain) || domain.equals(providerDomain);
     }
 
     /**
