@@ -24,6 +24,10 @@ import com.fernandobarillas.albumparser.imgur.model.AlbumResponse;
 import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponseV3;
 import com.fernandobarillas.albumparser.imgur.model.v3.ImageResponseV3;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -36,15 +40,17 @@ public interface ImgurApi {
     // No trailing slash!
     String BASE_DOMAIN = "imgur.com";
 
-    String[] VALID_DOMAINS = {
-            "www.imgur.com",
-            "i.stack.imgur.com",
-            "i.imgur.com",
-            "m.imgur.com",
+    String[]    VALID_DOMAINS     = {
+            BASE_DOMAIN,
+            "www." + BASE_DOMAIN,
+            "i.stack." + BASE_DOMAIN,
+            "i." + BASE_DOMAIN,
+            "m." + BASE_DOMAIN,
             "bildgur.de",
             "b.bildgur.de",
             "i.bildgur.de",
     };
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
 
     String API_URL                 = "https://" + BASE_DOMAIN;
     String API_URL_V3              = "https://api." + BASE_DOMAIN + "/3";

@@ -25,6 +25,10 @@ import com.fernandobarillas.albumparser.gfycat.model.GfyItem;
 import com.fernandobarillas.albumparser.gfycat.model.QueryHashResponse;
 import com.fernandobarillas.albumparser.gfycat.model.TranscodeResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -39,6 +43,15 @@ public interface GfycatApi {
     String API_URL     = "https://" + BASE_DOMAIN;
     String UPLOAD_URL  = "https://upload." + BASE_DOMAIN;
     String THUMB_URL   = "https://thumbs." + BASE_DOMAIN;
+
+    String[]    VALID_DOMAINS     = {
+            BASE_DOMAIN,
+            "fat." + BASE_DOMAIN,
+            "giant." + BASE_DOMAIN,
+            "thumbs." + BASE_DOMAIN,
+            "zippy." + BASE_DOMAIN,
+    };
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
 
     @GET("/cajax/checkUrl/{url}")
     Call<CheckLinkResponse> checkLink(@Path("url") String url);

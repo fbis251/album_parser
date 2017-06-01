@@ -30,6 +30,7 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import okhttp3.OkHttpClient;
@@ -75,6 +76,11 @@ public class EroshareParser extends AbstractApiParser {
 
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
         return hash;
+    }
+
+    @Override
+    public Set<String> getValidDomains() {
+        return EroshareApi.VALID_DOMAINS_SET;
     }
 
     @Override

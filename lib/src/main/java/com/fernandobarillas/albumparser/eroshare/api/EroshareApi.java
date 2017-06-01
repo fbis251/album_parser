@@ -22,6 +22,10 @@ package com.fernandobarillas.albumparser.eroshare.api;
 
 import com.fernandobarillas.albumparser.eroshare.model.EroshareAlbumResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -30,12 +34,14 @@ import retrofit2.http.Path;
  * Retrofit Interface for Eroshare API
  */
 public interface EroshareApi {
-    String   BASE_DOMAIN       = "eroshare.com";
-    String   EROSHARE_I_DOMAIN = "i." + BASE_DOMAIN;
-    String   EROSHARE_V_DOMAIN = "v." + BASE_DOMAIN;
-    String[] VALID_DOMAINS     = {
+    String BASE_DOMAIN       = "eroshare.com";
+    String EROSHARE_I_DOMAIN = "i." + BASE_DOMAIN;
+    String EROSHARE_V_DOMAIN = "v." + BASE_DOMAIN;
+
+    String[]    VALID_DOMAINS     = {
             BASE_DOMAIN, EROSHARE_I_DOMAIN, EROSHARE_V_DOMAIN
     };
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
 
     String API_URL = "https://api." + BASE_DOMAIN + "/api/v1/";
 

@@ -29,6 +29,7 @@ import com.fernandobarillas.albumparser.vidble.model.VidbleResponse;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
@@ -61,6 +62,11 @@ public class VidbleParser extends AbstractApiParser {
         String hash = VidbleUtils.getHash(mediaUrl.toString()); // TODO: Implement me in this method
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
         return hash;
+    }
+
+    @Override
+    public Set<String> getValidDomains() {
+        return VidbleApi.VALID_DOMAINS_SET;
     }
 
     @Override

@@ -81,10 +81,6 @@ public class ParserResponse implements IParserResponse {
         return mHash;
     }
 
-    public void setHash(String hash) {
-        mHash = hash;
-    }
-
     @Override
     public IMedia getMedia() {
         if (mMedia != null) return mMedia;
@@ -98,10 +94,6 @@ public class ParserResponse implements IParserResponse {
     @Override
     public URL getOriginalUrl() {
         return mOriginalUrl;
-    }
-
-    public void setOriginalUrl(URL originalUrl) {
-        mOriginalUrl = originalUrl;
     }
 
     @Override
@@ -128,5 +120,13 @@ public class ParserResponse implements IParserResponse {
 
     public void setApiProviderName(String providerName) {
         mProviderName = providerName;
+    }
+
+    public void setHash(String hash) {
+        mHash = hash;
+    }
+
+    public void setOriginalUrl(URL originalUrl) {
+        mOriginalUrl = originalUrl;
     }
 }

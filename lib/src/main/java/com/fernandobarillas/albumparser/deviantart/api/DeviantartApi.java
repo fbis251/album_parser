@@ -22,6 +22,10 @@ package com.fernandobarillas.albumparser.deviantart.api;
 
 import com.fernandobarillas.albumparser.deviantart.model.DeviantartResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -33,6 +37,12 @@ public interface DeviantartApi {
     // No trailing slash!
     String BASE_DOMAIN = "deviantart.com";
     String API_URL     = "https://backend." + BASE_DOMAIN;
+
+    String[] VALID_DOMAINS = {
+            "*." + BASE_DOMAIN,
+    };
+
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
 
     @GET("/oembed")
     Call<DeviantartResponse> getOembed(@Query("url") String url);

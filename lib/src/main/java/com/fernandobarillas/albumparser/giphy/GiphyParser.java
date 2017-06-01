@@ -31,6 +31,7 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
@@ -84,13 +85,19 @@ public class GiphyParser extends AbstractApiParser {
     }
 
     @Override
+    public Set<String> getValidDomains() {
+        return GiphyApi.VALID_DOMAINS_SET;
+    }
+
+    @Override
     public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
         String hash = getHash(mediaUrl);
         String apiKey = null;
         if (mGiphyApiKey != null) {
             apiKey = mGiphyApiKey.trim();
             if (apiKey.isEmpty()) {
-                throw new InvalidApiKeyException(mediaUrl, apiKey,
+                throw new InvalidApiKeyException(mediaUrl,
+                        apiKey,
                         "Giphy API key cannot be blank. Please set the key to null to use API calls");
             }
         }

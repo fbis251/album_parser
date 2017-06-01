@@ -34,6 +34,7 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import okhttp3.OkHttpClient;
@@ -86,11 +87,6 @@ public class ImgurParser extends AbstractApiParser {
     }
 
     @Override
-    public String[] getValidDomains() {
-        return ImgurApi.VALID_DOMAINS;
-    }
-
-    @Override
     public String getHash(URL mediaUrl) throws InvalidMediaUrlException {
         if (!isValidDomain(mediaUrl)) {
             throw new InvalidMediaUrlException(mediaUrl); // TODO: Add this instead of media == null check to other parsers
@@ -119,6 +115,11 @@ public class ImgurParser extends AbstractApiParser {
     }
 
     @Override
+    public Set<String> getValidDomains() {
+        return ImgurApi.VALID_DOMAINS_SET;
+    }
+
+    @Override
     public boolean isValidDomain(URL mediaUrl) {
         if (mediaUrl == null) return false;
         String domain = mediaUrl.getHost();
@@ -140,8 +141,7 @@ public class ImgurParser extends AbstractApiParser {
         if (mImgurClientId != null) {
             String apiKey = mImgurClientId.trim();
             if (apiKey.isEmpty()) {
-                throw new InvalidApiKeyException(
-                        mediaUrl,
+                throw new InvalidApiKeyException(mediaUrl,
                         apiKey,
                         "Imgur API key cannot be blank. Please set the key to null to not use the v3 API");
             }

@@ -212,12 +212,8 @@ public class ParseUtils {
                 || isGifExtension(mediaUrl);
     }
 
-    public static boolean isDomainMatch(String domain, String[] providerDomains) {
-        if (providerDomains == null) return false;
-        for (String providerDomain : providerDomains) {
-            if (providerDomain.equalsIgnoreCase(domain)) return true;
-        }
-        return false;
+    public static boolean isDomainMatch(String domain, Set<String> providerDomains) {
+        return providerDomains != null && providerDomains.contains(domain);
     }
 
     /**

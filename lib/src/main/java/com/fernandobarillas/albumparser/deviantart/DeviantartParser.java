@@ -28,6 +28,7 @@ import com.fernandobarillas.albumparser.parser.ParserResponse;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
@@ -46,6 +47,11 @@ public class DeviantartParser extends AbstractApiParser {
     }
 
     @Override
+    public boolean canParse(URL mediaUrl) {
+        return super.canParse(mediaUrl);
+    }
+
+    @Override
     public String getApiUrl() {
         return DeviantartApi.API_URL;
     }
@@ -59,6 +65,11 @@ public class DeviantartParser extends AbstractApiParser {
     public String getHash(URL mediaUrl) throws InvalidMediaUrlException {
         if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
         return mediaUrl.toString();
+    }
+
+    @Override
+    public Set<String> getValidDomains() {
+        return DeviantartApi.VALID_DOMAINS_SET;
     }
 
     @Override

@@ -28,6 +28,7 @@ import com.fernandobarillas.albumparser.parser.ParserResponse;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
@@ -44,7 +45,6 @@ public class GfycatParser extends AbstractApiParser {
         super(client);
     }
 
-
     @Override
     public String getApiUrl() {
         return GfycatApi.API_URL;
@@ -55,13 +55,17 @@ public class GfycatParser extends AbstractApiParser {
         return GfycatApi.BASE_DOMAIN;
     }
 
-
     @Override
     public String getHash(URL mediaUrl) {
         if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
         String hash = GfycatUtils.getHash(mediaUrl); // TODO: Implement me in this method
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
         return hash;
+    }
+
+    @Override
+    public Set<String> getValidDomains() {
+        return GfycatApi.VALID_DOMAINS_SET;
     }
 
     @Override

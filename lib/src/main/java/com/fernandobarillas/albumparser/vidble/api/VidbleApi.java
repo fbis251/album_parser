@@ -22,6 +22,10 @@ package com.fernandobarillas.albumparser.vidble.api;
 
 import com.fernandobarillas.albumparser.vidble.model.VidbleResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -31,8 +35,14 @@ import retrofit2.http.Path;
  */
 public interface VidbleApi {
     // No trailing slash!
-    String BASE_DOMAIN       = "vidble.com";
-    String API_URL           = "https://" + BASE_DOMAIN;
+    String BASE_DOMAIN = "vidble.com";
+    String API_URL     = "https://" + BASE_DOMAIN;
+
+    String[]    VALID_DOMAINS     = {
+            BASE_DOMAIN, "www." + BASE_DOMAIN
+    };
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
+
     String IMAGE_URL         = API_URL;
     int    IMAGE_HASH_LENGTH = 10;
     int    ALBUM_HASH_LENGTH = 8;

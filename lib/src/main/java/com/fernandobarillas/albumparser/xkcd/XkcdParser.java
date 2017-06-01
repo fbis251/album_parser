@@ -30,6 +30,7 @@ import com.fernandobarillas.albumparser.xkcd.model.XkcdResponse;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
@@ -73,13 +74,8 @@ public class XkcdParser extends AbstractApiParser {
     }
 
     @Override
-    protected boolean isValidDomain(URL mediaUrl) {
-        if (mediaUrl == null) return false;
-        String domain = mediaUrl.getHost();
-        String baseDomain = getBaseDomain();
-        return baseDomain.equalsIgnoreCase(domain)
-                || ("m." + baseDomain).equalsIgnoreCase(domain)
-                || ("imgs." + baseDomain).equalsIgnoreCase(domain);
+    public Set<String> getValidDomains() {
+        return XkcdApi.VALID_DOMAINS_SET;
     }
 
     @Override
@@ -102,6 +98,14 @@ public class XkcdParser extends AbstractApiParser {
         Response<XkcdResponse> serviceResponse = service.getComic(comicNumber).execute();
         XkcdResponse apiResponse = serviceResponse.body();
         return getParserResponse(mediaUrl, apiResponse);
+    }
+
+    @Override
+    protected boolean isValidDomain(URL mediaUrl) {
+        if (mediaUrl == null) return false;
+        String domain = mediaUrl.getHost().toLowerCase();
+        String baseDomain = getBaseDomain();
+        return baseDomain.equals(domain) || getValidDomains().contains(domain);
     }
 
     private long getComicNumber(final URL mediaUrl, final String hash)

@@ -22,6 +22,10 @@ package com.fernandobarillas.albumparser.xkcd.api;
 
 import com.fernandobarillas.albumparser.xkcd.model.XkcdResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -32,6 +36,11 @@ import retrofit2.http.Path;
 public interface XkcdApi {
     String BASE_DOMAIN = "xkcd.com"; // No trailing slash!
     String API_URL     = "https://" + BASE_DOMAIN;
+
+    String[]    VALID_DOMAINS     = {
+            BASE_DOMAIN, "www." + BASE_DOMAIN, "imgs." + BASE_DOMAIN, "m." + BASE_DOMAIN
+    };
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
 
     @GET("/{number}/info.0.json")
     Call<XkcdResponse> getComic(@Path("number") long number);

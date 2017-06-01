@@ -22,6 +22,10 @@ package com.fernandobarillas.albumparser.streamable.api;
 
 import com.fernandobarillas.albumparser.streamable.model.StreamableResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -36,6 +40,11 @@ public interface StreamableApi {
     String CDN_URL       = "https://cdn." + BASE_DOMAIN;
     String CDN_IMAGE_URL = CDN_URL + "/image";
     String CDN_VIDEO_URL = CDN_URL + "/video";
+
+    String[]    VALID_DOMAINS     = {
+            BASE_DOMAIN, "cdn." + BASE_DOMAIN
+    };
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
 
     @GET("/videos/{hash}")
     Call<StreamableResponse> getVideo(@Path("hash") String hash);

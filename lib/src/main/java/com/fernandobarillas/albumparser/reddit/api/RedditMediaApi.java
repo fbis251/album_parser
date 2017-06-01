@@ -20,6 +20,10 @@
 
 package com.fernandobarillas.albumparser.reddit.api;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Retrofit Interface for the reddit API
  */
@@ -30,8 +34,10 @@ public interface RedditMediaApi {
     String REDDITMEDIA_G_DOMAIN   = "g.redditmedia.com";
     String REDDITUPLOADS_I_DOMAIN = "i.reddituploads.com";
 
-    String[] VALID_DOMAINS = {
+    String[]    VALID_DOMAINS     = {
             REDD_IT_DOMAIN, REDDITMEDIA_G_DOMAIN, REDDITMEDIA_I_DOMAIN, REDDITUPLOADS_I_DOMAIN
     };
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
+
     // No API implementation
 }

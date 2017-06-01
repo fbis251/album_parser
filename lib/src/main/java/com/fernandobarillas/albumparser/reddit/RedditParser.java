@@ -27,18 +27,15 @@ import com.fernandobarillas.albumparser.reddit.api.RedditMediaApi;
 import com.fernandobarillas.albumparser.reddit.model.ReddItMedia;
 import com.fernandobarillas.albumparser.reddit.model.RedditMediaMedia;
 import com.fernandobarillas.albumparser.reddit.model.RedditUploadsMedia;
-import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.regex.Pattern;
+import java.util.Set;
 
 /**
  * Parser for the reddit API
  */
 public class RedditParser extends AbstractApiParser {
-
-    private static final Pattern REDD_IT_PATTERN = Pattern.compile("([^\\W_]{12})");
 
     @Override
     public String getApiUrl() {
@@ -54,9 +51,16 @@ public class RedditParser extends AbstractApiParser {
     @Override
     public String getHash(URL mediaUrl) {
         if (isValidDomain(mediaUrl)) {
+            // Reddit media has no API to get media information. Just return blank string if domain
+            // was valid
             return "";
         }
         throw new InvalidMediaUrlException(mediaUrl);
+    }
+
+    @Override
+    public Set<String> getValidDomains() {
+        return RedditMediaApi.VALID_DOMAINS_SET;
     }
 
     @Override
@@ -75,12 +79,5 @@ public class RedditParser extends AbstractApiParser {
 
         // i.redd.it media
         return new ParserResponse(new ReddItMedia(mediaUrl));
-    }
-
-    @Override
-    protected boolean isValidDomain(URL mediaUrl) {
-        if (mediaUrl == null) return false;
-        String domain = mediaUrl.getHost();
-        return ParseUtils.isDomainMatch(domain, RedditMediaApi.VALID_DOMAINS);
     }
 }

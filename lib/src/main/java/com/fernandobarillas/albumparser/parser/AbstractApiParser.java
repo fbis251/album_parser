@@ -27,6 +27,7 @@ import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -89,10 +90,6 @@ public abstract class AbstractApiParser {
      */
     public abstract String getBaseDomain();
 
-    public String[] getValidDomains() {
-        return null;
-    }
-
     /**
      * Gets the hash for the passed-in media URL
      *
@@ -110,6 +107,23 @@ public abstract class AbstractApiParser {
      * @return A hash that can be used in an API call if the URL can be parsed, null otherwise
      */
     public abstract String getHash(URL mediaUrl) throws InvalidMediaUrlException;
+
+    /**
+     * @return A Set of domain names that this parser can parse
+     */
+    public abstract Set<String> getValidDomains();
+
+    /**
+     * Parses a media URL and attempts to get a response from the respective API
+     *
+     * @param mediaUrl The URL to attempt to parse and get an API response for
+     * @return The parsed API response for the passed-in mediaUrl
+     * @throws IOException      When there was an error during the HTTP call
+     * @throws RuntimeException When the passed-in media URL was not supported by the parser, the
+     *                          API returns a null response or a response which the library could
+     *                          not parse.
+     */
+    public abstract ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException;
 
     protected ParserResponse getParserResponse(final URL mediaUrl, final IApiResponse apiResponse)
             throws InvalidApiResponseException {
@@ -147,16 +161,4 @@ public abstract class AbstractApiParser {
                 || ParseUtils.isDomainMatch(domain, getValidDomains());
         // @formatter:on
     }
-
-    /**
-     * Parses a media URL and attempts to get a response from the respective API
-     *
-     * @param mediaUrl The URL to attempt to parse and get an API response for
-     * @return The parsed API response for the passed-in mediaUrl
-     * @throws IOException      When there was an error during the HTTP call
-     * @throws RuntimeException When the passed-in media URL was not supported by the parser, the
-     *                          API returns a null response or a response which the library could
-     *                          not parse.
-     */
-    public abstract ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException;
 }

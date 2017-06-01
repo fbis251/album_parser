@@ -22,6 +22,10 @@ package com.fernandobarillas.albumparser.giphy.api;
 
 import com.fernandobarillas.albumparser.giphy.model.GiphyResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -35,6 +39,12 @@ public interface GiphyApi {
     String BASE_DOMAIN = "giphy.com";
     String API_URL     = "https://api." + BASE_DOMAIN;
     String MEDIA_URL   = "https://media." + BASE_DOMAIN;
+
+    String[] VALID_DOMAINS = {
+            BASE_DOMAIN, "*." + BASE_DOMAIN
+    };
+
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
 
     @GET("/v1/gifs/{hash}?api_key=dc6zaTOxFJmz")
     Call<GiphyResponse> getGif(@Path("hash") String hash, @Query("api_key") String apiKey);

@@ -22,6 +22,10 @@ package com.fernandobarillas.albumparser.vidme.api;
 
 import com.fernandobarillas.albumparser.vidme.model.VidmeResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -33,6 +37,11 @@ public interface VidmeApi {
     // No trailing slash!
     String BASE_DOMAIN = "vid.me";
     String API_URL     = "https://api." + BASE_DOMAIN;
+
+    String[]    VALID_DOMAINS     = {
+            BASE_DOMAIN
+    };
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
 
     /**
      * Calls the vid.me API to get data about a vid.me url

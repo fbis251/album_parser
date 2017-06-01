@@ -22,6 +22,10 @@ package com.fernandobarillas.albumparser.tumblr.api;
 
 import com.fernandobarillas.albumparser.tumblr.model.TumblrResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -35,12 +39,18 @@ public interface TumblrApi {
     String BASE_DOMAIN = "tumblr.com";
     String API_URL     = "https://api." + BASE_DOMAIN;
 
+    String[]    VALID_DOMAINS     = {
+            "*." + BASE_DOMAIN
+    };
+    Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
+
     /** The width of the image to use as the "low quality" version */
     int LOW_QUALITY_WIDTH = 500;
     /** The width of the image to use as the preview version */
     int PREVIEW_WIDTH     = 400;
 
     @GET("/v2/blog/{blogDomain}/posts/photo")
-    Call<TumblrResponse> getPost(@Path("blogDomain") String blogDomain, @Query("id") String postId,
+    Call<TumblrResponse> getPost(@Path("blogDomain") String blogDomain,
+            @Query("id") String postId,
             @Query("api_key") String apiKey);
 }
