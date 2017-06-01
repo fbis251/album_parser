@@ -46,6 +46,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestUtils {
     public static final int API_CALL_TIMEOUT_MS = 10000; // Wait time for HTTP call to finish
+    private static OkHttpClient sOkHttpClient;
 
     public static void apiDomainValid(final AbstractApiParser apiParser,
             final String baseDomain,
@@ -185,14 +186,19 @@ public class TestUtils {
     }
 
     public static OkHttpClient getOkHttpClient() {
-        // You can customize the OkHttpClient instance used by all the tests here
-        boolean useProxy = false;
-        if (useProxy) {
-            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy.lan", 8080));
-            return new OkHttpClient.Builder().proxy(proxy).build();
-        } else {
-            return new OkHttpClient();
+
+        if (sOkHttpClient == null) {
+            // You can customize the OkHttpClient instance used by all the tests here
+            boolean useProxy = false;
+            if (useProxy) {
+                Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy.lan", 8080));
+                sOkHttpClient = new OkHttpClient.Builder().proxy(proxy).build();
+            } else {
+                sOkHttpClient = new OkHttpClient();
+            }
         }
+
+        return sOkHttpClient;
     }
 
     public static void validateCanParseAndHashes(final AbstractApiParser parser,
