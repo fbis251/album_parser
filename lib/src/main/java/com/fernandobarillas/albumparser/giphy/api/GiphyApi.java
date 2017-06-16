@@ -46,6 +46,6 @@ public interface GiphyApi {
 
     Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
 
-    @GET("/v1/gifs/{hash}?api_key=dc6zaTOxFJmz")
+    @GET("/v1/gifs/{hash}")
     Call<GiphyResponse> getGif(@Path("hash") String hash, @Query("api_key") String apiKey);
 }
