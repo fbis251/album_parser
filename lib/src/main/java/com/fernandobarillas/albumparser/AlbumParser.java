@@ -22,7 +22,6 @@
 package com.fernandobarillas.albumparser;
 
 import com.fernandobarillas.albumparser.deviantart.DeviantartParser;
-import com.fernandobarillas.albumparser.eroshare.EroshareParser;
 import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
@@ -58,16 +57,15 @@ public class AlbumParser {
     private static final int DIRECT     = 0;
     private static final int DIRECT_GIF = 1;
     private static final int DEVIANTART = 2;
-    private static final int EROSHARE   = 3;
-    private static final int GFYCAT     = 4;
-    private static final int GIPHY      = 5;
-    private static final int IMGUR      = 6;
-    private static final int REDDIT     = 7;
-    private static final int STREAMABLE = 8;
-    private static final int VIDBLE     = 9;
-    private static final int VIDME      = 10;
-    private static final int TUMBLR     = 11;
-    private static final int XKCD       = 12;
+    private static final int GFYCAT     = 3;
+    private static final int GIPHY      = 4;
+    private static final int IMGUR      = 5;
+    private static final int REDDIT     = 6;
+    private static final int STREAMABLE = 7;
+    private static final int VIDBLE     = 8;
+    private static final int VIDME      = 9;
+    private static final int TUMBLR     = 10;
+    private static final int XKCD       = 11;
 
     /** The OkHttpClient instance to use when making all the API calls */
     private OkHttpClient mClient;
@@ -126,9 +124,6 @@ public class AlbumParser {
 
         if (new DeviantartParser().canParse(url)) {
             return DEVIANTART;
-        }
-        if (new EroshareParser().canParse(url)) {
-            return EROSHARE;
         }
         if (new GfycatParser().canParse(url)) {
             return GFYCAT;
@@ -231,8 +226,6 @@ public class AlbumParser {
         switch (getMediaProvider(mediaUrl)) {
             case DEVIANTART:
                 return new DeviantartParser(mClient).parse(mediaUrl);
-            case EROSHARE:
-                return new EroshareParser(mClient).parse(mediaUrl);
             case GFYCAT:
                 return new GfycatParser(mClient).parse(mediaUrl);
             case GIPHY:
