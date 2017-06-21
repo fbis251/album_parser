@@ -53,17 +53,19 @@ public class ImgurParser extends AbstractApiParser {
     private static final String GALLERY_PATH   = "gallery";
     private static final String SUBREDDIT_PATH = "r";
 
+    // The pattern for an album or gallery hash
+    private static final String HASH_PATTERN = "([^\\W_]{5}|[^\\W_]{7})";
+
     // Regex patterns, pre-compiled for better performance
     private static final Pattern GALLERY_PATTERN      =
-            Pattern.compile("^/gallery/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
-    private static final Pattern ALBUM_PATTERN        =
-            Pattern.compile("^/a/([^\\W_]{5})(?:/.*?|)$");
+            Pattern.compile("^/gallery/" + HASH_PATTERN + "(?:/.*?|)$");
+    private static final Pattern ALBUM_PATTERN        = Pattern.compile("/([^\\W_]{5})(?:/.*?|)$");
     private static final Pattern SUBREDDIT_PATTERN    =
-            Pattern.compile("^/r/\\w+/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
+            Pattern.compile("^/r/\\w+/" + HASH_PATTERN + "(?:/.*?|)$");
     private static final Pattern NO_PREFIX_PATTERN    =
-            Pattern.compile("^/([^\\W_]{5}|[^\\W_]{7})(?:/.*?|)$");
+            Pattern.compile("^/" + HASH_PATTERN + "(?:/.*?|)$");
     private static final Pattern DIRECT_MEDIA_PATTERN =
-            Pattern.compile("^/([^\\W_]{5}|[^\\W_]{7})(?:[sbtmlghr]|_d)?\\.[^\\W_]{3,4}/?$");
+            Pattern.compile("/" + HASH_PATTERN + "(?:[sbtmlghr]|_d)?\\.[^\\W_]{3,4}/?$");
 
     private String mImgurClientId = null;
     private String mPreviewSize;
@@ -197,11 +199,8 @@ public class ImgurParser extends AbstractApiParser {
             }
 
             // Is this a /a/{hash} URL? If so, don't attempt to parse as image below
-            String[] splitPath = ParseUtils.getSplitPath(mediaUrl);
-            if (splitPath.length > 0) {
-                if (ALBUM_PATH.equalsIgnoreCase(splitPath[0])) {
-                    throw new InvalidApiResponseException(mediaUrl, "Could not parse album URL");
-                }
+            if (ALBUM_PATH.equalsIgnoreCase(ParseUtils.getFirstPathSegment(mediaUrl))) {
+                throw new InvalidApiResponseException(mediaUrl, "Could not parse album URL");
             }
         }
 
