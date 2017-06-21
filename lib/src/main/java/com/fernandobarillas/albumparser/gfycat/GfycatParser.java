@@ -25,10 +25,12 @@ import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
 import com.fernandobarillas.albumparser.gfycat.model.QueryHashResponse;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
+import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
@@ -37,6 +39,10 @@ import retrofit2.Response;
  * Parser for the Gfycat API
  */
 public class GfycatParser extends AbstractApiParser {
+
+    private static final String  GIFS_PATH    = "gifs";
+    private static final String  DETAIL_PATH  = "detail";
+    private static final Pattern HASH_PATTERN = Pattern.compile("(\\w+)");
 
     public GfycatParser() {
     }
@@ -57,8 +63,24 @@ public class GfycatParser extends AbstractApiParser {
 
     @Override
     public String getHash(URL mediaUrl) {
-        if (mediaUrl == null) throw new InvalidMediaUrlException(mediaUrl);
-        String hash = GfycatUtils.getHash(mediaUrl); // TODO: Implement me in this method
+        if (!isValidDomain(mediaUrl)) {
+            throw new InvalidMediaUrlException(mediaUrl);
+        }
+        String hash = null;
+        String[] pathSegments = ParseUtils.getSplitPath(mediaUrl);
+        int segmentCount = pathSegments != null ? pathSegments.length : 0;
+
+        if (segmentCount >= 3) {
+            // /gifs/details/{hash} URL
+            if (GIFS_PATH.equalsIgnoreCase(pathSegments[0]) && DETAIL_PATH.equalsIgnoreCase(
+                    pathSegments[1])) {
+                hash = ParseUtils.hashRegex(pathSegments[2], HASH_PATTERN);
+            }
+        } else if (segmentCount >= 1) {
+            // /{hash} URL
+            hash = ParseUtils.hashRegex(pathSegments[0], HASH_PATTERN);
+        }
+
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
         return hash;
     }
@@ -76,7 +98,6 @@ public class GfycatParser extends AbstractApiParser {
         }
 
         GfycatApi service = getRetrofit().create(GfycatApi.class);
-        ;
         Response<QueryHashResponse> serviceResponse = service.queryHash(hash).execute();
         QueryHashResponse apiResponse = serviceResponse.body();
         return getParserResponse(mediaUrl, apiResponse);
