@@ -249,7 +249,9 @@ public class ParseUtils {
     }
 
     public static boolean isDomainMatch(String domain, Set<String> providerDomains) {
-        return providerDomains != null && providerDomains.contains(domain);
+        return domain != null
+                && providerDomains != null
+                && providerDomains.contains(domain.toLowerCase());
     }
 
     /**
