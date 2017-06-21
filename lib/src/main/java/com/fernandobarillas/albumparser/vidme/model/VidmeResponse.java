@@ -21,30 +21,18 @@
 package com.fernandobarillas.albumparser.vidme.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
-import com.fernandobarillas.albumparser.media.IMedia;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 
-import javax.annotation.Generated;
-
-/**
- * Created by fb on 5/10/16.
- */
-@Generated("org.jsonschema2pojo")
-public class VidmeResponse extends BaseApiResponse {
-    @SerializedName("status")
-    @Expose
-    public boolean status;
-    @SerializedName("error")
-    @Expose
+public class VidmeResponse extends BaseApiResponse<Video> {
+    @Json(name = "status")
+    public Boolean status;
+    @Json(name = "error")
     public String  error;
-    @SerializedName("code")
-    @Expose
+    @Json(name = "code")
     public String  code;
-    @SerializedName("video")
-    @Expose
+    @Json(name = "video")
     public Video   video;
 
     @Override
@@ -53,7 +41,7 @@ public class VidmeResponse extends BaseApiResponse {
     }
 
     @Override
-    public IMedia getMedia() {
+    public Video getMedia() {
         return video;
     }
 
@@ -64,7 +52,7 @@ public class VidmeResponse extends BaseApiResponse {
 
     @Override
     public boolean isSuccessful() {
-        return status;
+        return status != null ? status : false;
     }
 
     @Override

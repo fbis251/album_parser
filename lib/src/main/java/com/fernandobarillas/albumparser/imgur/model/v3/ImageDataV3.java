@@ -24,103 +24,72 @@ import com.fernandobarillas.albumparser.imgur.ImgurParser;
 import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
-
-import javax.annotation.Generated;
 
 import static com.fernandobarillas.albumparser.imgur.model.Image.HUGE_THUMBNAIL;
 import static com.fernandobarillas.albumparser.imgur.model.Image.MEDIUM_THUMBNAIL;
 import static com.fernandobarillas.albumparser.imgur.model.Image.ORIGINAL;
 
-@Generated("org.jsonschema2pojo")
 public class ImageDataV3 extends BaseMedia implements IMedia {
 
-    @SerializedName("id")
-    @Expose
+    @Json(name = "id")
     public String  id;
-    @SerializedName("title")
-    @Expose
+    @Json(name = "title")
     public String  title;
-    @SerializedName("description")
-    @Expose
+    @Json(name = "description")
     public String  description;
-    @SerializedName("datetime")
-    @Expose
-    public int     datetime;
-    @SerializedName("type")
-    @Expose
+    @Json(name = "datetime")
+    public Integer datetime;
+    @Json(name = "type")
     public String  type;
-    @SerializedName("animated")
-    @Expose
-    public boolean animated;
-    @SerializedName("width")
-    @Expose
-    public int     width;
-    @SerializedName("height")
-    @Expose
-    public int     height;
-    @SerializedName("size")
-    @Expose
-    public int     size;
-    @SerializedName("views")
-    @Expose
-    public int     views;
-    @SerializedName("bandwidth")
-    @Expose
-    public long    bandwidth;
-    @SerializedName("vote")
-    @Expose
+    @Json(name = "animated")
+    public Boolean animated;
+    @Json(name = "width")
+    public Integer width;
+    @Json(name = "height")
+    public Integer height;
+    @Json(name = "size")
+    public Integer size;
+    @Json(name = "views")
+    public Integer views;
+    @Json(name = "bandwidth")
+    public Long    bandwidth;
+    @Json(name = "vote")
     public String  vote;
-    @SerializedName("favorite")
-    @Expose
-    public boolean favorite;
-    @SerializedName("nsfw")
-    @Expose
-    public boolean nsfw;
-    @SerializedName("section")
-    @Expose
+    @Json(name = "favorite")
+    public Boolean favorite;
+    @Json(name = "nsfw")
+    public Boolean nsfw;
+    @Json(name = "section")
     public String  section;
-    @SerializedName("account_url")
-    @Expose
+    @Json(name = "account_url")
     public String  accountUrl;
-    @SerializedName("account_id")
-    @Expose
-    public int     accountId;
-    @SerializedName("in_gallery")
-    @Expose
-    public boolean inGallery;
-    @SerializedName("gifv")
-    @Expose
+    @Json(name = "account_id")
+    public Integer accountId;
+    @Json(name = "in_gallery")
+    public Boolean inGallery;
+    @Json(name = "gifv")
     public String  gifv;
-    @SerializedName("mp4")
-    @Expose
+    @Json(name = "mp4")
     public String  mp4;
-    @SerializedName("mp4_size")
-    @Expose
-    public int     mp4Size;
-    @SerializedName("link")
-    @Expose
+    @Json(name = "mp4_size")
+    public Integer mp4Size;
+    @Json(name = "link")
     public String  link;
-    @SerializedName("looping")
-    @Expose
-    public boolean looping;
-    @SerializedName("is_ad")
-    @Expose
-    public boolean isAd;
+    @Json(name = "looping")
+    public Boolean looping;
+    @Json(name = "is_ad")
+    public Boolean isAd;
 
     private String mPreviewQuality = MEDIUM_THUMBNAIL;
     private String mLowQuality     = HUGE_THUMBNAIL;
 
     @Override
     public int getByteSize(boolean highQuality) {
-        if (highQuality) {
-            if (animated) return mp4Size;
-            return size;
-        }
-
+        // Byte size is only available for high quality
+        if (highQuality) return defaultSizeIfNull(isVideo() ? mp4Size : size);
         return SIZE_UNAVAILABLE;
     }
 
@@ -132,7 +101,7 @@ public class ImageDataV3 extends BaseMedia implements IMedia {
     @Override
     public int getHeight(boolean highQuality) {
         // Imgur only returns height for original quality
-        return (highQuality) ? height : SIZE_UNAVAILABLE;
+        return (highQuality) ? defaultSizeIfNull(height) : SIZE_UNAVAILABLE;
     }
 
     @Override
@@ -148,19 +117,19 @@ public class ImageDataV3 extends BaseMedia implements IMedia {
     @Override
     public URL getUrl(boolean highQuality) {
         // Imgur doesn't support low quality animations/video
-        if (animated) return highQuality ? getImageUrl(ORIGINAL) : null;
+        if (isVideo()) return highQuality ? getImageUrl(ORIGINAL) : null;
         return (highQuality) ? getImageUrl(ORIGINAL) : getImageUrl(mLowQuality);
     }
 
     @Override
     public int getWidth(boolean highQuality) {
         // Imgur only returns width for original quality
-        return (highQuality) ? width : SIZE_UNAVAILABLE;
+        return (highQuality) ? defaultSizeIfNull(width) : SIZE_UNAVAILABLE;
     }
 
     @Override
     public boolean isVideo() {
-        return animated;
+        return animated != null ? animated : false;
     }
 
     @Override
@@ -234,8 +203,8 @@ public class ImageDataV3 extends BaseMedia implements IMedia {
 
     private URL getImageUrl(String quality) {
         String extension = ParseUtils.getExtension(link);
-        if (animated || EXT_GIF.equalsIgnoreCase(extension)) {
-            if (quality != ORIGINAL) {
+        if (isVideo() || EXT_GIF.equalsIgnoreCase(extension)) {
+            if (!ORIGINAL.equals(quality)) {
                 extension = EXT_JPG;
             } else {
                 extension = EXT_MP4;

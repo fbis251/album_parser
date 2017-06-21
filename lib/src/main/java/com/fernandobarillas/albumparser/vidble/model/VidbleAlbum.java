@@ -21,17 +21,13 @@
 package com.fernandobarillas.albumparser.vidble.model;
 
 import com.fernandobarillas.albumparser.media.BaseMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMedia;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by fb on 5/11/16.
- */
-public class VidbleAlbum extends BaseMediaAlbum {
-    List<IMedia> mMediaList;
+public class VidbleAlbum extends BaseMediaAlbum<VidbleMedia> {
+    private List<VidbleMedia> mMediaList;
 
     public VidbleAlbum(List<String> responsePics) {
         mMediaList = new ArrayList<>();
@@ -42,7 +38,7 @@ public class VidbleAlbum extends BaseMediaAlbum {
     }
 
     @Override
-    public List<IMedia> getAlbumMedia() {
+    public List<VidbleMedia> getAlbumMedia() {
         return mMediaList;
     }
 

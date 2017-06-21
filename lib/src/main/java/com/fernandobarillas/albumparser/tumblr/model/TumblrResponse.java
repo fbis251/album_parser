@@ -2,24 +2,19 @@ package com.fernandobarillas.albumparser.tumblr.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 
-import javax.annotation.Generated;
+public class TumblrResponse extends BaseApiResponse<BaseTumblrMedia> {
 
-@Generated("org.jsonschema2pojo")
-public class TumblrResponse extends BaseApiResponse {
-
-    @SerializedName("response")
-    @Expose
+    @Json(name = "response")
     public ResponseData response;
 
-    private IMediaAlbum mAlbum;
+    private transient IMediaAlbum<BaseTumblrMedia> mAlbum;
 
     @Override
-    public IMediaAlbum getAlbum() {
+    public IMediaAlbum<BaseTumblrMedia> getAlbum() {
         if (mAlbum == null) {
             if (response == null || response.posts == null) {
                 return null;

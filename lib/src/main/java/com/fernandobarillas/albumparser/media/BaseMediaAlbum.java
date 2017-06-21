@@ -26,15 +26,16 @@ import java.util.List;
 /**
  * Class that sets default values for the IMediaAlbum interface
  */
-public class BaseMediaAlbum implements IMediaAlbum {
+public abstract class BaseMediaAlbum<T extends IMedia> implements IMediaAlbum<T> {
+
     @Override
-    public List<IMedia> getAlbumMedia() {
+    public List<T> getAlbumMedia() {
         return null;
     }
 
     @Override
     public int getCount() {
-        List<IMedia> albumMedia = getAlbumMedia();
+        List<T> albumMedia = getAlbumMedia();
         return (albumMedia != null) ? albumMedia.size() : COUNT_UNAVAILABLE;
     }
 

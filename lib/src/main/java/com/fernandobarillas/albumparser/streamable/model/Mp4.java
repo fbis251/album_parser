@@ -20,35 +20,5 @@
 
 package com.fernandobarillas.albumparser.streamable.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import javax.annotation.Generated;
-
-/**
- * Created by fb on 5/10/16.
- */
-@Generated("org.jsonschema2pojo")
-public class Mp4 {
-    @SerializedName("status")
-    @Expose
-    public int    status;
-    @SerializedName("url")
-    @Expose
-    public String url;
-    @SerializedName("framerate")
-    @Expose
-    public int    framerate;
-    @SerializedName("height")
-    @Expose
-    public int    height;
-    @SerializedName("width")
-    @Expose
-    public int    width;
-    @SerializedName("bitrate")
-    @Expose
-    public int    bitrate;
-    @SerializedName("size")
-    @Expose
-    public int    size;
+public class Mp4 extends BaseMp4 {
 }

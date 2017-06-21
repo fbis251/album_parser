@@ -23,18 +23,10 @@ package com.fernandobarillas.albumparser.imgur.model;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 
-import javax.annotation.Generated;
-
-/**
- * Created by fb on 5/3/16.
- */
-
-@Generated("org.jsonschema2pojo")
 public class Image extends BaseMedia {
     // https://api.imgur.com/models/image
     public static final String SMALL_SQUARE     = "s";
@@ -47,38 +39,27 @@ public class Image extends BaseMedia {
     public static final String RETINA_THUMBNAIL = "r"; // ~1360px
     public static final String ORIGINAL         = "";  // Full resolution
 
-    @SerializedName("hash")
-    @Expose
-    public String hash;
-    @SerializedName("title")
-    @Expose
-    public String title;
-    @SerializedName("description")
-    @Expose
-    public String description;
-    @SerializedName("width")
-    @Expose
-    public int width  = SIZE_UNAVAILABLE;
-    @SerializedName("height")
-    @Expose
-    public int height = SIZE_UNAVAILABLE;
-    @SerializedName("size")
-    @Expose
-    public int size   = SIZE_UNAVAILABLE;
-    @SerializedName("ext")
-    @Expose
+    @Json(name = "hash")
+    public String  hash;
+    @Json(name = "title")
+    public String  title;
+    @Json(name = "description")
+    public String  description;
+    @Json(name = "width")
+    public Integer width;
+    @Json(name = "height")
+    public Integer height;
+    @Json(name = "size")
+    public Integer size;
+    @Json(name = "ext")
     public String  ext;
-    @SerializedName("animated")
-    @Expose
-    public boolean animated;
-    @SerializedName("prefer_video")
-    @Expose
-    public boolean preferVideo;
-    @SerializedName("looping")
-    @Expose
-    public boolean looping;
-    @SerializedName("datetime")
-    @Expose
+    @Json(name = "animated")
+    public Boolean animated;
+    @Json(name = "prefer_video")
+    public Boolean preferVideo;
+    @Json(name = "looping")
+    public Boolean looping;
+    @Json(name = "datetime")
     public String  datetime;
 
     private String mLowQuality     = HUGE_THUMBNAIL;
@@ -87,7 +68,7 @@ public class Image extends BaseMedia {
     @Override
     public int getByteSize(boolean highQuality) {
         // Imgur only returns size for original quality images
-        return (highQuality && !animated) ? size : SIZE_UNAVAILABLE;
+        return (highQuality && !isVideo()) ? defaultSizeIfNull(size) : SIZE_UNAVAILABLE;
     }
 
     @Override
@@ -98,7 +79,7 @@ public class Image extends BaseMedia {
     @Override
     public int getHeight(boolean highQuality) {
         // Imgur only returns height for original quality
-        return (highQuality) ? height : SIZE_UNAVAILABLE;
+        return (highQuality) ? defaultSizeIfNull(height) : SIZE_UNAVAILABLE;
     }
 
     @Override
@@ -114,19 +95,19 @@ public class Image extends BaseMedia {
     @Override
     public URL getUrl(boolean highQuality) {
         // Imgur doesn't support low quality animations/video
-        if (animated) return highQuality ? getImageUrl(ORIGINAL) : null;
+        if (isVideo()) return highQuality ? getImageUrl(ORIGINAL) : null;
         return (highQuality) ? getImageUrl(ORIGINAL) : getImageUrl(mLowQuality);
     }
 
     @Override
     public int getWidth(boolean highQuality) {
         // Imgur only returns width for original quality
-        return (highQuality) ? width : SIZE_UNAVAILABLE;
+        return (highQuality) ? defaultSizeIfNull(width) : SIZE_UNAVAILABLE;
     }
 
     @Override
     public boolean isVideo() {
-        return animated;
+        return animated != null ? animated : false;
     }
 
     /**

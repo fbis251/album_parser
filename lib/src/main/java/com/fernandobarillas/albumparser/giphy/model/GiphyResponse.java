@@ -1,21 +1,17 @@
 package com.fernandobarillas.albumparser.giphy.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
-import com.fernandobarillas.albumparser.media.IMedia;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
-public class GiphyResponse extends BaseApiResponse {
+public class GiphyResponse extends BaseApiResponse<Image> {
 
-    @SerializedName("data")
-    @Expose
+    @Json(name = "data")
     public Data data;
-    @SerializedName("meta")
-    @Expose
+    @Json(name = "meta")
     public Meta meta;
 
     @Override
-    public IMedia getMedia() {
+    public Image getMedia() {
         return data != null ? data.images : null;
     }
 

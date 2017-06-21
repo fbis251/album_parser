@@ -20,34 +20,26 @@
 
 package com.fernandobarillas.albumparser.gfycat.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 /**
  * Created by fb on 7/18/16.
  */
 public class CheckLinkResponse {
 
-    @SerializedName("urlKnown")
-    @Expose
-    private boolean urlKnown;
-    @SerializedName("gfyUrl")
-    @Expose
+    @Json(name = "urlKnown")
+    private Boolean urlKnown;
+    @Json(name = "gfyUrl")
     private String  gfyUrl;
-    @SerializedName("webmUrl")
-    @Expose
+    @Json(name = "webmUrl")
     private String  webmUrl;
-    @SerializedName("mp4Url")
-    @Expose
+    @Json(name = "mp4Url")
     private String  mp4Url;
-    @SerializedName("gifUrl")
-    @Expose
+    @Json(name = "gifUrl")
     private String  gifUrl;
-    @SerializedName("frameRate")
-    @Expose
+    @Json(name = "frameRate")
     private String  frameRate;
-    @SerializedName("gfyName")
-    @Expose
+    @Json(name = "gfyName")
     private String  gfyName;
 
     @Override

@@ -25,11 +25,11 @@ import java.net.URL;
 /**
  * Created by fb on 5/10/16.
  */
-public interface IApiResponse {
+public interface IApiResponse<T extends IMedia> {
     /**
      * @return An album returned by the API, null if no album is available
      */
-    IMediaAlbum getAlbum();
+    IMediaAlbum<T> getAlbum();
 
     /**
      * @return The error message returned by an API response, null if no error message was returned
@@ -45,7 +45,7 @@ public interface IApiResponse {
      * @return A direct link to the media returned by the API, null if no direct media link was
      * returned by the API
      */
-    IMedia getMedia();
+    T getMedia();
 
     /**
      * @return A URL to the media's preview image, null if no preview is available

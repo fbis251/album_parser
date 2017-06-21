@@ -44,7 +44,11 @@ public class RedditMediaMedia extends BaseMedia {
             mIsVideo = EXT_MP4.equalsIgnoreCase(queryMap.get(FORMAT_PARAM));
         }
         if (queryMap.containsKey(WIDTH_PARAM)) {
-            mWidth = Integer.parseInt(queryMap.get(WIDTH_PARAM));
+            mWidth = SIZE_UNAVAILABLE;
+            try {
+                mWidth = Integer.parseInt(queryMap.get(WIDTH_PARAM));
+            } catch (NumberFormatException ignored) {
+            }
         }
     }
 

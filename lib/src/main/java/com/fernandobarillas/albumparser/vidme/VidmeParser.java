@@ -72,7 +72,6 @@ public class VidmeParser extends AbstractApiParser {
     public ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException {
         String hash = getHash(mediaUrl);
         VidmeApi service = getRetrofit().create(VidmeApi.class);
-        ;
         Response<VidmeResponse> serviceResponse = service.getVideoData(hash).execute();
         VidmeResponse apiResponse = serviceResponse.body();
         return getParserResponse(mediaUrl, apiResponse);

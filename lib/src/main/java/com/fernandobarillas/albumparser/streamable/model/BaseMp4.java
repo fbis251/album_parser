@@ -1,6 +1,6 @@
 /*
  * The MIT License (MIT)
- * Copyright (c) 2016 Fernando Barillas (FBis251)
+ * Copyright (c) 2017 Fernando Barillas (FBis251)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -18,47 +18,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.media;
+package com.fernandobarillas.albumparser.streamable.model;
 
-import java.net.URL;
+import com.squareup.moshi.Json;
 
 /**
- * Class that sets default values for the IApiResponse interface
+ * Created by fb on 6/21/17.
  */
-public abstract class BaseApiResponse<T extends IMedia> implements IApiResponse {
-
-    @Override
-    public IMediaAlbum<T> getAlbum() {
-        return null;
-    }
-
-    @Override
-    public String getErrorMessage() {
-        return null;
-    }
-
-    @Override
-    public String getJson() {
-        return "";
-    }
-
-    @Override
-    public T getMedia() {
-        return null;
-    }
-
-    @Override
-    public URL getPreviewUrl() {
-        return null;
-    }
-
-    @Override
-    public boolean isAlbum() {
-        return false;
-    }
-
-    @Override
-    public boolean isSuccessful() {
-        return false;
-    }
+public class BaseMp4 {
+    @Json(name = "status")
+    public Integer status;
+    @Json(name = "url")
+    public String  url;
+    @Json(name = "framerate")
+    public Integer framerate;
+    @Json(name = "height")
+    public Integer height;
+    @Json(name = "width")
+    public Integer width;
+    @Json(name = "bitrate")
+    public Integer bitrate;
+    @Json(name = "size")
+    public Integer size;
 }

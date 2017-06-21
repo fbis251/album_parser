@@ -21,25 +21,15 @@
 package com.fernandobarillas.albumparser.gfycat.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
-import com.fernandobarillas.albumparser.media.IMedia;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 
-import javax.annotation.Generated;
+public class QueryHashResponse extends BaseApiResponse<GfyItem> {
 
-/**
- * Created by fb on 5/9/16.
- */
-@Generated("org.jsonschema2pojo")
-public class QueryHashResponse extends BaseApiResponse {
-
-    @SerializedName("gfyItem")
-    @Expose
+    @Json(name = "gfyItem")
     public GfyItem gfyItem;
-    @SerializedName("error")
-    @Expose
+    @Json(name = "error")
     public String  error;
 
     @Override
@@ -48,7 +38,7 @@ public class QueryHashResponse extends BaseApiResponse {
     }
 
     @Override
-    public IMedia getMedia() {
+    public GfyItem getMedia() {
         return gfyItem;
     }
 

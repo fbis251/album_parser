@@ -21,29 +21,21 @@
 package com.fernandobarillas.albumparser.imgur.model.v3;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
-import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 
-import javax.annotation.Generated;
+public class AlbumResponseV3 extends BaseApiResponse<ImageDataV3> {
 
-@Generated("org.jsonschema2pojo")
-public class AlbumResponseV3 extends BaseApiResponse {
-
-    @SerializedName("data")
-    @Expose
+    @Json(name = "data")
     public AlbumDataV3 data;
-    @SerializedName("success")
-    @Expose
-    public boolean     success;
-    @SerializedName("status")
-    @Expose
-    public int         status;
+    @Json(name = "success")
+    public Boolean     success;
+    @Json(name = "status")
+    public Integer     status;
 
     @Override
-    public IMediaAlbum getAlbum() {
+    public AlbumDataV3 getAlbum() {
         return data;
     }
 
@@ -60,7 +52,7 @@ public class AlbumResponseV3 extends BaseApiResponse {
 
     @Override
     public boolean isSuccessful() {
-        return success && data != null;
+        return success != null && data != null && success;
     }
 
     @Override

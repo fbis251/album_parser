@@ -23,86 +23,61 @@ package com.fernandobarillas.albumparser.imgur.model.v3;
 
 
 import com.fernandobarillas.albumparser.media.BaseMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMedia;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
+public class AlbumDataV3 extends BaseMediaAlbum<ImageDataV3> {
 
-@Generated("org.jsonschema2pojo")
-public class AlbumDataV3 extends BaseMediaAlbum {
+    @Json(name = "id")
+    public String            id;
+    @Json(name = "title")
+    public String            title;
+    @Json(name = "description")
+    public String            description;
+    @Json(name = "datetime")
+    public Integer           datetime;
+    @Json(name = "cover")
+    public String            cover;
+    @Json(name = "cover_width")
+    public Integer           coverWidth;
+    @Json(name = "cover_height")
+    public Integer           coverHeight;
+    @Json(name = "account_url")
+    public String            accountUrl;
+    @Json(name = "account_id")
+    public Integer           accountId;
+    @Json(name = "privacy")
+    public String            privacy;
+    @Json(name = "layout")
+    public String            layout;
+    @Json(name = "views")
+    public Integer           views;
+    @Json(name = "link")
+    public String            link;
+    @Json(name = "favorite")
+    public Boolean           favorite;
+    @Json(name = "nsfw")
+    public Boolean           nsfw;
+    @Json(name = "section")
+    public String            section;
+    @Json(name = "images_count")
+    public Integer           imagesCount;
+    @Json(name = "in_gallery")
+    public Boolean           inGallery;
+    @Json(name = "is_ad")
+    public Boolean           isAd;
+    @Json(name = "images")
+    public List<ImageDataV3> images;
 
-    @SerializedName("id")
-    @Expose
-    public String  id;
-    @SerializedName("title")
-    @Expose
-    public String  title;
-    @SerializedName("description")
-    @Expose
-    public String  description;
-    @SerializedName("datetime")
-    @Expose
-    public int     datetime;
-    @SerializedName("cover")
-    @Expose
-    public String  cover;
-    @SerializedName("cover_width")
-    @Expose
-    public int     coverWidth;
-    @SerializedName("cover_height")
-    @Expose
-    public int     coverHeight;
-    @SerializedName("account_url")
-    @Expose
-    public String  accountUrl;
-    @SerializedName("account_id")
-    @Expose
-    public int     accountId;
-    @SerializedName("privacy")
-    @Expose
-    public String  privacy;
-    @SerializedName("layout")
-    @Expose
-    public String  layout;
-    @SerializedName("views")
-    @Expose
-    public int     views;
-    @SerializedName("link")
-    @Expose
-    public String  link;
-    @SerializedName("favorite")
-    @Expose
-    public boolean favorite;
-    @SerializedName("nsfw")
-    @Expose
-    public Object  nsfw;
-    @SerializedName("section")
-    @Expose
-    public Object  section;
-    @SerializedName("images_count")
-    @Expose
-    public int     imagesCount;
-    @SerializedName("in_gallery")
-    @Expose
-    public boolean inGallery;
-    @SerializedName("is_ad")
-    @Expose
-    public boolean isAd;
-    @SerializedName("images")
-    @Expose
-    public List<ImageDataV3> images = new ArrayList<>();
-
-    private String       mLowQuality;
-    private String       mPreviewQuality;
-    private List<IMedia> mMediaList;
+    private String            mLowQuality;
+    private String            mPreviewQuality;
+    private List<ImageDataV3> mMediaList;
 
     @Override
-    public List<IMedia> getAlbumMedia() {
+    public List<ImageDataV3> getAlbumMedia() {
         if (mMediaList == null) {
             mMediaList = new ArrayList<>();
             for (ImageDataV3 image : images) {

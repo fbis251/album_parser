@@ -1,37 +1,27 @@
 package com.fernandobarillas.albumparser.giphy.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 public class ImageVariation {
 
-    @SerializedName("url")
-    @Expose
-    public String url;
-    @SerializedName("width")
-    @Expose
-    public int    width;
-    @SerializedName("height")
-    @Expose
-    public int    height;
-    @SerializedName("size")
-    @Expose
-    public int    size;
-    @SerializedName("frames")
-    @Expose
-    public int    frames;
-    @SerializedName("mp4")
-    @Expose
-    public String mp4;
-    @SerializedName("mp4_size")
-    @Expose
-    public int    mp4Size;
-    @SerializedName("webp")
-    @Expose
-    public String webp;
-    @SerializedName("webp_size")
-    @Expose
-    public int    webpSize;
+    @Json(name = "url")
+    public String  url;
+    @Json(name = "width")
+    public Integer width;
+    @Json(name = "height")
+    public Integer height;
+    @Json(name = "size")
+    public Integer size;
+    @Json(name = "frames")
+    public Integer frames;
+    @Json(name = "mp4")
+    public String  mp4;
+    @Json(name = "mp4_size")
+    public Integer mp4Size;
+    @Json(name = "webp")
+    public String  webp;
+    @Json(name = "webp_size")
+    public Integer webpSize;
 
     @Override
     public String toString() {

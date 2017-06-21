@@ -20,45 +20,33 @@
 
 package com.fernandobarillas.albumparser.gfycat.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 /**
  * Created by fb on 7/18/16.
  */
 public class TranscodeResponse {
-    @SerializedName("isOk")
-    @Expose
-    public boolean isOk;
-    @SerializedName("error")
-    @Expose
+    @Json(name = "isOk")
+    public Boolean isOk;
+    @Json(name = "error")
     public String  error;
-    @SerializedName("gfyname")
-    @Expose
+    @Json(name = "gfyname")
     public String  gfyname;
-    @SerializedName("gfyName")
-    @Expose
+    @Json(name = "gfyName")
     public String  gfyName;
-    @SerializedName("gfysize")
-    @Expose
-    public int     gfysize;
-    @SerializedName("gifSize")
-    @Expose
-    public int     gifSize;
-    @SerializedName("gifWidth")
-    @Expose
-    public int     gifWidth;
-    @SerializedName("mp4Url")
-    @Expose
+    @Json(name = "gfysize")
+    public Integer gfysize;
+    @Json(name = "gifSize")
+    public Integer gifSize;
+    @Json(name = "gifWidth")
+    public Integer gifWidth;
+    @Json(name = "mp4Url")
     public String  mp4Url;
-    @SerializedName("frameRate")
-    @Expose
-    public int     frameRate;
-    @SerializedName("webmUrl")
-    @Expose
+    @Json(name = "frameRate")
+    public Integer frameRate;
+    @Json(name = "webmUrl")
     public String  webmUrl;
-    @SerializedName("gifUrl")
-    @Expose
+    @Json(name = "gifUrl")
     public String  gifUrl;
 
     @Override

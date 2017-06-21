@@ -26,86 +26,60 @@ package com.fernandobarillas.albumparser.deviantart.model;
 
 import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 
-import javax.annotation.Generated;
-
-@Generated("org.jsonschema2pojo")
 public class DeviantartResponse extends BaseMedia {
 
-    @SerializedName("version")
-    @Expose
-    public String version;
-    @SerializedName("type")
-    @Expose
-    public String type;
-    @SerializedName("title")
-    @Expose
-    public String title;
-    @SerializedName("category")
-    @Expose
-    public String category;
-    @SerializedName("url")
-    @Expose
-    public String url;
-    @SerializedName("author_name")
-    @Expose
-    public String authorName;
-    @SerializedName("author_url")
-    @Expose
-    public String authorUrl;
-    @SerializedName("provider_name")
-    @Expose
-    public String providerName;
-    @SerializedName("provider_url")
-    @Expose
-    public String providerUrl;
-    @SerializedName("safety")
-    @Expose
-    public String safety;
-    @SerializedName("pubdate")
-    @Expose
-    public String pubdate;
-    @SerializedName("tags")
-    @Expose
-    public String tags;
-    @SerializedName("width")
-    @Expose
-    public int    width;
-    @SerializedName("height")
-    @Expose
-    public int    height;
-    @SerializedName("imagetype")
-    @Expose
-    public String imagetype;
-    @SerializedName("thumbnail_url")
-    @Expose
-    public String thumbnailUrl;
-    @SerializedName("thumbnail_width")
-    @Expose
-    public int    thumbnailWidth;
-    @SerializedName("thumbnail_height")
-    @Expose
-    public int    thumbnailHeight;
-    @SerializedName("thumbnail_url_150")
-    @Expose
-    public String thumbnailUrl150;
-    @SerializedName("thumbnail_url_200h")
-    @Expose
-    public String thumbnailUrl200h;
-    @SerializedName("thumbnail_width_200h")
-    @Expose
-    public int    thumbnailWidth200h;
-    @SerializedName("thumbnail_height_200h")
-    @Expose
-    public int    thumbnailHeight200h;
+    @Json(name = "version")
+    public String  version;
+    @Json(name = "type")
+    public String  type;
+    @Json(name = "title")
+    public String  title;
+    @Json(name = "category")
+    public String  category;
+    @Json(name = "url")
+    public String  url;
+    @Json(name = "author_name")
+    public String  authorName;
+    @Json(name = "author_url")
+    public String  authorUrl;
+    @Json(name = "provider_name")
+    public String  providerName;
+    @Json(name = "provider_url")
+    public String  providerUrl;
+    @Json(name = "safety")
+    public String  safety;
+    @Json(name = "pubdate")
+    public String  pubdate;
+    @Json(name = "tags")
+    public String  tags;
+    @Json(name = "width")
+    public Integer width;
+    @Json(name = "height")
+    public Integer height;
+    @Json(name = "imagetype")
+    public String  imagetype;
+    @Json(name = "thumbnail_url")
+    public String  thumbnailUrl;
+    @Json(name = "thumbnail_width")
+    public Integer thumbnailWidth;
+    @Json(name = "thumbnail_height")
+    public Integer thumbnailHeight;
+    @Json(name = "thumbnail_url_150")
+    public String  thumbnailUrl150;
+    @Json(name = "thumbnail_url_200h")
+    public String  thumbnailUrl200h;
+    @Json(name = "thumbnail_width_200h")
+    public Integer thumbnailWidth200h;
+    @Json(name = "thumbnail_height_200h")
+    public Integer thumbnailHeight200h;
 
     @Override
     public int getHeight(boolean highQuality) {
-        return (highQuality) ? height : thumbnailHeight;
+        return defaultSizeIfNull((highQuality) ? height : thumbnailHeight);
     }
 
     @Override
@@ -128,7 +102,7 @@ public class DeviantartResponse extends BaseMedia {
 
     @Override
     public int getWidth(boolean highQuality) {
-        return (highQuality) ? width : thumbnailWidth;
+        return defaultSizeIfNull((highQuality) ? width : thumbnailWidth);
     }
 
     @Override

@@ -21,37 +21,26 @@
 package com.fernandobarillas.albumparser.imgur.model;
 
 import com.fernandobarillas.albumparser.media.BaseMediaAlbum;
-import com.fernandobarillas.albumparser.media.IMedia;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
+public class AlbumData extends BaseMediaAlbum<Image> {
 
-/**
- * Created by fb on 5/3/16.
- */
+    @Json(name = "count")
+    public Integer     count;
+    @Json(name = "images")
+    public List<Image> images;
 
-@Generated("org.jsonschema2pojo")
-public class AlbumData extends BaseMediaAlbum {
-
-    @SerializedName("count")
-    @Expose
-    public int count;
-    @SerializedName("images")
-    @Expose
-    public List<Image> images = new ArrayList<>();
-
-    private List<IMedia> mMediaList;
+    private List<Image> mMediaList;
 
     private String mLowQuality;
     private String mPreviewQuality;
 
     @Override
-    public List<IMedia> getAlbumMedia() {
+    public List<Image> getAlbumMedia() {
         if (mMediaList == null) {
             mMediaList = new ArrayList<>();
             for (Image image : images) {

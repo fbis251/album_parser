@@ -2,8 +2,7 @@ package com.fernandobarillas.albumparser.giphy.model;
 
 import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 
@@ -11,56 +10,39 @@ import static com.fernandobarillas.albumparser.util.ParseUtils.getUrlObject;
 
 public class Image extends BaseMedia {
 
-    @SerializedName("fixed_height")
-    @Expose
+    @Json(name = "fixed_height")
     public ImageVariation fixedHeight;
-    @SerializedName("fixed_height_still")
-    @Expose
+    @Json(name = "fixed_height_still")
     public ImageVariation fixedHeightStill;
-    @SerializedName("fixed_height_downsampled")
-    @Expose
+    @Json(name = "fixed_height_downsampled")
     public ImageVariation fixedHeightDownsampled;
-    @SerializedName("fixed_width")
-    @Expose
+    @Json(name = "fixed_width")
     public ImageVariation fixedWidth;
-    @SerializedName("fixed_width_still")
-    @Expose
+    @Json(name = "fixed_width_still")
     public ImageVariation fixedWidthStill;
-    @SerializedName("fixed_width_downsampled")
-    @Expose
+    @Json(name = "fixed_width_downsampled")
     public ImageVariation fixedWidthDownsampled;
-    @SerializedName("fixed_height_small")
-    @Expose
+    @Json(name = "fixed_height_small")
     public ImageVariation fixedHeightSmall;
-    @SerializedName("fixed_height_small_still")
-    @Expose
+    @Json(name = "fixed_height_small_still")
     public ImageVariation fixedHeightSmallStill;
-    @SerializedName("fixed_width_small")
-    @Expose
+    @Json(name = "fixed_width_small")
     public ImageVariation fixedWidthSmall;
-    @SerializedName("fixed_width_small_still")
-    @Expose
+    @Json(name = "fixed_width_small_still")
     public ImageVariation fixedWidthSmallStill;
-    @SerializedName("downsized")
-    @Expose
+    @Json(name = "downsized")
     public ImageVariation downsized;
-    @SerializedName("downsized_still")
-    @Expose
+    @Json(name = "downsized_still")
     public ImageVariation downsizedStill;
-    @SerializedName("downsized_large")
-    @Expose
+    @Json(name = "downsized_large")
     public ImageVariation downsizedLarge;
-    @SerializedName("downsized_medium")
-    @Expose
+    @Json(name = "downsized_medium")
     public ImageVariation downsizedMedium;
-    @SerializedName("original")
-    @Expose
+    @Json(name = "original")
     public ImageVariation original;
-    @SerializedName("original_still")
-    @Expose
+    @Json(name = "original_still")
     public ImageVariation originalStill;
-    @SerializedName("looping")
-    @Expose
+    @Json(name = "looping")
     public ImageVariation looping;
 
     private URL mp4HighQualityUrl;
@@ -69,13 +51,13 @@ public class Image extends BaseMedia {
     @Override
     public int getByteSize(boolean highQuality) {
         ImageVariation variation = highQuality ? original : fixedHeight;
-        return (variation != null) ? variation.mp4Size : SIZE_UNAVAILABLE;
+        return (variation != null) ? defaultSizeIfNull(variation.mp4Size) : SIZE_UNAVAILABLE;
     }
 
     @Override
     public int getHeight(boolean highQuality) {
         ImageVariation variation = highQuality ? original : fixedHeight;
-        return (variation != null) ? variation.height : SIZE_UNAVAILABLE;
+        return (variation != null) ? defaultSizeIfNull(variation.height) : SIZE_UNAVAILABLE;
     }
 
     @Override
@@ -108,7 +90,7 @@ public class Image extends BaseMedia {
     @Override
     public int getWidth(boolean highQuality) {
         ImageVariation variation = highQuality ? original : fixedHeight;
-        return (variation != null) ? variation.width : SIZE_UNAVAILABLE;
+        return (variation != null) ? defaultSizeIfNull(variation.width) : SIZE_UNAVAILABLE;
     }
 
     @Override

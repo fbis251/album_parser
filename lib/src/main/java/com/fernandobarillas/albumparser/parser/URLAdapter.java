@@ -1,6 +1,6 @@
 /*
  * The MIT License (MIT)
- * Copyright (c) 2016 Fernando Barillas (FBis251)
+ * Copyright (c) 2017 Fernando Barillas (FBis251)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -18,47 +18,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.media;
+package com.fernandobarillas.albumparser.parser;
 
+import com.squareup.moshi.FromJson;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.ToJson;
+
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Class that sets default values for the IApiResponse interface
+ * A Moshi Adapter to convert java.net.URL Objects
  */
-public abstract class BaseApiResponse<T extends IMedia> implements IApiResponse {
-
-    @Override
-    public IMediaAlbum<T> getAlbum() {
-        return null;
+class URLAdapter {
+    @FromJson
+    URL fromJson(String urlString) {
+        try {
+            return new URL(urlString);
+        } catch (MalformedURLException e) {
+            throw new JsonDataException("Invalid URL: " + urlString);
+        }
     }
 
-    @Override
-    public String getErrorMessage() {
-        return null;
-    }
-
-    @Override
-    public String getJson() {
-        return "";
-    }
-
-    @Override
-    public T getMedia() {
-        return null;
-    }
-
-    @Override
-    public URL getPreviewUrl() {
-        return null;
-    }
-
-    @Override
-    public boolean isAlbum() {
-        return false;
-    }
-
-    @Override
-    public boolean isSuccessful() {
-        return false;
+    @ToJson
+    String toJson(URL url) {
+        return url != null ? url.toString() : null;
     }
 }

@@ -22,136 +22,86 @@ package com.fernandobarillas.albumparser.vidme.model;
 
 import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 
-import javax.annotation.Generated;
-
-/**
- * Created by fb on 5/10/16.
- */
-
-@Generated("org.jsonschema2pojo")
 public class Video extends BaseMedia {
 
-    @SerializedName("video_id")
-    @Expose
+    @Json(name = "video_id")
     public String  videoId;
-    @SerializedName("url")
-    @Expose
+    @Json(name = "url")
     public String  url;
-    @SerializedName("full_url")
-    @Expose
+    @Json(name = "full_url")
     public String  fullUrl;
-    @SerializedName("embed_url")
-    @Expose
+    @Json(name = "embed_url")
     public String  embedUrl;
-    @SerializedName("user_id")
-    @Expose
+    @Json(name = "user_id")
     public String  userId;
-    @SerializedName("complete")
-    @Expose
+    @Json(name = "complete")
     public String  complete;
-    @SerializedName("complete_url")
-    @Expose
+    @Json(name = "complete_url")
     public String  completeUrl;
-    @SerializedName("state")
-    @Expose
+    @Json(name = "state")
     public String  state;
-    @SerializedName("title")
-    @Expose
+    @Json(name = "title")
     public String  title;
-    @SerializedName("description")
-    @Expose
+    @Json(name = "description")
     public String  description;
-    @SerializedName("duration")
-    @Expose
-    public double  duration;
-    @SerializedName("height")
-    @Expose
-    public int     height;
-    @SerializedName("width")
-    @Expose
-    public int     width;
-    @SerializedName("date_created")
-    @Expose
+    @Json(name = "duration")
+    public Double  duration;
+    @Json(name = "height")
+    public Integer height;
+    @Json(name = "width")
+    public Integer width;
+    @Json(name = "date_created")
     public String  dateCreated;
-    @SerializedName("date_stored")
-    @Expose
+    @Json(name = "date_stored")
     public String  dateStored;
-    @SerializedName("date_completed")
-    @Expose
+    @Json(name = "date_completed")
     public String  dateCompleted;
-    @SerializedName("comment_count")
-    @Expose
-    public int     commentCount;
-    @SerializedName("view_count")
-    @Expose
-    public int     viewCount;
-    @SerializedName("share_count")
-    @Expose
-    public int     shareCount;
-    @SerializedName("version")
-    @Expose
-    public int     version;
-    @SerializedName("nsfw")
-    @Expose
-    public boolean nsfw;
-    @SerializedName("thumbnail")
-    @Expose
+    @Json(name = "comment_count")
+    public Integer commentCount;
+    @Json(name = "view_count")
+    public Integer viewCount;
+    @Json(name = "share_count")
+    public Integer shareCount;
+    @Json(name = "version")
+    public Integer version;
+    @Json(name = "nsfw")
+    public Boolean nsfw;
+    @Json(name = "thumbnail")
     public String  thumbnail;
-    @SerializedName("thumbnail_url")
-    @Expose
+    @Json(name = "thumbnail_url")
     public String  thumbnailUrl;
-    @SerializedName("thumbnail_gif")
-    @Expose
+    @Json(name = "thumbnail_gif")
     public String  thumbnailGif;
-    @SerializedName("thumbnail_gif_url")
-    @Expose
+    @Json(name = "thumbnail_gif_url")
     public String  thumbnailGifUrl;
-    @SerializedName("storyboard")
-    @Expose
+    @Json(name = "storyboard")
     public String  storyboard;
-    @SerializedName("score")
-    @Expose
-    public int     score;
-    @SerializedName("likes_count")
-    @Expose
-    public int     likesCount;
-    @SerializedName("channel_id")
-    @Expose
+    @Json(name = "score")
+    public Integer score;
+    @Json(name = "likes_count")
+    public Integer likesCount;
+    @Json(name = "channel_id")
     public String  channelId;
-    @SerializedName("source")
-    @Expose
+    @Json(name = "source")
     public String  source;
-    @SerializedName("private")
-    @Expose
-    public boolean _private;
-    @SerializedName("latitude")
-    @Expose
-    public double  latitude;
-    @SerializedName("longitude")
-    @Expose
-    public double  longitude;
-    @SerializedName("place_id")
-    @Expose
+    @Json(name = "private")
+    public Boolean _private;
+    @Json(name = "latitude")
+    public Double  latitude;
+    @Json(name = "longitude")
+    public Double  longitude;
+    @Json(name = "place_id")
     public String  placeId;
-    @SerializedName("place_name")
-    @Expose
+    @Json(name = "place_name")
     public String  placeName;
-    @SerializedName("colors")
-    @Expose
+    @Json(name = "colors")
     public String  colors;
-    @SerializedName("reddit_link")
-    @Expose
+    @Json(name = "reddit_link")
     public String  redditLink;
-
-    @Override
-    public int getByteSize(boolean highQuality) {
-        return SIZE_UNAVAILABLE;
-    }
 
     @Override
     public String getDescription() {
@@ -160,12 +110,12 @@ public class Video extends BaseMedia {
 
     @Override
     public double getDuration() {
-        return duration;
+        return defaultDurationIfNull(duration);
     }
 
     @Override
     public int getHeight(boolean highQuality) {
-        return height;
+        return highQuality ? defaultSizeIfNull(height) : SIZE_UNAVAILABLE;
     }
 
     @Override
@@ -180,12 +130,13 @@ public class Video extends BaseMedia {
 
     @Override
     public URL getUrl(boolean highQuality) {
-        return ParseUtils.getUrlObject(completeUrl);
+        // TODO: Get low quality URL. 480p? There are variants available under the "formats" obj
+        return highQuality ? ParseUtils.getUrlObject(completeUrl) : null;
     }
 
     @Override
     public int getWidth(boolean highQuality) {
-        return width;
+        return highQuality ? defaultSizeIfNull(width) : SIZE_UNAVAILABLE;
     }
 
     @Override

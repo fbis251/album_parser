@@ -80,7 +80,7 @@ public class VidbleMedia extends BaseMedia {
 
     @Override
     public boolean isVideo() {
-        return mExtension.equals(EXT_GIF);
+        return EXT_GIF.equals(mExtension);
     }
 
     private URL getImageUrl(final String quality, final String extension) {

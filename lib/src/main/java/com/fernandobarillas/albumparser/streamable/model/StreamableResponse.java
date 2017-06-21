@@ -21,61 +21,45 @@
 package com.fernandobarillas.albumparser.streamable.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
-import com.fernandobarillas.albumparser.media.IMedia;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Generated;
 
 import static com.fernandobarillas.albumparser.media.IMedia.PROTOCOL_HTTPS;
 
-/**
- * Created by fb on 5/10/16.
- */
-@Generated("org.jsonschema2pojo")
-public class StreamableResponse extends BaseApiResponse {
+public class StreamableResponse extends BaseApiResponse<StreamableMedia> {
+
     // Video schema status responses according to: https://streamable.com/documentation
     public static final int STATUS_UPLOADING  = 0;
     public static final int STATUS_PROCESSING = 1;
     public static final int STATUS_READY      = 2;
     public static final int STATUS_ERROR      = 3;
-    @SerializedName("status")
-    @Expose
-    public int    status;
-    @SerializedName("files")
-    @Expose
-    public Files  files;
-    @SerializedName("url_root")
-    @Expose
-    public String urlRoot;
-    @SerializedName("thumbnail_url")
-    @Expose
-    public String thumbnailUrl;
-    @SerializedName("formats")
-    @Expose
-    public List<String> formats = new ArrayList<String>();
-    @SerializedName("url")
-    @Expose
-    public String url;
-    @SerializedName("message")
-    @Expose
-    public String message;
-    @SerializedName("title")
-    @Expose
-    public String title;
-    @SerializedName("percent")
-    @Expose
-    public int    percent;
+
+    @Json(name = "status")
+    public Integer      status;
+    @Json(name = "files")
+    public Files        files;
+    @Json(name = "url_root")
+    public String       urlRoot;
+    @Json(name = "thumbnail_url")
+    public String       thumbnailUrl;
+    @Json(name = "formats")
+    public List<String> formats;
+    @Json(name = "url")
+    public String       url;
+    @Json(name = "message")
+    public String       message;
+    @Json(name = "title")
+    public String       title;
+    @Json(name = "percent")
+    public Integer      percent;
 
     private StreamableMedia mStreamableMedia;
 
     @Override
-    public IMedia getMedia() {
+    public StreamableMedia getMedia() {
         if (files == null) return null;
 
         if (mStreamableMedia == null) {
@@ -95,6 +79,6 @@ public class StreamableResponse extends BaseApiResponse {
 
     @Override
     public boolean isSuccessful() {
-        return status == STATUS_READY;
+        return status != null && status == STATUS_READY;
     }
 }

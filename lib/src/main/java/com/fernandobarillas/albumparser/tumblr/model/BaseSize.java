@@ -20,22 +20,18 @@
 
 package com.fernandobarillas.albumparser.tumblr.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 /**
  * Created by fb on 9/10/16.
  */
 public class BaseSize {
-    @SerializedName("url")
-    @Expose
-    public String url;
-    @SerializedName("width")
-    @Expose
-    public int    width;
-    @SerializedName("height")
-    @Expose
-    public int    height;
+    @Json(name = "url")
+    public String  url;
+    @Json(name = "width")
+    public Integer width;
+    @Json(name = "height")
+    public Integer height;
 
     @Override
     public String toString() {

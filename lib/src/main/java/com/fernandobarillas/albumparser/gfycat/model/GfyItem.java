@@ -22,158 +22,106 @@ package com.fernandobarillas.albumparser.gfycat.model;
 
 import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
-
-/**
- * Created by fb on 5/9/16.
- */
-@Generated("org.jsonschema2pojo")
 public class GfyItem extends BaseMedia {
 
-    @SerializedName("gfyId")
-    @Expose
-    public String gfyId;
-    @SerializedName("gfyName")
-    @Expose
-    public String gfyName;
-    @SerializedName("gfyNumber")
-    @Expose
-    public String gfyNumber;
-    @SerializedName("userName")
-    @Expose
-    public String userName;
-    @SerializedName("width")
-    @Expose
-    public int    width;
-    @SerializedName("height")
-    @Expose
-    public int    height;
-    @SerializedName("frameRate")
-    @Expose
-    public int    frameRate;
-    @SerializedName("numFrames")
-    @Expose
-    public int    numFrames;
-    @SerializedName("mp4Url")
-    @Expose
-    public String mp4Url;
-    @SerializedName("webmUrl")
-    @Expose
-    public String webmUrl;
-    @SerializedName("webpUrl")
-    @Expose
-    public String webpUrl;
-    @SerializedName("mobileUrl")
-    @Expose
-    public String mobileUrl;
-    @SerializedName("mobilePosterUrl")
-    @Expose
-    public String mobilePosterUrl;
-    @SerializedName("posterUrl")
-    @Expose
-    public String posterUrl;
-    @SerializedName("thumb360Url")
-    @Expose
-    public String thumb360Url;
-    @SerializedName("thumb360PosterUrl")
-    @Expose
-    public String thumb360PosterUrl;
-    @SerializedName("thumb100PosterUrl")
-    @Expose
-    public String thumb100PosterUrl;
-    @SerializedName("max5mbGif")
-    @Expose
-    public String max5mbGif;
-    @SerializedName("max2mbGif")
-    @Expose
-    public String max2mbGif;
-    @SerializedName("mjpgUrl")
-    @Expose
-    public String mjpgUrl;
-    @SerializedName("gifUrl")
-    @Expose
-    public String gifUrl;
-    @SerializedName("gifSize")
-    @Expose
-    public int    gifSize;
-    @SerializedName("mp4Size")
-    @Expose
-    public int    mp4Size;
-    @SerializedName("webmSize")
-    @Expose
-    public int    webmSize;
-    @SerializedName("createDate")
-    @Expose
-    public int    createDate;
-    @SerializedName("views")
-    @Expose
-    public int    views;
-    @SerializedName("title")
-    @Expose
-    public String title;
-    @SerializedName("extraLemmas")
-    @Expose
-    public List<String> extraLemmas = new ArrayList<String>();
-    @SerializedName("md5")
-    @Expose
-    public String md5;
-    @SerializedName("tags")
-    @Expose
-    public List<String> tags = new ArrayList<String>();
-    @SerializedName("nsfw")
-    @Expose
-    public String nsfw;
-    @SerializedName("sar")
-    @Expose
-    public String sar;
-    @SerializedName("url")
-    @Expose
-    public String url;
-    @SerializedName("source")
-    @Expose
-    public String source;
-    @SerializedName("dynamo")
-    @Expose
-    public Object dynamo;
-    @SerializedName("subreddit")
-    @Expose
-    public String subreddit;
-    @SerializedName("redditId")
-    @Expose
-    public String redditId;
-    @SerializedName("redditIdText")
-    @Expose
-    public String redditIdText;
-    @SerializedName("likes")
-    @Expose
-    public int    likes;
-    @SerializedName("dislikes")
-    @Expose
-    public int    dislikes;
-    @SerializedName("published")
-    @Expose
-    public String published;
-    @SerializedName("description")
-    @Expose
-    public String description;
-    @SerializedName("copyrightClaimaint")
-    @Expose
-    public String copyrightClaimaint;
-    @SerializedName("languageText")
-    @Expose
-    public String languageText;
+    @Json(name = "gfyId")
+    public String       gfyId;
+    @Json(name = "gfyName")
+    public String       gfyName;
+    @Json(name = "gfyNumber")
+    public String       gfyNumber;
+    @Json(name = "userName")
+    public String       userName;
+    @Json(name = "width")
+    public Integer      width;
+    @Json(name = "height")
+    public Integer      height;
+    @Json(name = "frameRate")
+    public Integer      frameRate;
+    @Json(name = "numFrames")
+    public Integer      numFrames;
+    @Json(name = "mp4Url")
+    public String       mp4Url;
+    @Json(name = "webmUrl")
+    public String       webmUrl;
+    @Json(name = "webpUrl")
+    public String       webpUrl;
+    @Json(name = "mobileUrl")
+    public String       mobileUrl;
+    @Json(name = "mobilePosterUrl")
+    public String       mobilePosterUrl;
+    @Json(name = "posterUrl")
+    public String       posterUrl;
+    @Json(name = "thumb360Url")
+    public String       thumb360Url;
+    @Json(name = "thumb360PosterUrl")
+    public String       thumb360PosterUrl;
+    @Json(name = "thumb100PosterUrl")
+    public String       thumb100PosterUrl;
+    @Json(name = "max5mbGif")
+    public String       max5mbGif;
+    @Json(name = "max2mbGif")
+    public String       max2mbGif;
+    @Json(name = "mjpgUrl")
+    public String       mjpgUrl;
+    @Json(name = "gifUrl")
+    public String       gifUrl;
+    @Json(name = "gifSize")
+    public Integer      gifSize;
+    @Json(name = "mp4Size")
+    public Integer      mp4Size;
+    @Json(name = "webmSize")
+    public Integer      webmSize;
+    @Json(name = "createDate")
+    public Integer      createDate;
+    @Json(name = "views")
+    public Integer      views;
+    @Json(name = "title")
+    public String       title;
+    @Json(name = "extraLemmas")
+    public List<String> extraLemmas;
+    @Json(name = "md5")
+    public String       md5;
+    @Json(name = "tags")
+    public List<String> tags;
+    @Json(name = "nsfw")
+    public String       nsfw;
+    @Json(name = "sar")
+    public String       sar;
+    @Json(name = "url")
+    public String       url;
+    @Json(name = "source")
+    public String       source;
+    @Json(name = "dynamo")
+    public Object       dynamo;
+    @Json(name = "subreddit")
+    public String       subreddit;
+    @Json(name = "redditId")
+    public String       redditId;
+    @Json(name = "redditIdText")
+    public String       redditIdText;
+    @Json(name = "likes")
+    public Integer      likes;
+    @Json(name = "dislikes")
+    public Integer      dislikes;
+    @Json(name = "published")
+    public String       published;
+    @Json(name = "description")
+    public String       description;
+    @Json(name = "copyrightClaimaint")
+    public String       copyrightClaimaint;
+    @Json(name = "languageText")
+    public String       languageText;
 
     @Override
     public int getByteSize(boolean highQuality) {
         // Gfycat mp4Size only available for high quality
-        return (highQuality) ? mp4Size : SIZE_UNAVAILABLE;
+        return (highQuality) ? defaultSizeIfNull(mp4Size) : SIZE_UNAVAILABLE;
     }
 
     @Override
@@ -183,17 +131,17 @@ public class GfyItem extends BaseMedia {
 
     @Override
     public double getDuration() {
-        double result = DURATION_UNAVAILABLE;
+        if (frameRate == null || numFrames == null) return DURATION_UNAVAILABLE;
         if (frameRate > 0) {
-            result = (double) numFrames / (double) frameRate;
+            return (numFrames * 1.0) / frameRate;
         }
-        return result;
+        return DURATION_UNAVAILABLE;
     }
 
     @Override
     public int getHeight(boolean highQuality) {
         // Gfycat height only available for high quality
-        return (highQuality) ? height : SIZE_UNAVAILABLE;
+        return (highQuality) ? defaultSizeIfNull(height) : SIZE_UNAVAILABLE;
     }
 
     @Override
@@ -219,7 +167,7 @@ public class GfyItem extends BaseMedia {
     @Override
     public int getWidth(boolean highQuality) {
         // Gfycat width only available for high quality
-        return (highQuality) ? width : SIZE_UNAVAILABLE;
+        return (highQuality) ? defaultSizeIfNull(width) : SIZE_UNAVAILABLE;
     }
 
     @Override

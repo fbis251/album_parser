@@ -26,13 +26,13 @@ import java.util.List;
 /**
  * Created by fb on 5/11/16.
  */
-public interface IMediaAlbum {
+public interface IMediaAlbum<T extends IMedia> {
     int COUNT_UNAVAILABLE = -1;
 
     /**
      * @return A List of all the media contained in the album
      */
-    List<IMedia> getAlbumMedia();
+    List<T> getAlbumMedia();
 
     /**
      * @return The number of media contained in the album

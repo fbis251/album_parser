@@ -42,22 +42,14 @@ public class StreamableMedia extends BaseMedia {
 
     @Override
     public int getByteSize(boolean highQuality) {
-        // By default always try to return the high quality size
-        int resultSize = (mMp4 != null) ? mMp4.size : SIZE_UNAVAILABLE;
-        if (!highQuality) {
-            resultSize = (mMp4Mobile != null) ? mMp4Mobile.size : SIZE_UNAVAILABLE;
-        }
-        return resultSize;
+        BaseMp4 baseMp4 = highQuality ? mMp4 : mMp4Mobile;
+        return baseMp4 != null ? defaultSizeIfNull(baseMp4.size) : SIZE_UNAVAILABLE;
     }
 
     @Override
     public int getHeight(boolean highQuality) {
-        // By default always try to return the high quality height
-        int resultHeight = (mMp4 != null) ? mMp4.height : SIZE_UNAVAILABLE;
-        if (!highQuality) {
-            resultHeight = (mMp4Mobile != null) ? mMp4Mobile.height : SIZE_UNAVAILABLE;
-        }
-        return resultHeight;
+        BaseMp4 baseMp4 = highQuality ? mMp4 : mMp4Mobile;
+        return baseMp4 != null ? defaultSizeIfNull(baseMp4.height) : SIZE_UNAVAILABLE;
     }
 
     @Override
@@ -67,24 +59,17 @@ public class StreamableMedia extends BaseMedia {
 
     @Override
     public URL getUrl(boolean highQuality) {
-        // By default always try to return the high quality URL
-        String mediaUrl = (mMp4 != null) ? mMp4.url : null;
-        if (!highQuality && mMp4Mobile != null) {
-            mediaUrl = mMp4Mobile.url;
-        }
-        if (mediaUrl == null) return null;
+        BaseMp4 baseMp4 = highQuality ? mMp4 : mMp4Mobile;
+        if (baseMp4 == null || baseMp4.url == null) return null;
+        String mediaUrl = baseMp4.url;
         String resultUrl = mediaUrl.startsWith("http") ? mediaUrl : PROTOCOL_HTTPS + ":" + mediaUrl;
         return ParseUtils.getUrlObject(resultUrl);
     }
 
     @Override
     public int getWidth(boolean highQuality) {
-        // By default always try to return the high quality width
-        int resultWidth = (mMp4 != null) ? mMp4.width : SIZE_UNAVAILABLE;
-        if (!highQuality) {
-            resultWidth = (mMp4Mobile != null) ? mMp4Mobile.width : SIZE_UNAVAILABLE;
-        }
-        return resultWidth;
+        BaseMp4 baseMp4 = highQuality ? mMp4 : mMp4Mobile;
+        return baseMp4 != null ? defaultSizeIfNull(baseMp4.width) : SIZE_UNAVAILABLE;
     }
 
     @Override

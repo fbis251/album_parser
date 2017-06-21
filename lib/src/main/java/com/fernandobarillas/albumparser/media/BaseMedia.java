@@ -27,6 +27,7 @@ import java.net.URL;
  * Class that sets default values for the IMedia interface
  */
 public class BaseMedia implements IMedia {
+
     @Override
     public int getByteSize(boolean highQuality) {
         return SIZE_UNAVAILABLE;
@@ -102,5 +103,13 @@ public class BaseMedia implements IMedia {
                 + getPreviewUrl()
                 + '\''
                 + '}';
+    }
+
+    protected double defaultDurationIfNull(Double doubleValue) {
+        return doubleValue != null ? doubleValue : (double) DURATION_UNAVAILABLE;
+    }
+
+    protected int defaultSizeIfNull(Integer integerValue) {
+        return integerValue != null ? integerValue : SIZE_UNAVAILABLE;
     }
 }

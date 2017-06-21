@@ -20,23 +20,22 @@
 
 package com.fernandobarillas.albumparser.tumblr.model;
 
-import com.fernandobarillas.albumparser.media.BaseMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.net.URL;
 
-public class Video extends BaseMedia {
+public class Video extends BaseTumblrMedia {
 
     private URL    mUrl;
     private URL    mPreviewUrl;
     private double mDuration;
     private String mDescription;
 
-    public Video(String videoUrl, String previewUrl, String description, double duration) {
+    public Video(String videoUrl, String previewUrl, String description, Double duration) {
         mUrl = ParseUtils.getUrlObject(videoUrl);
         mPreviewUrl = ParseUtils.getUrlObject(previewUrl);
         mDescription = description;
-        mDuration = duration;
+        mDuration = defaultDurationIfNull(duration);
     }
 
     @Override

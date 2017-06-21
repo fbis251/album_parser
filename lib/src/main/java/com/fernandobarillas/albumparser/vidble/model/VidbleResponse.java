@@ -22,28 +22,20 @@ package com.fernandobarillas.albumparser.vidble.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
+public class VidbleResponse extends BaseApiResponse<VidbleMedia> {
 
-/**
- * Java representation of the Vidble album JSON response
- */
-@Generated("org.jsonschema2pojo")
-public class VidbleResponse extends BaseApiResponse {
+    @Json(name = "pics")
+    public List<String> pics;
 
-    @SerializedName("pics")
-    @Expose
-    public List<String> pics = new ArrayList<String>();
     private VidbleAlbum mAlbum;
 
     @Override
-    public IMediaAlbum getAlbum() {
+    public IMediaAlbum<VidbleMedia> getAlbum() {
         if (mAlbum == null) {
             mAlbum = new VidbleAlbum(pics);
         }

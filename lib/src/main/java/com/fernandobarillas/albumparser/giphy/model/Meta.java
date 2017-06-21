@@ -1,18 +1,13 @@
 package com.fernandobarillas.albumparser.giphy.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 public class Meta {
 
-    @SerializedName("status")
-    @Expose
-    public int    status;
-    @SerializedName("msg")
-    @Expose
-    public String msg;
-    @SerializedName("response_id")
-    @Expose
-    public String responseId;
-
+    @Json(name = "status")
+    public Integer status;
+    @Json(name = "msg")
+    public String  msg;
+    @Json(name = "response_id")
+    public String  responseId;
 }

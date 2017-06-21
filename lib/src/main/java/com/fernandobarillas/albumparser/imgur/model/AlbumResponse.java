@@ -22,31 +22,20 @@ package com.fernandobarillas.albumparser.imgur.model;
 
 import com.fernandobarillas.albumparser.media.BaseApiResponse;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.net.URL;
 
-import javax.annotation.Generated;
-
-/**
- * Created by fb on 5/3/16.
- */
-
-@Generated("org.jsonschema2pojo")
-public class AlbumResponse extends BaseApiResponse {
-    @SerializedName("data")
-    @Expose
+public class AlbumResponse extends BaseApiResponse<Image> {
+    @Json(name = "data")
     public AlbumData data;
-    @SerializedName("success")
-    @Expose
-    public boolean   success;
-    @SerializedName("status")
-    @Expose
-    public int       status;
+    @Json(name = "success")
+    public Boolean   success;
+    @Json(name = "status")
+    public Integer   status;
 
     @Override
-    public IMediaAlbum getAlbum() {
+    public IMediaAlbum<Image> getAlbum() {
         return data;
     }
 
@@ -63,7 +52,7 @@ public class AlbumResponse extends BaseApiResponse {
 
     @Override
     public boolean isSuccessful() {
-        // This API always returns true in the response, determine succes from non-empty album instead
+        // This API always returns true in the response, determine success from non-empty album instead
         return (data != null && !data.isEmpty());
     }
 

@@ -24,6 +24,7 @@ import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
+import com.squareup.moshi.Moshi;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,7 +32,7 @@ import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 /**
  * Abstract class for parsers for API responses. This defines a few helper methods to make getting
@@ -139,8 +140,9 @@ public abstract class AbstractApiParser {
      * @return A Retrofit instance for the passed-in API URL.
      */
     protected Retrofit getRetrofit() {
+        Moshi moshi = new Moshi.Builder().add(new URLAdapter()).build();
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder().baseUrl(getApiUrl())
-                .addConverterFactory(GsonConverterFactory.create());
+                .addConverterFactory(MoshiConverterFactory.create(moshi));
         if (mClient != null) {
             retrofitBuilder = retrofitBuilder.client(mClient);
         }

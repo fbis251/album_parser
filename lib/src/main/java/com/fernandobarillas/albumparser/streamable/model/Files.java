@@ -20,22 +20,16 @@
 
 package com.fernandobarillas.albumparser.streamable.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import javax.annotation.Generated;
+import com.squareup.moshi.Json;
 
 /**
  * Created by fb on 5/10/16.
  */
-@Generated("org.jsonschema2pojo")
 public class Files {
 
-    @SerializedName("mp4")
-    @Expose
+    @Json(name = "mp4")
     public Mp4       mp4;
-    @SerializedName("mp4-mobile")
-    @Expose
+    @Json(name = "mp4-mobile")
     public Mp4Mobile mp4Mobile;
 
     public Mp4 getMp4() {
