@@ -25,6 +25,7 @@ import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.giphy.GiphyParser;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
+import com.fernandobarillas.albumparser.util.ExpectedHash;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.util.TestUtils;
 
@@ -32,8 +33,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
 import static com.fernandobarillas.albumparser.util.TestUtils.apiDomainValid;
@@ -71,28 +72,35 @@ public class GiphyParserTest implements IParserTest {
     @Test
     @Override
     public void testCanParseAndGetHash() {
-        Map<String, String> validHashes = new HashMap<>();
+        List<ExpectedHash> validHashes = new ArrayList<>();
 
         // /gifs/{hash}
-        validHashes.put("l0HlD7sTICR75rDHy", "http://giphy.com/gifs/l0HlD7sTICR75rDHy");
+        validHashes.add(new ExpectedHash("l0HlD7sTICR75rDHy",
+                "http://giphy.com/gifs/l0HlD7sTICR75rDHy"));
         // /gifs/{hash}/suffix
-        validHashes.put("l0HlD7sTICR75rDHy", "http://giphy.com/gifs/l0HlD7sTICR75rDHy/html5");
+        validHashes.add(new ExpectedHash("l0HlD7sTICR75rDHy",
+                "http://giphy.com/gifs/l0HlD7sTICR75rDHy/html5"));
         // /gifs/prefix-{hash}
-        validHashes.put("l0HlD7sTICR75rDHy", "https://giphy.com/gifs/simpsons-l0HlD7sTICR75rDHy");
+        validHashes.add(new ExpectedHash("l0HlD7sTICR75rDHy",
+                "https://giphy.com/gifs/simpsons-l0HlD7sTICR75rDHy"));
         // direct GIF url, media domain
-        validHashes.put("l0HlD7sTICR75rDHy",
-                "https://media.giphy.com/media/l0HlD7sTICR75rDHy/giphy.gif");
+        validHashes.add(new ExpectedHash("l0HlD7sTICR75rDHy",
+                "https://media.giphy.com/media/l0HlD7sTICR75rDHy/giphy.gif"));
         // direct MP4 url, media domain
-        validHashes.put("l0HlD7sTICR75rDHy",
-                "https://media.giphy.com/media/l0HlD7sTICR75rDHy/giphy.mp4");
+        validHashes.add(new ExpectedHash("l0HlD7sTICR75rDHy",
+                "https://media.giphy.com/media/l0HlD7sTICR75rDHy/giphy.mp4"));
         // direct GIF url, i domain
-        validHashes.put("l0HlD7sTICR75rDHy", "http://i.giphy.com/l0HlD7sTICR75rDHy.gif");
+        validHashes.add(new ExpectedHash("l0HlD7sTICR75rDHy",
+                "http://i.giphy.com/l0HlD7sTICR75rDHy.gif"));
         // direct GIFV url, i domain
-        validHashes.put("l0HlD7sTICR75rDHy", "http://i.giphy.com/l0HlD7sTICR75rDHy.gifv");
+        validHashes.add(new ExpectedHash("l0HlD7sTICR75rDHy",
+                "http://i.giphy.com/l0HlD7sTICR75rDHy.gifv"));
         // direct gifOriginal url, i domain
-        validHashes.put("l0HlD7sTICR75rDHy", "http://i.giphy.com/l0HlD7sTICR75rDHy.gifOriginal");
+        validHashes.add(new ExpectedHash("l0HlD7sTICR75rDHy",
+                "http://i.giphy.com/l0HlD7sTICR75rDHy.gifOriginal"));
         // /embed/{hash} url
-        validHashes.put("l0HlD7sTICR75rDHy", "http://giphy.com/embed/l0HlD7sTICR75rDHy?html5=true");
+        validHashes.add(new ExpectedHash("l0HlD7sTICR75rDHy",
+                "http://giphy.com/embed/l0HlD7sTICR75rDHy?html5=true"));
 
         validateCanParseAndHashes(mGiphyParser, validHashes, false);
     }

@@ -28,6 +28,7 @@ import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.model.ExpectedAlbum;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
+import com.fernandobarillas.albumparser.util.ExpectedHash;
 import com.fernandobarillas.albumparser.util.TestUtils;
 
 import org.junit.Test;
@@ -35,10 +36,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static com.fernandobarillas.albumparser.util.ParseUtils.getUrlObject;
@@ -85,73 +84,93 @@ public class ImgurParserTest implements IParserTest {
     @Test
     @Override
     public void testCanParseAndGetHash() {
-        Map<String, String> validHashes = new HashMap<>();
+        List<ExpectedHash> validHashes = new ArrayList<>();
 
         // Valid sub-domains
-        validHashes.put("Htlsv6N", "http://m.imgur.com/r/aww/Htlsv6N"); // subreddit mobile URL
-        validHashes.put("Htlsv6N", "http://m.imgur.com/Htlsv6N"); // mobile url
-        validHashes.put("Htlsv6N", "http://i.imgur.com/Htlsv6N.jpg"); // i subdomain
-        validHashes.put("1w2MFRq", "http://b.Bildgur.de/1w2MFRq.png"); // bildgur domain
+        validHashes.add(new ExpectedHash("Htlsv6N",
+                "http://m.imgur.com/r/aww/Htlsv6N")); // subreddit mobile URL
+        validHashes.add(new ExpectedHash("Htlsv6N", "http://m.imgur.com/Htlsv6N")); // mobile url
+        validHashes.add(new ExpectedHash("Htlsv6N",
+                "http://i.imgur.com/Htlsv6N.jpg")); // i subdomain
+        validHashes.add(new ExpectedHash("1w2MFRq",
+                "http://b.Bildgur.de/1w2MFRq.png")); // bildgur domain
 
         // Albums
-        validHashes.put("rROMo", "http://imgur.com/rROMo"); // Album with no prefix
-        validHashes.put("VhGBD", "http://imgur.com/r/motivation/VhGBD"); // Album with /r/ prefix
-        validHashes.put("WKauF", "https://imgur.com/gallery/WKauF"); // Album with gallery URL
-        validHashes.put("cvehZ", "http://www.imgur.com/a/cvehZ"); // /a/ prefix album, www domain
-        validHashes.put("cvehZ", "http://imgur.com/a/cvehZ"); // /a/ prefix album
-        validHashes.put("rROMo", "https://bildgur.de/a/rROMo"); // /a/ prefix album, bildgur domain
-        validHashes.put("zis2t", "http://imgur.com/r/diy/zis2t"); // /r/ prefix album
+        validHashes.add(new ExpectedHash("rROMo",
+                "http://imgur.com/rROMo")); // Album with no prefix
+        validHashes.add(new ExpectedHash("VhGBD",
+                "http://imgur.com/r/motivation/VhGBD")); // Album with /r/ prefix
+        validHashes.add(new ExpectedHash("WKauF",
+                "https://imgur.com/gallery/WKauF")); // Album with gallery URL
+        validHashes.add(new ExpectedHash("cvehZ",
+                "http://www.imgur.com/a/cvehZ")); // /a/ prefix album, www domain
+        validHashes.add(new ExpectedHash("cvehZ", "http://imgur.com/a/cvehZ")); // /a/ prefix album
+        validHashes.add(new ExpectedHash("rROMo",
+                "https://bildgur.de/a/rROMo")); // /a/ prefix album, bildgur domain
+        validHashes.add(new ExpectedHash("zis2t",
+                "http://imgur.com/r/diy/zis2t")); // /r/ prefix album
 
         // Images
-        validHashes.put("0MlEZ", "http://i.imgur.com/0MlEZ.jpg"); // Pre-API direct URL
-        validHashes.put("awsGf9p", "http://imgur.com/awsGf9p"); // No prefix image URL
-        validHashes.put("sCjRLQG", "http://i.imgur.com/sCjRLQG.jpg?1"); // Direct url with param
-        validHashes.put("PBTrqAA", "https://imgur.com/gallery/PBTrqAA"); // gallery prefix
-        validHashes.put("mhcWa37", "http://imgur.com/gallery/mhcWa37/new"); // Extra path after hash
-        validHashes.put("SWSteYm", "http://imgur.com/r/google/SWSteYm"); // /r/ prefix
+        validHashes.add(new ExpectedHash("0MlEZ",
+                "http://i.imgur.com/0MlEZ.jpg")); // Pre-API direct URL
+        validHashes.add(new ExpectedHash("awsGf9p",
+                "http://imgur.com/awsGf9p")); // No prefix image URL
+        validHashes.add(new ExpectedHash("sCjRLQG",
+                "http://i.imgur.com/sCjRLQG.jpg?1")); // Direct url with param
+        validHashes.add(new ExpectedHash("sCjRLQG",
+                "http://i.imgur.com//sCjRLQG.jpg")); // Direct url with extra slash
+        validHashes.add(new ExpectedHash("PBTrqAA",
+                "https://imgur.com/gallery/PBTrqAA")); // gallery prefix
+        validHashes.add(new ExpectedHash("mhcWa37",
+                "http://imgur.com/gallery/mhcWa37/new")); // Extra path after hash
+        validHashes.add(new ExpectedHash("SWSteYm",
+                "http://imgur.com/r/google/SWSteYm")); // /r/ prefix
 
-        validHashes.put("FGfBEqu", "https://bildgur.de/FGfBEqu.png"); // Direct bildgur url
-        validHashes.put("xvn42E1", "http://b.bildgur.de/xvn42E1.jpg"); // Direct bildgur url
-        validHashes.put("FGfBEqu", "https://bildgur.de/FGfBEqu"); // bildgur url
-        validHashes.put("1234567", "http://i.imgur.com/1234567_d.jpg"); // _d suffix
+        validHashes.add(new ExpectedHash("FGfBEqu",
+                "https://bildgur.de/FGfBEqu.png")); // Direct bildgur url
+        validHashes.add(new ExpectedHash("xvn42E1",
+                "http://b.bildgur.de/xvn42E1.jpg")); // Direct bildgur url
+        validHashes.add(new ExpectedHash("FGfBEqu", "https://bildgur.de/FGfBEqu")); // bildgur url
+        validHashes.add(new ExpectedHash("1234567",
+                "http://i.imgur.com/1234567_d.jpg")); // _d suffix
 
         // Synthetic URLs
-        validHashes.put("12345", "http://imgur.com/12345.jpg");
-        validHashes.put("12345", "http://i.imgur.com/12345.gifv");
-        validHashes.put("abcde", "http://i.imgur.com/abcde.png");
-        validHashes.put("1234567", "http://imgur.com/1234567.bmp");
-        validHashes.put("1234567", "http://i.imgur.com/1234567.gif");
-        validHashes.put("abcdefg", "http://i.imgur.com/abcdefg.jpg");
-        validHashes.put("abcdefg", "http://i.imgur.com/abcdefg.jpg/");
+        validHashes.add(new ExpectedHash("12345", "http://imgur.com/12345.jpg"));
+        validHashes.add(new ExpectedHash("12345", "http://i.imgur.com/12345.gifv"));
+        validHashes.add(new ExpectedHash("abcde", "http://i.imgur.com/abcde.png"));
+        validHashes.add(new ExpectedHash("1234567", "http://imgur.com/1234567.bmp"));
+        validHashes.add(new ExpectedHash("1234567", "http://i.imgur.com/1234567.gif"));
+        validHashes.add(new ExpectedHash("abcdefg", "http://i.imgur.com/abcdefg.jpg"));
+        validHashes.add(new ExpectedHash("abcdefg", "http://i.imgur.com/abcdefg.jpg/"));
 
         // Valid image variation suffixes
-        validHashes.put("1234567", "http://i.imgur.com/1234567s.jpg");
-        validHashes.put("1234567", "http://i.imgur.com/1234567b.jpg");
-        validHashes.put("1234567", "http://i.imgur.com/1234567t.jpg");
-        validHashes.put("1234567", "http://i.imgur.com/1234567m.jpg");
-        validHashes.put("1234567", "http://i.imgur.com/1234567l.jpg");
-        validHashes.put("1234567", "http://i.imgur.com/1234567g.jpg");
-        validHashes.put("1234567", "http://i.imgur.com/1234567h.jpg");
-        validHashes.put("1234567", "http://i.imgur.com/1234567r.jpg");
+        validHashes.add(new ExpectedHash("1234567", "http://i.imgur.com/1234567s.jpg"));
+        validHashes.add(new ExpectedHash("1234567", "http://i.imgur.com/1234567b.jpg"));
+        validHashes.add(new ExpectedHash("1234567", "http://i.imgur.com/1234567t.jpg"));
+        validHashes.add(new ExpectedHash("1234567", "http://i.imgur.com/1234567m.jpg"));
+        validHashes.add(new ExpectedHash("1234567", "http://i.imgur.com/1234567l.jpg"));
+        validHashes.add(new ExpectedHash("1234567", "http://i.imgur.com/1234567g.jpg"));
+        validHashes.add(new ExpectedHash("1234567", "http://i.imgur.com/1234567h.jpg"));
+        validHashes.add(new ExpectedHash("1234567", "http://i.imgur.com/1234567r.jpg"));
 
-        validHashes.put("12345", "http://imgur.com/12345");
-        validHashes.put("abcde", "http://imgur.com/abcde");
-        validHashes.put("1234567", "http://imgur.com/1234567");
-        validHashes.put("abcdefg", "http://imgur.com/abcdefg");
+        validHashes.add(new ExpectedHash("12345", "http://imgur.com/12345"));
+        validHashes.add(new ExpectedHash("abcde", "http://imgur.com/abcde"));
+        validHashes.add(new ExpectedHash("1234567", "http://imgur.com/1234567"));
+        validHashes.add(new ExpectedHash("abcdefg", "http://imgur.com/abcdefg"));
 
-        validHashes.put("12345", "http://imgur.com/gallery/12345");
-        validHashes.put("abcde", "http://imgur.com/gallery/abcde");
-        validHashes.put("1234567", "http://imgur.com/gallery/1234567");
-        validHashes.put("abcdefg", "http://imgur.com/gallery/abcdefg");
+        validHashes.add(new ExpectedHash("12345", "http://imgur.com/gallery/12345"));
+        validHashes.add(new ExpectedHash("abcde", "http://imgur.com/gallery/abcde"));
+        validHashes.add(new ExpectedHash("1234567", "http://imgur.com/gallery/1234567"));
+        validHashes.add(new ExpectedHash("abcdefg", "http://imgur.com/gallery/abcdefg"));
 
-        validHashes.put("12345", "http://imgur.com/a/test/12345");
-        validHashes.put("abcde", "http://imgur.com/a/test/abcde");
+        validHashes.add(new ExpectedHash("12345", "http://imgur.com/a/test/12345"));
+        validHashes.add(new ExpectedHash("abcde", "http://imgur.com/a/test/abcde"));
 
-        validHashes.put("12345", "http://imgur.com/r/test/12345");
-        validHashes.put("abcde", "http://imgur.com/r/test/abcde");
-        validHashes.put("1234567", "http://imgur.com/r/test/1234567");
-        validHashes.put("abcdefg", "http://imgur.com/r/test/abcdefg");
-        validHashes.put("wi3Sl", "http://i.stack.imgur.com/wi3Sl.jpg");
+        validHashes.add(new ExpectedHash("12345", "http://imgur.com/r/test/12345"));
+        validHashes.add(new ExpectedHash("abcde", "http://imgur.com/r/test/abcde"));
+        validHashes.add(new ExpectedHash("1234567", "http://imgur.com/r/test/1234567"));
+        validHashes.add(new ExpectedHash("abcdefg", "http://imgur.com/r/test/abcdefg"));
+        validHashes.add(new ExpectedHash("wi3Sl", "http://i.stack.imgur.com/wi3Sl.jpg"));
 
         validateCanParseAndHashes(mImgurParser, validHashes, false);
     }

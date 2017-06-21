@@ -32,7 +32,6 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import okhttp3.OkHttpClient;
@@ -202,14 +201,14 @@ public class TestUtils {
     }
 
     public static void validateCanParseAndHashes(final AbstractApiParser parser,
-            final Map<String, String> validHashes,
+            final List<ExpectedHash> validHashes,
             final boolean skipHash) {
-        for (Map.Entry<String, String> entry : validHashes.entrySet()) {
-            String expectedHash = entry.getKey();
-            String url = entry.getValue();
+        for (ExpectedHash expectedHash : validHashes) {
+            String hash = expectedHash.hash;
+            String url = expectedHash.url;
             assertTrue(url + " canParse", parser.canParse(url));
             if (skipHash) continue;
-            assertEquals(url + " hash equals", expectedHash, parser.getHash(url));
+            assertEquals(url + " hash equals", hash, parser.getHash(url));
         }
     }
 }

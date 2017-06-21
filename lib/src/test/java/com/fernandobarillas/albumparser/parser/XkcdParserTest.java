@@ -23,6 +23,7 @@ package com.fernandobarillas.albumparser.parser;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
+import com.fernandobarillas.albumparser.util.ExpectedHash;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.util.TestUtils;
 import com.fernandobarillas.albumparser.xkcd.XkcdParser;
@@ -33,9 +34,9 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
@@ -74,16 +75,17 @@ public class XkcdParserTest implements IParserTest {
     @Test
     @Override
     public void testCanParseAndGetHash() {
-        Map<String, String> validHashes = new HashMap<>();
+        List<ExpectedHash> validHashes = new ArrayList<>();
         // standard URL
-        validHashes.put("1", "http://xkcd.com/1");
-        validHashes.put("695", "http://m.xkcd.com/695/");
-        validHashes.put("1722", "http://www.xkcd.com/1722/#");
-        validHashes.put("9223372036854775807", "http://xkcd.com/9223372036854775807");
-        validHashes.put("/comics/infinite_scrolling.png",
-                "http://imgs.xkcd.com/comics/infinite_scrolling.png");
-        validHashes.put("/comics/goldbach_conjectures.png",
-                "http://imgs.xkcd.com/comics/goldbach_conjectures.png");
+        validHashes.add(new ExpectedHash("1", "http://xkcd.com/1"));
+        validHashes.add(new ExpectedHash("695", "http://m.xkcd.com/695/"));
+        validHashes.add(new ExpectedHash("1722", "http://www.xkcd.com/1722/#"));
+        validHashes.add(new ExpectedHash("9223372036854775807",
+                "http://xkcd.com/9223372036854775807"));
+        validHashes.add(new ExpectedHash("/comics/infinite_scrolling.png",
+                "http://imgs.xkcd.com/comics/infinite_scrolling.png"));
+        validHashes.add(new ExpectedHash("/comics/goldbach_conjectures.png",
+                "http://imgs.xkcd.com/comics/goldbach_conjectures.png"));
 
         validateCanParseAndHashes(mXkcdParser, validHashes, false);
     }

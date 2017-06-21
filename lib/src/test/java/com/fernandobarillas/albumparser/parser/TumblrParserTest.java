@@ -29,6 +29,7 @@ import com.fernandobarillas.albumparser.model.ExpectedAlbum;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
 import com.fernandobarillas.albumparser.tumblr.TumblrParser;
+import com.fernandobarillas.albumparser.util.ExpectedHash;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 import com.fernandobarillas.albumparser.util.TestUtils;
 
@@ -37,9 +38,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
 import static com.fernandobarillas.albumparser.util.TestUtils.apiDomainValid;
@@ -74,21 +73,24 @@ public class TumblrParserTest implements IParserTest {
     @Test
     @Override
     public void testCanParseAndGetHash() {
-        Map<String, String> validHashes = new HashMap<>();
+        List<ExpectedHash> validHashes = new ArrayList<>();
 
         // /image/ prefix
-        validHashes.put("150175958904", "http://bossrushstudio.tumblr.com/image/150175958904");
+        validHashes.add(new ExpectedHash("150175958904",
+                "http://bossrushstudio.tumblr.com/image/150175958904"));
         // /post/ prefix with suffix
-        validHashes.put("150140358556", "http://aatkaw.tumblr.com/post/150140358556/hana");
+        validHashes.add(new ExpectedHash("150140358556",
+                "http://aatkaw.tumblr.com/post/150140358556/hana"));
         // /post/ prefix
-        validHashes.put("150135750508", "http://fbis251.tumblr.com/post/150135750508/");
+        validHashes.add(new ExpectedHash("150135750508",
+                "http://fbis251.tumblr.com/post/150135750508/"));
 
         validateCanParseAndHashes(mTumblrParser, validHashes, false);
 
-        Map<String, String> validDirectUrls = new HashMap<>();
+        List<ExpectedHash> validDirectUrls = new ArrayList<>();
         // Direct media URL
-        validDirectUrls.put(null,
-                "https://67.media.tumblr.com/dbd5c1852e25468bd2e715cb88085178/tumblr_od7ef98S291r8k7mao1_540.jpg");
+        validDirectUrls.add(new ExpectedHash(null,
+                "https://67.media.tumblr.com/dbd5c1852e25468bd2e715cb88085178/tumblr_od7ef98S291r8k7mao1_540.jpg"));
         validateCanParseAndHashes(mTumblrParser, validDirectUrls, true);
     }
 
