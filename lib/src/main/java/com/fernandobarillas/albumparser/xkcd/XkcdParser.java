@@ -71,17 +71,14 @@ public class XkcdParser extends AbstractApiParser {
         // No path segments for the URL
         if (splitPath == null || splitPath.length < 1) throw new InvalidMediaUrlException(mediaUrl);
         String firstSegment = splitPath[0];
-        System.out.println("firstSegment = [" + firstSegment + ']');
         if (splitPath.length >= 2
                 && PATH_COMICS.equalsIgnoreCase(firstSegment)
                 && ParseUtils.isImageExtension(mediaUrl)) {
             String secondSegment = splitPath[1];
             hash = ParseUtils.hashRegex(secondSegment, COMICS_REGEX);
             hash = String.format("/%s/%s", PATH_COMICS, hash);
-            System.out.println("hash = [" + hash + ']');
         } else {
             hash = ParseUtils.hashRegex(firstSegment, NUMBER_REGEX);
-            System.out.println("hash = [" + hash + ']');
             getComicNumber(mediaUrl, hash);
         }
         if (hash == null) throw new InvalidMediaUrlException(mediaUrl);
