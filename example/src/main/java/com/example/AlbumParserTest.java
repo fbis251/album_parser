@@ -38,7 +38,7 @@ public class AlbumParserTest {
     protected final static String SEPARATOR = "\n--------------------\n";
     // @formatter:off
     private static final String[] TEST_URLS = {
-            "https://gfycat.com/AngryFrequentChuckwalla",
+            "https://gfycat.com/gifs/detail/AngryFrequentChuckwalla",
             "https://gfycat.com/UnconsciousTalkativeBluejay", // 404
             "https://fat.gfycat.com/PotableLeftAbalone.webm",
             "https://fat.gfycat.com/PotableLeftAbalone.mp4",
@@ -86,6 +86,7 @@ public class AlbumParserTest {
     public static final boolean testAlbumParser(final OkHttpClient client) {
         AlbumParser albumParser = new AlbumParser(client);
         int count = 0;
+        List<String> errorUrls = new ArrayList<>();
         for (String testUrl : TEST_URLS) {
             System.out.println("Testing " + testUrl);
             try {
@@ -111,7 +112,11 @@ public class AlbumParserTest {
             count++;
         }
 
-        System.out.println(String.format("%d/%d done", count, TEST_URLS.length));
+        System.out.printf("%d/%d done\n", count, TEST_URLS.length);
+        System.out.printf("URLs with errors: %d\n", errorUrls.size());
+        for (String errorUrl : errorUrls) {
+            System.out.println("\t" + errorUrl);
+        }
         return true;
     }
 
@@ -156,7 +161,6 @@ public class AlbumParserTest {
         }
 
         System.out.println("Preview URL: " + apiResponse.getPreviewUrl());
-        System.out.println("JSON: " + apiResponse.getJson());
 
         if (apiResponse.isAlbum()) {
             System.out.println("API returned an album");
