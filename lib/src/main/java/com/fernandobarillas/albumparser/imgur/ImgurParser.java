@@ -23,9 +23,11 @@ package com.fernandobarillas.albumparser.imgur;
 import com.fernandobarillas.albumparser.exception.InvalidApiKeyException;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
+import com.fernandobarillas.albumparser.imgur.api.ErrorUtils;
 import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.imgur.model.AlbumResponse;
 import com.fernandobarillas.albumparser.imgur.model.Image;
+import com.fernandobarillas.albumparser.imgur.model.ImgurApiError;
 import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponseV3;
 import com.fernandobarillas.albumparser.imgur.model.v3.ImageResponseV3;
 import com.fernandobarillas.albumparser.media.IMedia;
@@ -181,6 +183,7 @@ public class ImgurParser extends AbstractApiParser {
                 // Use API v3 if the client ID is set
                 Response<AlbumResponseV3> serviceResponse =
                         service.getV3Album(clientIdHeader, hash).execute();
+                checkResponseSuccess(mediaUrl, serviceResponse);
                 AlbumResponseV3 apiResponse = serviceResponse.body();
                 if (apiResponse != null) {
                     apiResponse.setLowQuality(mLowQualitySize);
@@ -190,6 +193,7 @@ public class ImgurParser extends AbstractApiParser {
             } else {
                 // Make an API call to get the album images via the old API
                 Response<AlbumResponse> serviceResponse = service.getAlbumData(hash).execute();
+                checkResponseSuccess(mediaUrl, serviceResponse);
                 AlbumResponse apiResponse = serviceResponse.body();
                 if (apiResponse != null) {
                     apiResponse.setLowQuality(mLowQualitySize);
@@ -270,5 +274,13 @@ public class ImgurParser extends AbstractApiParser {
      */
     public void setPreviewSize(String previewSize) {
         mPreviewSize = previewSize;
+    }
+
+    private void checkResponseSuccess(URL mediaUrl, Response<?> serviceResponse)
+            throws InvalidApiResponseException {
+        if (!serviceResponse.isSuccessful()) {
+            ImgurApiError apiError = ErrorUtils.getApiError(getRetrofit(), serviceResponse);
+            throw new InvalidApiResponseException(mediaUrl, apiError.getMessage());
+        }
     }
 }
