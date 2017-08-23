@@ -28,6 +28,8 @@ import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 
@@ -60,7 +62,6 @@ public class AlbumParserTest {
             "https://imgur.com/a/cU6rs",     // Static image album
             "http://i.imgur.com/0t3yWP9.gifv", // direct gifv
             "http://i.imgur.com/0t3yWP9t.jpg", // Thumbnail URL
-            "https://imgur.com/zzaVA8m,jIg2N6q,xUFslmV", // Multiple image hashes TODO: Fix me
             "https://streamable.com/hm0i?t=0.2",
             "https://cdn.streamable.com/video/mp4/w78y.mp4",
             "https://cdn.streamable.com/video/mp4-mobile/ghju.mp4",
@@ -79,12 +80,13 @@ public class AlbumParserTest {
             "http://fbis251.tumblr.com/post/150135750508/",
             "http://fbis251.tumblr.com/post/150134742963/",
             "http://aatkaw.tumblr.com/post/150140358556/hana",
-            "https://eroshare.com/3fdr6v4a",
     };
     // @formatter:on
 
-    public static final boolean testAlbumParser(final OkHttpClient client) {
-        AlbumParser albumParser = new AlbumParser(client);
+    public static boolean testAlbumParser(final OkHttpClient client) {
+        AlbumParser albumParser = new AlbumParser.Builder()
+                .okHttpClient(client)
+                .build();
         int count = 0;
         List<String> errorUrls = new ArrayList<>();
         for (String testUrl : TEST_URLS) {
@@ -108,6 +110,7 @@ public class AlbumParserTest {
             } catch (Exception e) {
                 System.err.println("Error: " + testUrl + " " + e.getMessage());
                 e.printStackTrace();
+                errorUrls.add(testUrl);
             }
             count++;
         }
@@ -151,7 +154,7 @@ public class AlbumParserTest {
                 + '}';
     }
 
-    protected static void testApiResponse(URL originalUrl, IApiResponse apiResponse) {
+    protected static void testApiResponse(URL originalUrl, IApiResponse<IMedia> apiResponse) {
         if (apiResponse == null) return;
         if (!apiResponse.isSuccessful()) {
             System.err.println("API Error");
@@ -164,7 +167,7 @@ public class AlbumParserTest {
 
         if (apiResponse.isAlbum()) {
             System.out.println("API returned an album");
-            IMediaAlbum album = apiResponse.getAlbum();
+            IMediaAlbum<IMedia> album = apiResponse.getAlbum();
             if (album == null) {
                 System.err.println("Response had a null album: " + originalUrl);
                 return;

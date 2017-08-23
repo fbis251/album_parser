@@ -30,6 +30,7 @@ import com.fernandobarillas.albumparser.giphy.GiphyParser;
 import com.fernandobarillas.albumparser.imgur.ImgurParser;
 import com.fernandobarillas.albumparser.imgur.model.Image;
 import com.fernandobarillas.albumparser.media.DirectMedia;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.reddit.RedditParser;
 import com.fernandobarillas.albumparser.streamable.StreamableParser;
@@ -80,22 +81,25 @@ public class AlbumParser {
     private String mImgurLowQualitySize;
 
     /**
-     * Instantiates an AlbumParser instance. The library will use its own OkHttpClient instance to
-     * make all the HTTP calls.
-     */
-    public AlbumParser() {
-        this(new OkHttpClient());
-    }
-
-    /**
      * Instantiates an AlbumParser instance with the passed in OkHttpClient. This is useful when
      * you're setting custom headers such as the username. You can also set up a Proxy in the client
      * before passing it into this class.
      *
      * @param client The OkHttpClient instance to use with all the HTTP calls this library makes
      */
-    public AlbumParser(OkHttpClient client) {
-        if (client != null) mClient = client;
+    private AlbumParser(OkHttpClient client,
+            String giphyApiKey,
+            String imgurClientId,
+            String tumblrApiKey,
+            String imgurPreviewSize,
+            String imgurLowQualitySize) {
+        mClient = client != null ? client : new OkHttpClient();
+
+        mGiphyApiKey = giphyApiKey;
+        mImgurClientId = imgurClientId;
+        mTumblrApiKey = tumblrApiKey;
+        mImgurPreviewSize = imgurPreviewSize;
+        mImgurLowQualitySize = imgurLowQualitySize;
     }
 
     /**
@@ -176,8 +180,7 @@ public class AlbumParser {
     /**
      * Gets the client ID token that will be used when making requests to the Imgur API.
      *
-     * @return The Imgur Client ID if one was set by {@link #setImgurClientId(String)}, null
-     * otherwise
+     * @return The Imgur Client ID if one was set, null otherwise
      */
     public String getImgurClientId() {
         return mImgurClientId;
@@ -220,9 +223,11 @@ public class AlbumParser {
      * @throws InvalidMediaUrlException    When the passed-in URL is not supported by this library
      *                                     and cannot be parsed
      */
-    public ParserResponse parseUrl(URL mediaUrl)
+    public ParserResponse<IMedia> parseUrl(URL mediaUrl)
             throws IOException, InvalidApiKeyException, InvalidApiResponseException,
             InvalidMediaUrlException {
+        int provider = getMediaProvider(mediaUrl);
+
         switch (getMediaProvider(mediaUrl)) {
             case DEVIANTART:
                 return new DeviantartParser(mClient).parse(mediaUrl);
@@ -260,54 +265,104 @@ public class AlbumParser {
         }
     }
 
-    /**
-     * Sets the API key to use when making requests to the Giphy API
-     *
-     * @param giphyApiKey The API key to use when making requests to the Giphy API
-     */
-    public void setGiphyApiKey(String giphyApiKey) {
-        mGiphyApiKey = giphyApiKey;
-    }
+    public static class Builder {
 
-    /**
-     * Sets the client ID to use when making requests to the Imgur API
-     *
-     * @param imgurClientId The client ID to use when making requests to the Imgur API
-     */
-    public void setImgurClientId(String imgurClientId) {
-        mImgurClientId = imgurClientId;
-    }
+        private OkHttpClient newOkHttpClient;
 
-    /**
-     * Sets the default size of the low quality URL imgur returns
-     *
-     * @param lowQualitySize The default size of the low quality URL Imgur returns. Look at {@link
-     *                       Image} for available sizes. Examples: {@link Image#ORIGINAL}, {@link
-     *                       Image#GIANT_THUMBNAIL}
-     */
-    public void setImgurLowQualitySize(String lowQualitySize) {
-        mImgurLowQualitySize = lowQualitySize;
-    }
+        // API Keys
+        private String newGiphyApiKey;
+        private String newImgurClientId;
+        private String newTumblrApiKey;
 
-    /**
-     * Sets the default size of the preview URL imgur returns
-     *
-     * @param previewSize The default size of the preview URL Imgur returns. Look at {@link Image}
-     *                    for available sizes. Examples: {@link Image#BIG_SQUARE}, {@link
-     *                    Image#MEDIUM_THUMBNAIL}
-     */
-    public void setImgurPreviewSize(String previewSize) {
-        mImgurPreviewSize = previewSize;
-    }
+        // Default preview and low quality URL dimensions/sizes
+        private String newImgurPreviewSize;
+        private String newImgurLowQualitySize;
 
-    /**
-     * Sets the API key used to make calls to the Tumblr API. Notice, the Tumblr API will not send a
-     * response unless you have first set the key using this method. If you attempt to make calls to
-     * the Tumblr API with no key set, the parser will return an {@link InvalidApiKeyException}
-     *
-     * @param tumblrApiKey The key to use to make calls to the Tumblr API
-     */
-    public void setTumblrApiKey(String tumblrApiKey) {
-        mTumblrApiKey = tumblrApiKey;
+        public Builder() {
+        }
+
+        /**
+         * @return A new AlbumParser instance with all the requested keys and options set.
+         */
+        public AlbumParser build() {
+            return new AlbumParser(newOkHttpClient,
+                    newGiphyApiKey,
+                    newImgurClientId,
+                    newTumblrApiKey,
+                    newImgurPreviewSize,
+                    newImgurLowQualitySize);
+        }
+
+        /**
+         * Sets the API key to use when making requests to the Giphy API
+         *
+         * @param giphyApiKey The API key to use when making requests to the Giphy API
+         * @return The Builder instance with the new Giphy API key set.
+         */
+        public Builder giphyApiKey(String giphyApiKey) {
+            newGiphyApiKey = giphyApiKey;
+            return this;
+        }
+
+        /**
+         * Sets the client ID to use when making requests to the Imgur API
+         *
+         * @param imgurClientId The client ID to use when making requests to the Imgur API
+         * @return The Builder instance with the new imgur client ID set.
+         */
+        public Builder imgurClientId(String imgurClientId) {
+            newImgurClientId = imgurClientId;
+            return this;
+        }
+
+        /**
+         * Sets the default size of the low quality URL imgur returns
+         *
+         * @param lowQualitySize The default size of the low quality URL Imgur returns. Look at
+         *                       {@link Image} for available sizes. Examples: {@link
+         *                       Image#ORIGINAL}, {@link Image#GIANT_THUMBNAIL}
+         * @return The Builder instance with the new imgur low quality size set.
+         */
+        public Builder imgurLowQualitySize(String lowQualitySize) {
+            newImgurLowQualitySize = lowQualitySize;
+            return this;
+        }
+
+        /**
+         * Sets the default size of the preview URL imgur returns
+         *
+         * @param previewSize The default size of the preview URL Imgur returns. Look at {@link
+         *                    Image} for available sizes. Examples: {@link Image#BIG_SQUARE}, {@link
+         *                    Image#MEDIUM_THUMBNAIL}
+         * @return The Builder instance with the new imgur preview size set.
+         */
+        public Builder imgurPreviewSize(String previewSize) {
+            newImgurPreviewSize = previewSize;
+            return this;
+        }
+
+        /**
+         * @param okHttpClient The OkHttpClient instance to use with all the HTTP calls this library
+         *                     makes
+         * @return The Builder instance with the new OkHttpClient set.
+         */
+        public Builder okHttpClient(OkHttpClient okHttpClient) {
+            newOkHttpClient = okHttpClient;
+            return this;
+        }
+
+        /**
+         * Sets the API key used to make calls to the Tumblr API. Notice, the Tumblr API will not
+         * send a response unless you have first set the key using this method. If you attempt to
+         * make calls to the Tumblr API with no key set, the parser will return an {@link
+         * InvalidApiKeyException}
+         *
+         * @param tumblrApiKey The key to use to make calls to the Tumblr API
+         * @return The Builder instance with the new Tumblr API key set.
+         */
+        public Builder tumblrApiKey(String tumblrApiKey) {
+            newTumblrApiKey = tumblrApiKey;
+            return this;
+        }
     }
 }
