@@ -70,7 +70,7 @@ public class ImgurParserTest implements IParserTest {
     @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
     @Override
     public void testApi404Error() throws IOException, RuntimeException {
-        URL url = getUrlObject("https://imgur.com/a/uuuuu");
+        URL url = getUrlObject("https://imgur.com/a/ccccc");
         assertNotNull(url);
         mImgurParser.parse(url);
     }
