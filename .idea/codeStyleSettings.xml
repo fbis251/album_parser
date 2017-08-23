@@ -58,6 +58,7 @@
           <option name="EXTENDS_KEYWORD_WRAP" value="1" />
           <option name="THROWS_KEYWORD_WRAP" value="1" />
           <option name="METHOD_CALL_CHAIN_WRAP" value="5" />
+          <option name="WRAP_FIRST_METHOD_IN_CALL_CHAIN" value="true" />
           <option name="BINARY_OPERATION_WRAP" value="5" />
           <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
           <option name="TERNARY_OPERATION_WRAP" value="1" />
@@ -710,6 +711,5 @@
       </value>
     </option>
     <option name="USE_PER_PROJECT_SETTINGS" value="true" />
-    <option name="PREFERRED_PROJECT_CODE_STYLE" value="FB Android" />
   </component>
 </project>
