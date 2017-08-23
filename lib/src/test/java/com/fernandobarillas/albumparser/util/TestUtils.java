@@ -21,13 +21,17 @@
 package com.fernandobarillas.albumparser.util;
 
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
+import com.fernandobarillas.albumparser.media.IApiResponse;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.media.IMediaAlbum;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.IParserResponse;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 import org.junit.Assert;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
@@ -80,6 +84,41 @@ public class TestUtils {
                 Assert.fail(url + " should have thrown InvalidMediaUrlException");
             } catch (InvalidMediaUrlException ignored) {
             }
+        }
+    }
+
+    public static <T extends IApiResponse> void checkMediaMethodsForNullPointers(IMedia media)
+            throws IOException, NullPointerException {
+        assertNotNull("Media Object null", media);
+        media.getByteSize(true);
+        media.getByteSize(false);
+        media.getDescription();
+        media.getHeight(true);
+        media.getHeight(false);
+        media.getPreviewUrl();
+        media.getTitle();
+        media.getWidth(true);
+        media.getWidth(false);
+        media.isVideo();
+    }
+
+    public static <T extends IApiResponse> void checkNullJson(final Moshi moshi,
+            JsonAdapter<T> jsonAdapter,
+            String jsonString) throws IOException {
+        assertNotNull("Moshi instance null", moshi);
+        assertNotNull("JSON String null", jsonString);
+
+        T parserResponse = jsonAdapter.fromJson(jsonString);
+        assertNotNull("Parser Response Null", parserResponse);
+        if (parserResponse.isAlbum()) {
+            IMediaAlbum album = parserResponse.getAlbum();
+            assertNotNull("ParserResponse album null", album);
+            for (Object media : album.getAlbumMedia()) {
+                assertTrue("AlbumMedia not instanceof IMedia", media instanceof IMedia);
+                checkMediaMethodsForNullPointers((IMedia) media);
+            }
+        } else {
+            checkMediaMethodsForNullPointers(parserResponse.getMedia());
         }
     }
 
@@ -188,9 +227,9 @@ public class TestUtils {
 
         if (sOkHttpClient == null) {
             // You can customize the OkHttpClient instance used by all the tests here
-            boolean useProxy = false;
+            boolean useProxy = true;
             if (useProxy) {
-                Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy.lan", 8080));
+                Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8080));
                 sOkHttpClient = new OkHttpClient.Builder().proxy(proxy).build();
             } else {
                 sOkHttpClient = new OkHttpClient();

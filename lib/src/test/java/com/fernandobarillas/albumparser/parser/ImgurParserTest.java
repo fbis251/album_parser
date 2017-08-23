@@ -24,12 +24,15 @@ import com.fernandobarillas.albumparser.ApiKeys;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.imgur.ImgurParser;
 import com.fernandobarillas.albumparser.imgur.model.Image;
+import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponseV3;
 import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.model.ExpectedAlbum;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
 import com.fernandobarillas.albumparser.util.ExpectedHash;
 import com.fernandobarillas.albumparser.util.TestUtils;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 import org.junit.Test;
 
@@ -315,6 +318,15 @@ public class ImgurParserTest implements IParserTest {
 
         ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
         compareParserResponse(url, expectedParserResponse, parserResponse);
+    }
+
+    @Test
+    public void testNullJsonFields() throws IOException {
+        String json =
+                "{\"data\":{\"id\":null,\"title\":null,\"description\":null,\"datetime\":null,\"cover\":null,\"cover_width\":null,\"cover_height\":null,\"account_url\":null,\"account_id\":null,\"privacy\":null,\"layout\":null,\"views\":null,\"link\":null,\"favorite\":null,\"nsfw\":null,\"section\":null,\"images_count\":null,\"in_gallery\":null,\"is_ad\":null,\"images\":[{\"id\":null,\"title\":null,\"description\":null,\"datetime\":null,\"type\":null,\"animated\":null,\"width\":null,\"height\":null,\"size\":null,\"views\":null,\"bandwidth\":null,\"vote\":null,\"favorite\":null,\"nsfw\":null,\"section\":null,\"account_url\":null,\"account_id\":null,\"is_ad\":null,\"in_most_viral\":null,\"tags\":null,\"ad_type\":null,\"ad_url\":null,\"in_gallery\":null,\"link\":null},{\"id\":null,\"title\":null,\"description\":null,\"datetime\":null,\"type\":null,\"animated\":null,\"width\":null,\"height\":null,\"size\":null,\"views\":null,\"bandwidth\":null,\"vote\":null,\"favorite\":null,\"nsfw\":null,\"section\":null,\"account_url\":null,\"account_id\":null,\"is_ad\":null,\"in_most_viral\":null,\"tags\":null,\"ad_type\":null,\"ad_url\":null,\"in_gallery\":null,\"mp4\":null,\"gifv\":null,\"mp4_size\":null,\"link\":null,\"looping\":null}]},\"success\":null,\"status\":null}";
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<AlbumResponseV3> jsonAdapter = moshi.adapter(AlbumResponseV3.class);
+        TestUtils.checkNullJson(moshi, jsonAdapter, json);
     }
 
     // Tests a standard album URL with the old API call
