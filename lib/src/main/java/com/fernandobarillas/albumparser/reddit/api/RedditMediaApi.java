@@ -29,13 +29,13 @@ import java.util.Set;
  */
 public interface RedditMediaApi {
     // No trailing slash!
-    String REDD_IT_DOMAIN         = "i.redd.it";
+    String REDD_IT_I_DOMAIN       = "i.redd.it";
     String REDDITMEDIA_I_DOMAIN   = "i.redditmedia.com";
     String REDDITMEDIA_G_DOMAIN   = "g.redditmedia.com";
     String REDDITUPLOADS_I_DOMAIN = "i.reddituploads.com";
 
     String[]    VALID_DOMAINS     = {
-            REDD_IT_DOMAIN, REDDITMEDIA_G_DOMAIN, REDDITMEDIA_I_DOMAIN, REDDITUPLOADS_I_DOMAIN
+            REDD_IT_I_DOMAIN, REDDITMEDIA_G_DOMAIN, REDDITMEDIA_I_DOMAIN, REDDITUPLOADS_I_DOMAIN
     };
     Set<String> VALID_DOMAINS_SET = new HashSet<>(Arrays.asList(VALID_DOMAINS));
 
