@@ -62,6 +62,8 @@ public class GfycatParserTest implements IParserTest {
     public void testCanParseAndGetHash() {
         List<ExpectedHash> validHashes = new ArrayList<>();
 
+        validHashes.add(new ExpectedHash("AngryFrequentChuckwalla",
+                "https://gfycat.com/gifs/detail/AngryFrequentChuckwalla"));
         validHashes.add(new ExpectedHash("IndelibleMerryBuck",
                 "https://gfycat.com/IndelibleMerryBuck"));
         validHashes.add(new ExpectedHash("IndelibleMerryBuck",
