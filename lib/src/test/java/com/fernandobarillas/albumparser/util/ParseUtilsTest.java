@@ -47,7 +47,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class ParseUtilsTest {
     private static final String[] VALID_VIDEO_URLS = {
-            // @formatter:off
             "http://example.com/file.3gp",
             "http://example.com/file.3GP",
             "http://example.com/file.gifv",
@@ -58,11 +57,9 @@ public class ParseUtilsTest {
             "http://example.com/file.MP4",
             "http://example.com/file.webm",
             "http://example.com/file.WEBM",
-            // @formatter:on
     };
 
     private static final String[] VALID_IMAGE_URLS = {
-            // @formatter:off
             "http://example.com/file.bmp",
             "http://example.com/file.BMP",
             "http://example.com/file.jpg",
@@ -73,7 +70,6 @@ public class ParseUtilsTest {
             "http://example.com/file.PNG",
             "http://example.com/file.webp",
             "http://example.com/file.WEBP",
-            // @formatter:on
     };
 
     private static final String[] VALID_GIF_URLS = {
@@ -84,7 +80,6 @@ public class ParseUtilsTest {
     };
 
     private static final String[] INVALID_MEDIA_URLs = {
-            // @formatter:off
             null,
             "",
             "example.com",
@@ -94,7 +89,6 @@ public class ParseUtilsTest {
             "http://example.com/file.txt",
             "http://example.com/file",
             "http://example.com/",
-            // @formatter:on
     };
 
     @Test
