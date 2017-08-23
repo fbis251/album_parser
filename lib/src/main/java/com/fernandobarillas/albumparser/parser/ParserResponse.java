@@ -31,19 +31,19 @@ import java.net.URL;
  * will always try to return either a full API response when a call was made to the API, or it will
  * return an IMedia Object with a URL that links directly to video or an image
  */
-public class ParserResponse implements IParserResponse {
-    private IApiResponse mApiResponse;
-    private String       mHash;
-    private IMedia       mMedia;
-    private String       mProviderName;
-    private URL          mOriginalUrl;
+public class ParserResponse<T extends IMedia> implements IParserResponse {
+    private IApiResponse<T> mApiResponse;
+    private String          mHash;
+    private T               mMedia;
+    private String          mProviderName;
+    private URL             mOriginalUrl;
 
     /**
      * Constructor for direct IMedia objects
      *
      * @param media The media to return in this response
      */
-    public ParserResponse(IMedia media) {
+    public ParserResponse(T media) {
         mMedia = media;
     }
 
@@ -53,12 +53,12 @@ public class ParserResponse implements IParserResponse {
      *
      * @param apiResponse The API response to return in this response
      */
-    public ParserResponse(IApiResponse apiResponse) {
+    public ParserResponse(IApiResponse<T> apiResponse) {
         mApiResponse = apiResponse;
     }
 
     @Override
-    public IMediaAlbum getAlbum() {
+    public IMediaAlbum<T> getAlbum() {
         if (mApiResponse != null && mApiResponse.isAlbum()) {
             return mApiResponse.getAlbum();
         }
@@ -72,7 +72,7 @@ public class ParserResponse implements IParserResponse {
     }
 
     @Override
-    public IApiResponse getApiResponse() {
+    public IApiResponse<T> getApiResponse() {
         return mApiResponse;
     }
 
@@ -82,7 +82,7 @@ public class ParserResponse implements IParserResponse {
     }
 
     @Override
-    public IMedia getMedia() {
+    public T getMedia() {
         if (mMedia != null) return mMedia;
         if (mApiResponse != null && !mApiResponse.isAlbum()) {
             return mApiResponse.getMedia();

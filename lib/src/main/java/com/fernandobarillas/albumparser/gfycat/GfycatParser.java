@@ -100,6 +100,6 @@ public class GfycatParser extends AbstractApiParser {
         GfycatApi service = getRetrofit().create(GfycatApi.class);
         Response<QueryHashResponse> serviceResponse = service.queryHash(hash).execute();
         QueryHashResponse apiResponse = serviceResponse.body();
-        return getParserResponse(mediaUrl, apiResponse);
+        return getParserResponse(mediaUrl, apiResponse, serviceResponse);
     }
 }

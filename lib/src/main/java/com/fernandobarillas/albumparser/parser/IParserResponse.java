@@ -31,12 +31,12 @@ import java.net.URL;
  * will always try to return either a full API response when a call was made to the API, or it will
  * return an IMedia Object with a URL that links directly to video or an image
  */
-public interface IParserResponse {
+public interface IParserResponse<T extends IMedia> {
 
     /**
      * @return The IMediaAlbum returned by the parser
      */
-    IMediaAlbum getAlbum();
+    IMediaAlbum<T> getAlbum();
 
     /**
      * @return The name of the API provider that was used to create this ParseResponse
@@ -46,7 +46,7 @@ public interface IParserResponse {
     /**
      * @return The IApiResponse returned by the parser
      */
-    IApiResponse getApiResponse();
+    IApiResponse<T> getApiResponse();
 
     /**
      * @return The hash that was used when making the API request that created this ParseResponse
@@ -56,7 +56,7 @@ public interface IParserResponse {
     /**
      * @return The IMedia returned by the parser
      */
-    IMedia getMedia();
+    T getMedia();
 
     /**
      * @return The original URL used by the parser before the request was made to the API. For

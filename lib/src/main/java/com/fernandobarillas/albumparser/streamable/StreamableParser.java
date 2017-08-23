@@ -76,6 +76,6 @@ public class StreamableParser extends AbstractApiParser {
         StreamableApi service = getRetrofit().create(StreamableApi.class);
         Response<StreamableResponse> serviceResponse = service.getVideo(hash).execute();
         StreamableResponse apiResponse = serviceResponse.body();
-        return getParserResponse(mediaUrl, apiResponse);
+        return getParserResponse(mediaUrl, apiResponse, serviceResponse);
     }
 }

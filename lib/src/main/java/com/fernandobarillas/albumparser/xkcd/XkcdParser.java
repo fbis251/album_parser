@@ -109,7 +109,7 @@ public class XkcdParser extends AbstractApiParser {
         XkcdApi service = getRetrofit().create(XkcdApi.class);
         Response<XkcdResponse> serviceResponse = service.getComic(comicNumber).execute();
         XkcdResponse apiResponse = serviceResponse.body();
-        return getParserResponse(mediaUrl, apiResponse);
+        return getParserResponse(mediaUrl, apiResponse, serviceResponse);
     }
 
     @Override

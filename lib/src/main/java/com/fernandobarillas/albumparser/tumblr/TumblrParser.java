@@ -102,6 +102,6 @@ public class TumblrParser extends AbstractApiParser {
         Response<TumblrResponse> serviceResponse =
                 service.getPost(mediaUrl.getHost(), hash, mTumblrApiKey).execute();
         TumblrResponse apiResponse = serviceResponse.body();
-        return getParserResponse(mediaUrl, apiResponse);
+        return getParserResponse(mediaUrl, apiResponse, serviceResponse);
     }
 }

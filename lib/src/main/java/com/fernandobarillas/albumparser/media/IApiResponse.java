@@ -37,11 +37,6 @@ public interface IApiResponse<T extends IMedia> {
     String getErrorMessage();
 
     /**
-     * @return This Object as a JSON String
-     */
-    String getJson();
-
-    /**
      * @return A direct link to the media returned by the API, null if no direct media link was
      * returned by the API
      */

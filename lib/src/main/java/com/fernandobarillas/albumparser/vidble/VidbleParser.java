@@ -77,7 +77,7 @@ public class VidbleParser extends AbstractApiParser {
             VidbleApi service = getRetrofit().create(VidbleApi.class);
             Response<VidbleResponse> serviceResponse = service.getAlbumData(hash).execute();
             VidbleResponse apiResponse = serviceResponse.body();
-            return getParserResponse(mediaUrl, apiResponse);
+            return getParserResponse(mediaUrl, apiResponse, serviceResponse);
         } else {
             ParserResponse parserResponse =
                     new ParserResponse(new VidbleMedia(mediaUrl.toString()));

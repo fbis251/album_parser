@@ -105,7 +105,7 @@ public class GiphyParser extends AbstractApiParser {
             GiphyApi service = getRetrofit().create(GiphyApi.class);
             Response<GiphyResponse> serviceResponse = service.getGif(hash, apiKey).execute();
             GiphyResponse apiResponse = serviceResponse.body();
-            return getParserResponse(mediaUrl, apiResponse);
+            return getParserResponse(mediaUrl, apiResponse, serviceResponse);
         }
 
         // API key was null, try to generate a response anyway. Some of the URLs in the returned

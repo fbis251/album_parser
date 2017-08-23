@@ -23,14 +23,21 @@ package com.fernandobarillas.albumparser.parser;
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.media.IApiResponse;
+import com.fernandobarillas.albumparser.media.IMedia;
 import com.fernandobarillas.albumparser.util.ParseUtils;
+import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URL;
+import java.util.Map;
 import java.util.Set;
 
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
@@ -38,7 +45,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
  * Abstract class for parsers for API responses. This defines a few helper methods to make getting
  * the correct Retrofit service instance easier such as {@link #getRetrofit()}
  */
-public abstract class AbstractApiParser {
+public abstract class AbstractApiParser<T extends IMedia> {
     private OkHttpClient mClient;
 
     /**
@@ -124,12 +131,33 @@ public abstract class AbstractApiParser {
      *                          API returns a null response or a response which the library could
      *                          not parse.
      */
-    public abstract ParserResponse parse(URL mediaUrl) throws IOException, RuntimeException;
+    public abstract ParserResponse<T> parse(URL mediaUrl) throws IOException, RuntimeException;
 
-    protected ParserResponse getParserResponse(final URL mediaUrl, final IApiResponse apiResponse)
-            throws InvalidApiResponseException {
-        if (apiResponse == null) throw new InvalidApiResponseException(mediaUrl);
-        ParserResponse parserResponse = new ParserResponse(apiResponse);
+    protected ParserResponse<T> getParserResponse(final URL mediaUrl,
+            final IApiResponse<T> apiResponse,
+            final Response httpResponse) throws IOException, InvalidApiResponseException {
+        if (httpResponse != null && !httpResponse.isSuccessful()) {
+            ResponseBody errorBody = httpResponse.errorBody();
+            String errorBodyString = "";
+            if (errorBody != null) {
+                errorBodyString = errorBody.string();
+                decodeError(errorBodyString);
+            }
+            String errorString = String.format("API Error %d\nMessage: %s\nError Body:%s",
+                    httpResponse.code(),
+                    httpResponse.message(),
+                    errorBodyString);
+            throw new InvalidApiResponseException(mediaUrl, errorString);
+        }
+
+        if (apiResponse == null) {
+            throw new InvalidApiResponseException(mediaUrl, "The API response was null");
+        }
+
+        if (!apiResponse.isSuccessful()) {
+            throw new InvalidApiResponseException(mediaUrl, apiResponse.getErrorMessage());
+        }
+        ParserResponse<T> parserResponse = new ParserResponse<>(apiResponse);
         parserResponse.setOriginalUrl(mediaUrl);
         parserResponse.setApiProviderName(getBaseDomain());
         parserResponse.setHash(getHash(mediaUrl));
@@ -141,7 +169,8 @@ public abstract class AbstractApiParser {
      */
     protected Retrofit getRetrofit() {
         Moshi moshi = new Moshi.Builder().add(new URLAdapter()).build();
-        Retrofit.Builder retrofitBuilder = new Retrofit.Builder().baseUrl(getApiUrl())
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(getApiUrl())
                 .addConverterFactory(MoshiConverterFactory.create(moshi));
         if (mClient != null) {
             retrofitBuilder = retrofitBuilder.client(mClient);
@@ -162,5 +191,17 @@ public abstract class AbstractApiParser {
         return ParseUtils.isDomainMatch(domain, getBaseDomain())
                 || ParseUtils.isDomainMatch(domain, getValidDomains());
         // @formatter:on
+    }
+
+    private void decodeError(String jsonString) throws IOException {
+        System.err.println("AbstractApiParser.decodeError: " + jsonString);
+
+        Moshi moshi = new Moshi.Builder().build();
+
+        Type map = Types.newParameterizedType(Map.class, String.class, Object.class);
+        JsonAdapter<Map<String, Object>> jsonAdapter = moshi.adapter(map);
+
+        Map<String, Object> blackjackHand = jsonAdapter.fromJson(jsonString);
+        System.err.println(blackjackHand);
     }
 }

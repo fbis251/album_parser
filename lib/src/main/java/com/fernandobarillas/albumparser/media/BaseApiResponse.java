@@ -38,11 +38,6 @@ public abstract class BaseApiResponse<T extends IMedia> implements IApiResponse 
     }
 
     @Override
-    public String getJson() {
-        return "";
-    }
-
-    @Override
     public T getMedia() {
         return null;
     }

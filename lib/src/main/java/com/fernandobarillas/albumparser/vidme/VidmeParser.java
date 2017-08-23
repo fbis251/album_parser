@@ -74,6 +74,6 @@ public class VidmeParser extends AbstractApiParser {
         VidmeApi service = getRetrofit().create(VidmeApi.class);
         Response<VidmeResponse> serviceResponse = service.getVideoData(hash).execute();
         VidmeResponse apiResponse = serviceResponse.body();
-        return getParserResponse(mediaUrl, apiResponse);
+        return getParserResponse(mediaUrl, apiResponse, serviceResponse);
     }
 }

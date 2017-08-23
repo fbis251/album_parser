@@ -188,7 +188,7 @@ public class ImgurParser extends AbstractApiParser {
                 if (apiResponse != null) {
                     apiResponse.setLowQuality(mLowQualitySize);
                     apiResponse.setPreviewQuality(mPreviewSize);
-                    return getParserResponse(mediaUrl, apiResponse);
+                    return getParserResponse(mediaUrl, apiResponse, serviceResponse);
                 }
             } else {
                 // Make an API call to get the album images via the old API
@@ -198,7 +198,7 @@ public class ImgurParser extends AbstractApiParser {
                 if (apiResponse != null) {
                     apiResponse.setLowQuality(mLowQualitySize);
                     apiResponse.setPreviewQuality(mPreviewSize);
-                    return getParserResponse(mediaUrl, apiResponse);
+                    return getParserResponse(mediaUrl, apiResponse, serviceResponse);
                 }
             }
 
@@ -216,7 +216,7 @@ public class ImgurParser extends AbstractApiParser {
             apiResponse.setLowQuality(mLowQualitySize);
             apiResponse.setPreviewQuality(mPreviewSize);
         }
-        return getParserResponse(mediaUrl, apiResponse);
+        return getParserResponse(mediaUrl, apiResponse, serviceResponse);
     }
 
     /**
