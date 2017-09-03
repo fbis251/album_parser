@@ -42,7 +42,7 @@ public class GfyItem extends BaseMedia {
     @Json(name = "height")
     public Integer      height;
     @Json(name = "frameRate")
-    public Integer      frameRate;
+    public Double       frameRate;
     @Json(name = "numFrames")
     public Integer      numFrames;
     @Json(name = "mp4Url")
