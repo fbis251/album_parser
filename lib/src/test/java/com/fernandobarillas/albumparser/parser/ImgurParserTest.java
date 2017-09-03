@@ -103,6 +103,8 @@ public class ImgurParserTest implements IParserTest {
                 "http://imgur.com/rROMo")); // Album with no prefix
         validHashes.add(new ExpectedHash("VhGBD",
                 "http://imgur.com/r/motivation/VhGBD")); // Album with /r/ prefix
+        validHashes.add(new ExpectedHash("VhGBD",
+                "http://imgur.com/t/motivation/VhGBD")); // Album with /t/ prefix
         validHashes.add(new ExpectedHash("WKauF",
                 "https://imgur.com/gallery/WKauF")); // Album with gallery URL
         validHashes.add(new ExpectedHash("cvehZ",

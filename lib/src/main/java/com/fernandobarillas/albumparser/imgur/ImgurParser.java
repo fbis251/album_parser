@@ -51,9 +51,10 @@ public class ImgurParser extends AbstractApiParser {
     private static final int ALBUM_HASH_LENGTH = 5; // Most recent album hashes are exactly 5 chars
     private static final int IMAGE_HASH_LENGTH = 7; // Most recent image hashes are exactly 7 chars
 
-    private static final String ALBUM_PATH     = "a";
-    private static final String GALLERY_PATH   = "gallery";
-    private static final String SUBREDDIT_PATH = "r";
+    private static final String ALBUM_PATH       = "a";
+    private static final String GALLERY_PATH     = "gallery";
+    private static final String SUBREDDIT_PATH   = "r";
+    private static final String SUBREDDIT_PATH_2 = "t"; // Sometimes subreddits use /t/<subreddit>
 
     // The pattern for an album or gallery hash
     private static final String HASH_PATTERN = "([^\\W_]{5}|[^\\W_]{7})";
@@ -63,7 +64,7 @@ public class ImgurParser extends AbstractApiParser {
             Pattern.compile("^/gallery/" + HASH_PATTERN + "(?:/.*?|)$");
     private static final Pattern ALBUM_PATTERN        = Pattern.compile("/([^\\W_]{5})(?:/.*?|)$");
     private static final Pattern SUBREDDIT_PATTERN    =
-            Pattern.compile("^/r/\\w+/" + HASH_PATTERN + "(?:/.*?|)$");
+            Pattern.compile("^/[rt]/\\w+/" + HASH_PATTERN + "(?:/.*?|)$");
     private static final Pattern NO_PREFIX_PATTERN    =
             Pattern.compile("^/" + HASH_PATTERN + "(?:/.*?|)$");
     private static final Pattern DIRECT_MEDIA_PATTERN =
@@ -108,7 +109,7 @@ public class ImgurParser extends AbstractApiParser {
             hash = ParseUtils.hashRegex(path, GALLERY_PATTERN);
         } else if (ALBUM_PATH.equalsIgnoreCase(firstSegment)) {
             hash = ParseUtils.hashRegex(path, ALBUM_PATTERN);
-        } else if (SUBREDDIT_PATH.equalsIgnoreCase(firstSegment)) {
+        } else if (SUBREDDIT_PATH.equals(firstSegment) || SUBREDDIT_PATH_2.equals(firstSegment)) {
             hash = ParseUtils.hashRegex(path, SUBREDDIT_PATTERN);
         } else {
             // Probably a gallery URL with no prefix
