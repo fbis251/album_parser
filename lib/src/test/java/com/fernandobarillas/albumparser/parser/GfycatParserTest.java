@@ -18,9 +18,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.fernandobarillas.albumparser.gfycat;
+package com.fernandobarillas.albumparser.parser;
 
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
+import com.fernandobarillas.albumparser.gfycat.GfycatParser;
 import com.fernandobarillas.albumparser.model.ExpectedMedia;
 import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
 import com.fernandobarillas.albumparser.parser.IParserTest;

@@ -22,7 +22,7 @@ package com.fernandobarillas.albumparser.gfycat;
 
 import com.fernandobarillas.albumparser.exception.InvalidMediaUrlException;
 import com.fernandobarillas.albumparser.gfycat.api.GfycatApi;
-import com.fernandobarillas.albumparser.gfycat.model.QueryHashResponse;
+import com.fernandobarillas.albumparser.gfycat.model.GfycatInfoResponse;
 import com.fernandobarillas.albumparser.parser.AbstractApiParser;
 import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.util.ParseUtils;
@@ -98,8 +98,8 @@ public class GfycatParser extends AbstractApiParser {
         }
 
         GfycatApi service = getRetrofit().create(GfycatApi.class);
-        Response<QueryHashResponse> serviceResponse = service.queryHash(hash).execute();
-        QueryHashResponse apiResponse = serviceResponse.body();
+        Response<GfycatInfoResponse> serviceResponse = service.getGfycatInfo(hash).execute();
+        GfycatInfoResponse apiResponse = serviceResponse.body();
         return getParserResponse(mediaUrl, apiResponse, serviceResponse);
     }
 }

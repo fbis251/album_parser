@@ -83,8 +83,6 @@ public class GfyItem extends BaseMedia {
     public Integer      views;
     @Json(name = "title")
     public String       title;
-    @Json(name = "extraLemmas")
-    public List<String> extraLemmas;
     @Json(name = "md5")
     public String       md5;
     @Json(name = "tags")

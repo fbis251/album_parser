@@ -22,7 +22,7 @@ package com.fernandobarillas.albumparser.gfycat.api;
 
 import com.fernandobarillas.albumparser.gfycat.model.CheckLinkResponse;
 import com.fernandobarillas.albumparser.gfycat.model.GfyItem;
-import com.fernandobarillas.albumparser.gfycat.model.QueryHashResponse;
+import com.fernandobarillas.albumparser.gfycat.model.GfycatInfoResponse;
 import com.fernandobarillas.albumparser.gfycat.model.TranscodeResponse;
 
 import java.util.Arrays;
@@ -40,7 +40,7 @@ import retrofit2.http.Query;
 public interface GfycatApi {
     // No trailing slash!
     String BASE_DOMAIN = "gfycat.com";
-    String API_URL     = "https://" + BASE_DOMAIN;
+    String API_URL     = "https://api." + BASE_DOMAIN;
     String UPLOAD_URL  = "https://upload." + BASE_DOMAIN;
     String THUMB_URL   = "https://thumbs." + BASE_DOMAIN;
 
@@ -60,9 +60,8 @@ public interface GfycatApi {
     Call<GfyItem> convertGif(@Query("fetchUrl") String gifUrl);
 
     @GET(UPLOAD_URL + "/transcodeRelease/{randomString}")
-    Call<TranscodeResponse> convertGif(@Path("randomString") String randomString,
-            @Query("fetchUrl") String gifUrl);
+    Call<TranscodeResponse> convertGif(@Path("randomString") String randomString, @Query("fetchUrl") String gifUrl);
 
-    @GET("/cajax/get/{hash}")
-    Call<QueryHashResponse> queryHash(@Path("hash") String hash);
+    @GET("/v1/gfycats/{hash}")
+    Call<GfycatInfoResponse> getGfycatInfo(@Path("hash") String hash);
 }

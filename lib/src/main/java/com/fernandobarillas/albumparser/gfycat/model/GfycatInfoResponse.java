@@ -25,7 +25,7 @@ import com.squareup.moshi.Json;
 
 import java.net.URL;
 
-public class QueryHashResponse extends BaseApiResponse<GfyItem> {
+public class GfycatInfoResponse extends BaseApiResponse<GfyItem> {
 
     @Json(name = "gfyItem")
     public GfyItem gfyItem;
@@ -54,6 +54,6 @@ public class QueryHashResponse extends BaseApiResponse<GfyItem> {
 
     @Override
     public String toString() {
-        return "QueryHashResponse{" + "gfyItem=" + gfyItem + ", error='" + error + '\'' + '}';
+        return "GfycatInfoResponse{" + "gfyItem=" + gfyItem + ", error='" + error + '\'' + '}';
     }
 }
