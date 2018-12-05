@@ -21,7 +21,10 @@
 package com.fernandobarillas.albumparser.gfycat;
 
 import com.fernandobarillas.albumparser.exception.InvalidApiResponseException;
+import com.fernandobarillas.albumparser.model.ExpectedMedia;
+import com.fernandobarillas.albumparser.model.ExpectedParserResponse;
 import com.fernandobarillas.albumparser.parser.IParserTest;
+import com.fernandobarillas.albumparser.parser.ParserResponse;
 import com.fernandobarillas.albumparser.util.ExpectedHash;
 import com.fernandobarillas.albumparser.util.TestUtils;
 
@@ -35,6 +38,7 @@ import java.util.List;
 
 import static com.fernandobarillas.albumparser.util.ParseUtils.getUrlObject;
 import static com.fernandobarillas.albumparser.util.TestUtils.API_CALL_TIMEOUT_MS;
+import static com.fernandobarillas.albumparser.util.TestUtils.compareParserResponse;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -64,16 +68,29 @@ public class GfycatParserTest implements IParserTest {
 
         validHashes.add(new ExpectedHash("AngryFrequentChuckwalla",
                 "https://gfycat.com/gifs/detail/AngryFrequentChuckwalla"));
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck", "http://gfycat.com/IndelibleMerryBuck"));
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck", "https://gfycat.com/IndelibleMerryBuck"));
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck", "https://gfycat.com/IndelibleMerryBuck/"));
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck", "https://gfycat.com/gifs/detail/IndelibleMerryBuck"));
+
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck", "https://giant.gfycat.com/IndelibleMerryBuck.mp4"));
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck", "https://giant.gfycat.com/IndelibleMerryBuck.webm"));
         validHashes.add(new ExpectedHash("IndelibleMerryBuck",
-                "https://gfycat.com/IndelibleMerryBuck"));
+                "https://thumbs.gfycat.com/IndelibleMerryBuck-100px.gif"));
         validHashes.add(new ExpectedHash("IndelibleMerryBuck",
-                "https://gfycat.com/gifs/detail/IndelibleMerryBuck"));
+                "https://thumbs.gfycat.com/IndelibleMerryBuck-max-1mb.gif"));
         validHashes.add(new ExpectedHash("IndelibleMerryBuck",
-                "https://gfycat.com/IndelibleMerryBuck"));
-        validHashes.add(new ExpectedHash("PotableLeftAbalone",
-                "https://fat.gfycat.com/PotableLeftAbalone.webm"));
-        validHashes.add(new ExpectedHash("PotableLeftAbalone",
-                "https://fat.gfycat.com/PotableLeftAbalone.mp4"));
+                "https://thumbs.gfycat.com/IndelibleMerryBuck-mobile.jpg"));
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck",
+                "https://thumbs.gfycat.com/IndelibleMerryBuck-mobile.mp4"));
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck",
+                "https://thumbs.gfycat.com/IndelibleMerryBuck-poster.jpg"));
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck",
+                "https://thumbs.gfycat.com/IndelibleMerryBuck-size_restricted.gif"));
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck",
+                "https://thumbs.gfycat.com/IndelibleMerryBuck-small.gif"));
+        validHashes.add(new ExpectedHash("IndelibleMerryBuck", "https://thumbs.gfycat.com/IndelibleMerryBuck.webp"));
+
         validHashes.add(new ExpectedHash("PotableLeftAbalone",
                 "https://thumbs.gfycat.com/PotableLeftAbalone-mobile.mp4"));
 
@@ -88,5 +105,28 @@ public class GfycatParserTest implements IParserTest {
     @Before
     public void setUp() throws Exception {
         mGfycatParser = new GfycatParser(TestUtils.getOkHttpClient());
+    }
+
+    @Test
+    public void testGfyDetailsApiResponse() throws IOException {
+        URL url = getUrlObject("https://gfycat.com/colossalneighboringhorsefly");
+        ExpectedMedia expectedMedia = new ExpectedMedia.Builder()
+                .setPreviewUrl("https://thumbs.gfycat.com/ColossalNeighboringHorsefly-mobile.jpg")
+                .setHighQualityUrl("https://giant.gfycat.com/ColossalNeighboringHorsefly.mp4")
+                .setLowQualityUrl("https://thumbs.gfycat.com/ColossalNeighboringHorsefly-mobile.mp4")
+                .setHighQualityByteSize(7043882)
+                .setDescription("")
+                .setDuration(7.55) // numFrames / frameRate
+                .setIsVideo(true)
+                .setTitle("numbani fast spawn to point")
+                .setHighQualityWidth(1920)
+                .setHighQualityHeight(1080)
+                // TODO: set low quality width and height, available from content_urls object in API response
+                .build();
+        ExpectedParserResponse expectedParserResponse =
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true).setMedia(expectedMedia).build();
+
+        ParserResponse parserResponse = mGfycatParser.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 }
