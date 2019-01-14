@@ -3,8 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/album_parser.iml" filepath="$PROJECT_DIR$/.idea/modules/album_parser.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/example.iml" filepath="$PROJECT_DIR$/.idea/modules/example/example.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/lib.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/album_parser-example.iml" filepath="$PROJECT_DIR$/.idea/modules/example/album_parser-example.iml" group="example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/album_parser-example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/album_parser-example_main.iml" group="example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/album_parser-example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/album_parser-example_test.iml" group="example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/album_parser-lib.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/album_parser-lib.iml" group="lib" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/album_parser-lib_main.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/album_parser-lib_main.iml" group="lib" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/album_parser-lib_test.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/album_parser-lib_test.iml" group="lib" />
     </modules>
   </component>
 </project>
