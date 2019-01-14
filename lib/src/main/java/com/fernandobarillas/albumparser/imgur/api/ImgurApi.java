@@ -22,6 +22,7 @@ package com.fernandobarillas.albumparser.imgur.api;
 
 import com.fernandobarillas.albumparser.imgur.model.AlbumResponse;
 import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponseV3;
+import com.fernandobarillas.albumparser.imgur.model.v3.GalleryResponseV3;
 import com.fernandobarillas.albumparser.imgur.model.v3.ImageResponseV3;
 
 import java.util.Arrays;
@@ -68,5 +69,10 @@ public interface ImgurApi {
     // https://api.imgur.com/3/image/{id}
     @GET(API_URL_V3 + "/image/{hash}")
     Call<ImageResponseV3> getV3Image(@Header("Authorization") String authHeader,
+            @Path("hash") String hash);
+
+    // https://api.imgur.com/3/image/{id}
+    @GET(API_URL_V3 + "/gallery/{hash}")
+    Call<GalleryResponseV3> getV3Gallery(@Header("Authorization") String authHeader,
             @Path("hash") String hash);
 }

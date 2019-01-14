@@ -73,7 +73,7 @@ public class ImgurParserTest implements IParserTest {
     @Test(expected = InvalidApiResponseException.class, timeout = API_CALL_TIMEOUT_MS)
     @Override
     public void testApi404Error() throws IOException, RuntimeException {
-        URL url = getUrlObject("https://imgur.com/a/ccccc");
+        URL url = getUrlObject("https://imgur.com/a/abcdef");
         assertNotNull(url);
         mImgurParser.parse(url);
     }
@@ -90,54 +90,34 @@ public class ImgurParserTest implements IParserTest {
         List<ExpectedHash> validHashes = new ArrayList<>();
 
         // Valid sub-domains
-        validHashes.add(new ExpectedHash("Htlsv6N",
-                "http://m.imgur.com/r/aww/Htlsv6N")); // subreddit mobile URL
+        validHashes.add(new ExpectedHash("Htlsv6N", "http://m.imgur.com/r/aww/Htlsv6N")); // subreddit mobile URL
         validHashes.add(new ExpectedHash("Htlsv6N", "http://m.imgur.com/Htlsv6N")); // mobile url
-        validHashes.add(new ExpectedHash("Htlsv6N",
-                "http://i.imgur.com/Htlsv6N.jpg")); // i subdomain
-        validHashes.add(new ExpectedHash("1w2MFRq",
-                "http://b.Bildgur.de/1w2MFRq.png")); // bildgur domain
+        validHashes.add(new ExpectedHash("Htlsv6N", "http://i.imgur.com/Htlsv6N.jpg")); // i subdomain
+        validHashes.add(new ExpectedHash("1w2MFRq", "http://b.Bildgur.de/1w2MFRq.png")); // bildgur domain
 
         // Albums
-        validHashes.add(new ExpectedHash("rROMo",
-                "http://imgur.com/rROMo")); // Album with no prefix
-        validHashes.add(new ExpectedHash("VhGBD",
-                "http://imgur.com/r/motivation/VhGBD")); // Album with /r/ prefix
-        validHashes.add(new ExpectedHash("VhGBD",
-                "http://imgur.com/t/motivation/VhGBD")); // Album with /t/ prefix
-        validHashes.add(new ExpectedHash("WKauF",
-                "https://imgur.com/gallery/WKauF")); // Album with gallery URL
-        validHashes.add(new ExpectedHash("cvehZ",
-                "http://www.imgur.com/a/cvehZ")); // /a/ prefix album, www domain
+        validHashes.add(new ExpectedHash("rROMo", "http://imgur.com/rROMo")); // Album with no prefix
+        validHashes.add(new ExpectedHash("VhGBD", "http://imgur.com/r/motivation/VhGBD")); // Album with /r/ prefix
+        validHashes.add(new ExpectedHash("VhGBD", "http://imgur.com/t/motivation/VhGBD")); // Album with /t/ prefix
+        validHashes.add(new ExpectedHash("WKauF", "https://imgur.com/gallery/WKauF")); // Album with gallery URL
+        validHashes.add(new ExpectedHash("cvehZ", "http://www.imgur.com/a/cvehZ")); // /a/ prefix album, www domain
         validHashes.add(new ExpectedHash("cvehZ", "http://imgur.com/a/cvehZ")); // /a/ prefix album
-        validHashes.add(new ExpectedHash("rROMo",
-                "https://bildgur.de/a/rROMo")); // /a/ prefix album, bildgur domain
-        validHashes.add(new ExpectedHash("zis2t",
-                "http://imgur.com/r/diy/zis2t")); // /r/ prefix album
+        validHashes.add(new ExpectedHash("rROMo", "https://bildgur.de/a/rROMo")); // /a/ prefix album, bildgur domain
+        validHashes.add(new ExpectedHash("zis2t", "http://imgur.com/r/diy/zis2t")); // /r/ prefix album
 
         // Images
-        validHashes.add(new ExpectedHash("0MlEZ",
-                "http://i.imgur.com/0MlEZ.jpg")); // Pre-API direct URL
-        validHashes.add(new ExpectedHash("awsGf9p",
-                "http://imgur.com/awsGf9p")); // No prefix image URL
-        validHashes.add(new ExpectedHash("sCjRLQG",
-                "http://i.imgur.com/sCjRLQG.jpg?1")); // Direct url with param
-        validHashes.add(new ExpectedHash("sCjRLQG",
-                "http://i.imgur.com//sCjRLQG.jpg")); // Direct url with extra slash
-        validHashes.add(new ExpectedHash("PBTrqAA",
-                "https://imgur.com/gallery/PBTrqAA")); // gallery prefix
-        validHashes.add(new ExpectedHash("mhcWa37",
-                "http://imgur.com/gallery/mhcWa37/new")); // Extra path after hash
-        validHashes.add(new ExpectedHash("SWSteYm",
-                "http://imgur.com/r/google/SWSteYm")); // /r/ prefix
+        validHashes.add(new ExpectedHash("0MlEZ", "http://i.imgur.com/0MlEZ.jpg")); // Pre-API direct URL
+        validHashes.add(new ExpectedHash("awsGf9p", "http://imgur.com/awsGf9p")); // No prefix image URL
+        validHashes.add(new ExpectedHash("sCjRLQG", "http://i.imgur.com/sCjRLQG.jpg?1")); // Direct url with param
+        validHashes.add(new ExpectedHash("sCjRLQG", "http://i.imgur.com//sCjRLQG.jpg")); // Direct url with extra slash
+        validHashes.add(new ExpectedHash("PBTrqAA", "https://imgur.com/gallery/PBTrqAA")); // gallery prefix
+        validHashes.add(new ExpectedHash("mhcWa37", "http://imgur.com/gallery/mhcWa37/new")); // Extra path after hash
+        validHashes.add(new ExpectedHash("SWSteYm", "http://imgur.com/r/google/SWSteYm")); // /r/ prefix
 
-        validHashes.add(new ExpectedHash("FGfBEqu",
-                "https://bildgur.de/FGfBEqu.png")); // Direct bildgur url
-        validHashes.add(new ExpectedHash("xvn42E1",
-                "http://b.bildgur.de/xvn42E1.jpg")); // Direct bildgur url
+        validHashes.add(new ExpectedHash("FGfBEqu", "https://bildgur.de/FGfBEqu.png")); // Direct bildgur url
+        validHashes.add(new ExpectedHash("xvn42E1", "http://b.bildgur.de/xvn42E1.jpg")); // Direct bildgur url
         validHashes.add(new ExpectedHash("FGfBEqu", "https://bildgur.de/FGfBEqu")); // bildgur url
-        validHashes.add(new ExpectedHash("1234567",
-                "http://i.imgur.com/1234567_d.jpg")); // _d suffix
+        validHashes.add(new ExpectedHash("1234567", "http://i.imgur.com/1234567_d.jpg")); // _d suffix
 
         // Synthetic URLs
         validHashes.add(new ExpectedHash("12345", "http://imgur.com/12345.jpg"));
@@ -165,8 +145,12 @@ public class ImgurParserTest implements IParserTest {
 
         validHashes.add(new ExpectedHash("12345", "http://imgur.com/gallery/12345"));
         validHashes.add(new ExpectedHash("abcde", "http://imgur.com/gallery/abcde"));
+        validHashes.add(new ExpectedHash("1234567", "http://imgur.com/1234567"));
+        validHashes.add(new ExpectedHash("abcdefg", "http://imgur.com/abcdefg"));
         validHashes.add(new ExpectedHash("1234567", "http://imgur.com/gallery/1234567"));
         validHashes.add(new ExpectedHash("abcdefg", "http://imgur.com/gallery/abcdefg"));
+        validHashes.add(new ExpectedHash("1234567", "http://imgur.com/a/1234567"));
+        validHashes.add(new ExpectedHash("abcdefg", "http://imgur.com/a/abcdefg"));
 
         validHashes.add(new ExpectedHash("12345", "http://imgur.com/a/test/12345"));
         validHashes.add(new ExpectedHash("abcde", "http://imgur.com/a/test/abcde"));
@@ -176,6 +160,12 @@ public class ImgurParserTest implements IParserTest {
         validHashes.add(new ExpectedHash("1234567", "http://imgur.com/r/test/1234567"));
         validHashes.add(new ExpectedHash("abcdefg", "http://imgur.com/r/test/abcdefg"));
         validHashes.add(new ExpectedHash("wi3Sl", "http://i.stack.imgur.com/wi3Sl.jpg"));
+
+        // Real urls
+        validHashes.add(new ExpectedHash("wspUqCv", "https://imgur.com/wspUqCv")); // Single image
+        validHashes.add(new ExpectedHash("3OMFeBx", "https://imgur.com/gallery/3OMFeBx")); // Album
+        validHashes.add(new ExpectedHash("3OMFeBx", "https://imgur.com/a/3OMFeBx")); // Album
+        validHashes.add(new ExpectedHash("mPqzVMZ", "https://imgur.com/gallery/mPqzVMZ")); // Single image
 
         validateCanParseAndHashes(mImgurParser, validHashes, false);
     }
@@ -190,8 +180,6 @@ public class ImgurParserTest implements IParserTest {
 
         invalidUrls.add("https://imgur.com/a/1234");
         invalidUrls.add("https://imgur.com/a/1234_");
-        invalidUrls.add("https://imgur.com/a/123456");
-        invalidUrls.add("https://imgur.com/a/1234567");
         invalidUrls.add("https://imgur.com/a/12345678");
 
         invalidUrls.add("https://imgur.com/gallery/1234");
@@ -238,6 +226,46 @@ public class ImgurParserTest implements IParserTest {
         assertInvalidUrlsThrowException(mImgurParser, invalidUrls);
     }
 
+    // Tests a standard album URL with the old API call
+    @Test(timeout = API_CALL_TIMEOUT_MS)
+    public void testAlbumWithGalleryUrl() throws IOException, RuntimeException {
+        URL url = getUrlObject("https://imgur.com/gallery/3OMFeBx");
+        String albumPreviewUrl = "https://i.imgur.com/wspUqCv" + mPreviewQuality + ".png";
+
+        ExpectedMedia image1 = new ExpectedMedia.Builder()
+                .setHighQualityUrl("https://i.imgur.com/wspUqCv.png")
+                .setLowQualityUrl("https://i.imgur.com/wspUqCvm.png")
+                .setPreviewUrl("https://i.imgur.com/wspUqCvs.png")
+                .setHighQualityByteSize(89154)
+                .setHighQualityWidth(268)
+                .setHighQualityHeight(315)
+                .setDescription("The Simpsons Family")
+                .build();
+        ExpectedMedia image2 = new ExpectedMedia.Builder()
+                .setHighQualityUrl("https://i.imgur.com/grlYZVG.png")
+                .setLowQualityUrl("https://i.imgur.com/grlYZVGm.png")
+                .setPreviewUrl("https://i.imgur.com/grlYZVGs.png")
+                .setHighQualityByteSize(193905)
+                .setHighQualityWidth(533)
+                .setHighQualityHeight(187)
+                .setDescription("Simpsons Characters")
+                .build();
+        List<IMedia> expectedMediaList = new ArrayList<>();
+        expectedMediaList.add(image1);
+        expectedMediaList.add(image2);
+
+        ExpectedAlbum expectedAlbum = new ExpectedAlbum.Builder()
+                .setCount(2)
+                .setPreviewUrl(albumPreviewUrl)
+                .setAlbumMedia(expectedMediaList)
+                .build();
+
+        ExpectedParserResponse expectedParserResponse =
+                new ExpectedParserResponse.Builder(url).setIsAlbum(true).setMediaAlbum(expectedAlbum).build();
+        ParserResponse parserResponse = mImgurParser.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
+    }
+
     // Tests a direct GIF URL with no API call
     @Test
     public void testGifWithNoApiCall() throws IOException {
@@ -246,9 +274,7 @@ public class ImgurParserTest implements IParserTest {
 
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, true).build();
         ExpectedParserResponse expectedParserResponse =
-                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
-                        .setMedia(expectedMedia)
-                        .build();
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true).setMedia(expectedMedia).build();
 
         ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
         compareParserResponse(url, expectedParserResponse, parserResponse);
@@ -261,9 +287,7 @@ public class ImgurParserTest implements IParserTest {
         String hash = "M1ZXzzn";
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, true).build();
         ExpectedParserResponse expectedParserResponse =
-                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
-                        .setMedia(expectedMedia)
-                        .build();
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true).setMedia(expectedMedia).build();
 
         ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
         compareParserResponse(url, expectedParserResponse, parserResponse);
@@ -276,9 +300,7 @@ public class ImgurParserTest implements IParserTest {
         String hash = "aRadjBe";
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, true).build();
         ExpectedParserResponse expectedParserResponse =
-                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
-                        .setMedia(expectedMedia)
-                        .build();
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true).setMedia(expectedMedia).build();
 
         ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
         compareParserResponse(url, expectedParserResponse, parserResponse);
@@ -299,9 +321,7 @@ public class ImgurParserTest implements IParserTest {
         String hash = "jIg2N6q";
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, false).build();
         ExpectedParserResponse expectedParserResponse =
-                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
-                        .setMedia(expectedMedia)
-                        .build();
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true).setMedia(expectedMedia).build();
 
         ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
         compareParserResponse(url, expectedParserResponse, parserResponse);
@@ -314,9 +334,7 @@ public class ImgurParserTest implements IParserTest {
         String hash = "zzaVA8m";
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, false).build();
         ExpectedParserResponse expectedParserResponse =
-                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
-                        .setMedia(expectedMedia)
-                        .build();
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true).setMedia(expectedMedia).build();
 
         ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
         compareParserResponse(url, expectedParserResponse, parserResponse);
@@ -335,8 +353,8 @@ public class ImgurParserTest implements IParserTest {
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testOldApiAlbum() throws IOException, RuntimeException {
         URL url = getUrlObject("http://imgur.com/a/NzCBe");
-        ExpectedParserResponse expectedParserResponse =
-                getV3AlbumExpectedParserResponse(url, false);
+        ExpectedParserResponse expectedParserResponse = getV3AlbumExpectedParserResponse(url, false);
+
         ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
         compareParserResponse(url, expectedParserResponse, parserResponse);
     }
@@ -348,11 +366,9 @@ public class ImgurParserTest implements IParserTest {
         String hash = "0MlEZ";
         ExpectedMedia expectedMedia = getExpectedMediaBuilder(hash, false).build();
         ExpectedParserResponse expectedParserResponse =
-                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
-                        .setMedia(expectedMedia)
-                        .build();
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true).setMedia(expectedMedia).build();
 
-        ParserResponse parserResponse = mImgurParser.parse(url);
+        ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
         compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
@@ -362,6 +378,15 @@ public class ImgurParserTest implements IParserTest {
         URL url = getUrlObject("http://imgur.com/a/NzCBe");
         ExpectedParserResponse expectedParserResponse = getV3AlbumExpectedParserResponse(url, true);
         ParserResponse parserResponse = mImgurParser.parse(url);
+        compareParserResponse(url, expectedParserResponse, parserResponse);
+    }
+
+    // Tests a standard album URL with the old API call
+    @Test(timeout = API_CALL_TIMEOUT_MS)
+    public void testV3AlbumNew() throws IOException, RuntimeException {
+        URL url = getUrlObject("http://imgur.com/a/NzCBe");
+        ExpectedParserResponse expectedParserResponse = getV3AlbumExpectedParserResponse(url, false);
+        ParserResponse parserResponse = mImgurParserNoApiKey.parse(url);
         compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
@@ -387,50 +412,46 @@ public class ImgurParserTest implements IParserTest {
     @Test(timeout = API_CALL_TIMEOUT_MS)
     public void testV3ImageWithShortHash() throws IOException, RuntimeException {
         URL url = getUrlObject("https://imgur.com/0MlEZ");
-        ExpectedMedia expectedImage =
-                getExpectedMediaBuilder("0MlEZ", false).setHighQualityByteSize(126099)
-                        .setHighQualityWidth(553)
-                        .setHighQualityHeight(833)
-                        .build();
+        ExpectedMedia expectedImage = getExpectedMediaBuilder("0MlEZ", false)
+                .setHighQualityByteSize(126099)
+                .setHighQualityWidth(553)
+                .setHighQualityHeight(833)
+                .build();
 
         ExpectedParserResponse expectedParserResponse =
-                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true)
-                        .setMedia(expectedImage)
-                        .build();
+                new ExpectedParserResponse.Builder(url).setIsSingleMedia(true).setMedia(expectedImage).build();
 
         ParserResponse parserResponse = mImgurParser.parse(url);
         compareParserResponse(url, expectedParserResponse, parserResponse);
     }
 
-    private ExpectedMedia.Builder getExpectedMediaBuilder(final String hash,
-            final boolean isAnimated) {
+    private ExpectedMedia.Builder getExpectedMediaBuilder(final String hash, final boolean isAnimated) {
         String expectedExtension = isAnimated ? ".mp4" : ".jpg";
-        return new ExpectedMedia.Builder().setPreviewUrl("https://i.imgur.com/"
-                + hash
-                + mPreviewQuality
-                + ".jpg")
+        return new ExpectedMedia.Builder()
+                .setPreviewUrl("https://i.imgur.com/" + hash + mPreviewQuality + ".jpg")
                 .setHighQualityUrl("https://i.imgur.com/" + hash + expectedExtension)
                 // No low quality URLs for animated results
-                .setLowQualityUrl(
-                        !isAnimated ? "https://i.imgur.com/" + hash + mLowQuality + ".jpg" : null)
+                .setLowQualityUrl(!isAnimated ? "https://i.imgur.com/" + hash + mLowQuality + ".jpg" : null)
                 .setIsVideo(isAnimated);
     }
 
     private ExpectedMedia getFbLogoExpectedMedia() {
-        return getExpectedMediaBuilder("P3Z2WfX", false).setHighQualityByteSize(4753)
+        return getExpectedMediaBuilder("P3Z2WfX", false)
+                .setHighQualityByteSize(4753)
                 .setHighQualityWidth(256)
                 .setHighQualityHeight(256)
                 .setTitle("FB Logo")
                 .setDescription("FB logo description")
+                .setHighQualityByteSize(4753)
                 .build();
     }
 
     private ExpectedMedia getSpiralAnimationExpectedMedia(final boolean isV3ApiCall) {
-        ExpectedMedia.Builder builder =
-                getExpectedMediaBuilder("Siit59R", true).setHighQualityWidth(347)
-                        .setHighQualityHeight(326)
-                        .setTitle("Spiral Animation")
-                        .setDescription("Spiral animation description");
+        ExpectedMedia.Builder builder = getExpectedMediaBuilder("Siit59R", true)
+                .setHighQualityWidth(347)
+                .setHighQualityHeight(326)
+                .setTitle("Spiral Animation")
+                .setDescription("Spiral animation description");
 
         if (isV3ApiCall) {
             // Only the V3 API call supports MP4 file sizes
@@ -440,24 +461,23 @@ public class ImgurParserTest implements IParserTest {
         return builder.build();
     }
 
-    private ExpectedParserResponse getV3AlbumExpectedParserResponse(final URL albumUrl,
-            final boolean isV3ApiCall) {
+    private ExpectedParserResponse getV3AlbumExpectedParserResponse(final URL albumUrl, final boolean isV3ApiCall) {
         String albumPreviewUrl = "https://i.imgur.com/P3Z2WfX" + mPreviewQuality + ".jpg";
         List<IMedia> expectedMediaList = new ArrayList<>();
         expectedMediaList.add(getFbLogoExpectedMedia());
         expectedMediaList.add(getSpiralAnimationExpectedMedia(isV3ApiCall));
 
-        ExpectedAlbum expectedAlbum = new ExpectedAlbum.Builder().setCount(2)
+        ExpectedAlbum expectedAlbum = new ExpectedAlbum.Builder()
+                .setCount(2)
                 .setPreviewUrl(albumPreviewUrl)
                 .setAlbumMedia(expectedMediaList)
                 .build();
-        return new ExpectedParserResponse.Builder(albumUrl).setIsAlbum(true)
-                .setMediaAlbum(expectedAlbum)
-                .build();
+        return new ExpectedParserResponse.Builder(albumUrl).setIsAlbum(true).setMediaAlbum(expectedAlbum).build();
     }
 
     private ExpectedParserResponse getV3ImageExpectedParserResponse(final URL imageUrl) {
-        return new ExpectedParserResponse.Builder(imageUrl).setIsSingleMedia(true)
+        return new ExpectedParserResponse.Builder(imageUrl)
+                .setIsSingleMedia(true)
                 .setMedia(getFbLogoExpectedMedia())
                 .build();
     }
