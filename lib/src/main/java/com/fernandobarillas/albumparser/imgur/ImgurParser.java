@@ -28,6 +28,7 @@ import com.fernandobarillas.albumparser.imgur.api.ImgurApi;
 import com.fernandobarillas.albumparser.imgur.model.AlbumResponse;
 import com.fernandobarillas.albumparser.imgur.model.Image;
 import com.fernandobarillas.albumparser.imgur.model.ImgurApiError;
+import com.fernandobarillas.albumparser.imgur.model.v3.AlbumResponseV3;
 import com.fernandobarillas.albumparser.imgur.model.v3.GalleryResponseV3;
 import com.fernandobarillas.albumparser.imgur.model.v3.ImageResponseV3;
 import com.fernandobarillas.albumparser.media.IMedia;
@@ -197,14 +198,14 @@ public class ImgurParser extends AbstractApiParser {
             // If response was null, will attempt to run the hash as an album/gallery below
         }
 
-        Response<GalleryResponseV3> galleryServiceResponse = service.getV3Gallery(clientIdHeader, hash).execute();
-        GalleryResponseV3 galleryResponse = galleryServiceResponse.body();
-        if (galleryResponse != null) {
-            galleryResponse.setLowQuality(mLowQualitySize);
-            galleryResponse.setPreviewQuality(mPreviewSize);
+        Response<AlbumResponseV3> albumServiceResponse = service.getV3Album(clientIdHeader, hash).execute();
+        AlbumResponseV3 albumResponse = albumServiceResponse.body();
+        if (albumResponse != null) {
+            albumResponse.setLowQuality(mLowQualitySize);
+            albumResponse.setPreviewQuality(mPreviewSize);
         }
 
-        return getParserResponse(mediaUrl, galleryResponse, galleryServiceResponse);
+        return getParserResponse(mediaUrl, albumResponse, albumServiceResponse);
     }
 
     /**
